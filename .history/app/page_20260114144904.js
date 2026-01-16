@@ -7,8 +7,8 @@ import Contact from "@/sections/contact";
 export default function Home() {
   return (
     <main className="scroll-smooth">
-      <Hero />
-      <Services />
+      <hero />
+      <services />
       <Projects />
       <About />
       <Contact />
