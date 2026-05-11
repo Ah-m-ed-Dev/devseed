@@ -5,6 +5,8 @@
 html {
   scroll-behavior: smooth;
   direction: rtl;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
 }
 
 body {
@@ -12,6 +14,27 @@ body {
   color: #ffffff;
   font-family: 'Cairo', sans-serif;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ----- تثبيت حجم الخط الأساسي ----- */
+@media screen and (max-width: 640px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+@media screen and (min-width: 641px) and (max-width: 1024px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+@media screen and (min-width: 1025px) {
+  html {
+    font-size: 16px;
+  }
 }
 
 /* ----- شريط التمرير ----- */
@@ -28,21 +51,10 @@ body {
   border-radius: 3px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(20, 184, 166, 0.4);
-}
-
 /* ----- تحديد النص ----- */
 ::selection {
   background: rgba(20, 184, 166, 0.3);
   color: #ffffff;
-}
-
-/* ----- تحسينات الجوال ----- */
-@media (max-width: 640px) {
-  html {
-    font-size: 14px;
-  }
 }
 
 /* ----- منع overflow أفقي ----- */
