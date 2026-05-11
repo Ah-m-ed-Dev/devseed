@@ -11,11 +11,12 @@ body {
   background: #0a0a0f;
   color: #ffffff;
   font-family: 'Cairo', sans-serif;
+  overflow-x: hidden;
 }
 
 /* ----- شريط التمرير ----- */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -24,7 +25,7 @@ body {
 
 ::-webkit-scrollbar-thumb {
   background: rgba(20, 184, 166, 0.2);
-  border-radius: 4px;
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -35,4 +36,17 @@ body {
 ::selection {
   background: rgba(20, 184, 166, 0.3);
   color: #ffffff;
+}
+
+/* ----- تحسينات الجوال ----- */
+@media (max-width: 640px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+/* ----- منع overflow أفقي ----- */
+img, video, canvas, svg {
+  max-width: 100%;
+  height: auto;
 }
