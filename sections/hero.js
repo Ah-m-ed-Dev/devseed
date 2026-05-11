@@ -50,7 +50,7 @@ export default function Hero() {
         <h1 className="text-[2rem] sm:text-5xl lg:text-7xl font-bold mb-4 sm:mb-6 leading-tight text-white">
           فكرتك بذرة،
           <br />
-          <span className="bg-gradient-to-r from-teal-400 via-emerald-400 to-teal-300 bg-clip-text text-transparent">
+          <span className="text-teal-400">
             ونحن نعرف كيف ننمّيها
           </span>
         </h1>
