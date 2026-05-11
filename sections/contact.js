@@ -1,6 +1,6 @@
 export default function Contact() {
   return (
-    <section id="contact" className="py-24 px-6 relative overflow-hidden bg-[#0a0a0f]">
+    <section id="contact" className="py-16 sm:py-24 px-0 sm:px-6 relative overflow-hidden bg-[#0a0a0f]">
       
       {/* خلفية زخرفية */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(20,184,166,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(20,184,166,0.02)_1px,transparent_1px)] bg-[size:80px_80px]" />
@@ -9,7 +9,7 @@ export default function Contact() {
       <div className="max-w-4xl mx-auto relative z-10">
         
         {/* الشارة العلوية */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-8 px-5 sm:px-0">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-teal-500/20 bg-teal-500/5 text-teal-300 text-sm mb-6">
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
@@ -20,20 +20,20 @@ export default function Contact() {
         </div>
 
         {/* العنوان */}
-        <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-6xl font-bold text-white mb-4">
+        <div className="text-center mb-12 px-5 sm:px-0">
+          <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-white mb-4">
             تواصل
-            <span className="bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent"> معنا</span>
+            <span className="text-teal-400"> معنا</span>
           </h2>
-          <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg text-gray-400 max-w-2xl mx-auto">
             لديك فكرة أو مشروع؟ أخبرنا عنها، ونحن نتولى الباقي. نرد عادةً خلال 24 ساعة.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-5 gap-8 max-w-4xl mx-auto">
+        <div className="grid md:grid-cols-5 gap-0 sm:gap-8 max-w-4xl mx-auto px-0 sm:px-0">
           
           {/* معلومات التواصل */}
-          <div className="md:col-span-2 space-y-6">
+          <div className="md:col-span-2 space-y-0 sm:space-y-6 px-5 sm:px-0 mb-6 sm:mb-0">
             {[
               {
                 icon: (
@@ -69,7 +69,7 @@ export default function Contact() {
                 href: null,
               },
             ].map((info, index) => (
-              <div key={index} className="flex items-start gap-4 p-4 rounded-xl border border-white/5 bg-white/[0.02] hover:border-teal-500/20 transition-all duration-300">
+              <div key={index} className="flex items-start gap-4 p-4 border-b sm:border border-white/5 bg-white/[0.02] sm:rounded-xl hover:border-teal-500/20 transition-all duration-300 last:border-b-0 sm:last:border-b">
                 <div className="w-10 h-10 rounded-xl bg-teal-500/10 text-teal-400 flex items-center justify-center flex-shrink-0">
                   {info.icon}
                 </div>
@@ -88,8 +88,8 @@ export default function Contact() {
           </div>
 
           {/* نموذج التواصل */}
-          <div className="md:col-span-3">
-            <form className="space-y-4 p-8 rounded-2xl border border-white/5 bg-white/[0.02]">
+          <div className="md:col-span-3 px-5 sm:px-0">
+            <form className="space-y-4 p-6 sm:p-8 rounded-none sm:rounded-2xl border-0 sm:border border-white/5 bg-white/[0.02]">
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-gray-400 text-sm mb-2">الاسم</label>
@@ -134,7 +134,7 @@ export default function Contact() {
                 className="w-full group inline-flex items-center justify-center gap-2 bg-teal-500 text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:bg-teal-400 transition-all shadow-lg shadow-teal-500/25 hover:shadow-teal-500/40 hover:-translate-y-0.5"
               >
                 أرسل الرسالة
-                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg className="w-5 h-5 group-hover:-translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 12h14" />
                   <path d="M12 5l7 7-7 7" />
                 </svg>
