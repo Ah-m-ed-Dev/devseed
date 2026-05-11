@@ -1,121 +1,83 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import Link from "next/link";
 
 export default function Navbar() {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
-  // تغيير شكل النافبار عند التمرير
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // إغلاق القائمة عند النقر على رابط (للموبايل)
-  const closeMenu = () => setIsMobileMenuOpen(false);
-
-  // تمرير سلس للقسم المستهدف
-  const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
+  const handleSmoothScroll = (e, targetId) => {
     e.preventDefault();
     const element = document.getElementById(targetId);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
-      closeMenu();
     }
+    setIsOpen(false);
   };
 
   const navLinks = [
-    { name: "الخدمات", href: "services", icon: "⚙️" },
-    { name: "المشاريع", href: "projects", icon: "📁" },
-    { name: "من نحن", href: "about", icon: "👥" },
-    { name: "اتصل بنا", href: "contact", icon: "📞" },
+    { name: "الرئيسية", href: "#home" },
+    { name: "الخدمات", href: "#services" },
+    { name: "أعمالنا", href: "#work" },
+    { name: "تواصل معنا", href: "#contact" },
   ];
 
   return (
-    <header
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        isScrolled
-          ? "bg-white/90 backdrop-blur-md shadow-lg"
-          : "bg-white/70 backdrop-blur-sm shadow-sm"
-      }`}
-    >
-      <nav className="max-w-7xl mx-auto flex justify-between items-center px-6 py-3 md:px-8 md:py-4">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/80 backdrop-blur-md border-b border-white/5">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        
         {/* الشعار */}
-        <a
-          href="#"
-          onClick={(e) => handleSmoothScroll(e, "hero")}
-          className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-teal-600 to-emerald-500 bg-clip-text text-transparent flex items-center gap-2"
-        >
+        <Link href="/" className="flex items-center gap-2 text-teal-400 font-bold text-2xl">
           <span className="text-3xl">🌱</span>
           DevSeed
-        </a>
+        </Link>
 
         {/* روابط سطح المكتب */}
-        <div className="hidden md:flex gap-8 text-sm font-medium">
+        <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
             <a
-              key={link.href}
-              href={`#${link.href}`}
-              onClick={(e) => handleSmoothScroll(e, link.href)}
-              className="relative text-gray-700 hover:text-teal-600 transition-colors duration-200 group"
+              key={link.name}
+              href={link.href}
+              onClick={(e) => handleSmoothScroll(e, link.href.replace("#", ""))}
+              className="text-gray-300 hover:text-teal-400 transition-colors text-sm font-medium"
             >
-              <span className="flex items-center gap-1">
-                {link.icon} {link.name}
-              </span>
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-teal-600 transition-all group-hover:w-full"></span>
+              {link.name}
             </a>
           ))}
         </div>
 
-        {/* زر هامبورجر (للموبايل) */}
+        {/* زر القائمة للجوال */}
         <button
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 focus:outline-none"
-          aria-label="القائمة"
+          onClick={() => setIsOpen(!isOpen)}
+          className="md:hidden text-gray-300 hover:text-white p-2"
         >
-          <div className="space-y-1.5">
-            <span
-              className={`block w-6 h-0.5 bg-gray-700 transition-transform ${
-                isMobileMenuOpen ? "rotate-45 translate-y-2" : ""
-              }`}
-            ></span>
-            <span
-              className={`block w-6 h-0.5 bg-gray-700 transition-opacity ${
-                isMobileMenuOpen ? "opacity-0" : ""
-              }`}
-            ></span>
-            <span
-              className={`block w-6 h-0.5 bg-gray-700 transition-transform ${
-                isMobileMenuOpen ? "-rotate-45 -translate-y-2" : ""
-              }`}
-            ></span>
-          </div>
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {isOpen ? (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            ) : (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            )}
+          </svg>
         </button>
-      </nav>
-
-      {/* قائمة الموبايل المنزلقة */}
-      <div
-        className={`md:hidden absolute top-full left-0 w-full bg-white/95 backdrop-blur-md shadow-md transition-all duration-300 overflow-hidden ${
-          isMobileMenuOpen ? "max-h-96 py-4" : "max-h-0 py-0"
-        }`}
-      >
-        <div className="flex flex-col items-start gap-4 px-6">
-          {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={`#${link.href}`}
-              onClick={(e) => handleSmoothScroll(e, link.href)}
-              className="text-gray-700 hover:text-teal-600 transition-colors text-lg flex items-center gap-2"
-            >
-              {link.icon} {link.name}
-            </a>
-          ))}
-        </div>
       </div>
-    </header>
+
+      {/* قائمة الجوال */}
+      {isOpen && (
+        <div className="md:hidden bg-[#0a0a0f]/95 backdrop-blur-md border-b border-white/5">
+          <div className="px-6 py-4 flex flex-col gap-4">
+            {navLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                onClick={(e) => handleSmoothScroll(e, link.href.replace("#", ""))}
+                className="text-gray-300 hover:text-teal-400 transition-colors text-sm font-medium"
+              >
+                {link.name}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+    </nav>
   );
 }
