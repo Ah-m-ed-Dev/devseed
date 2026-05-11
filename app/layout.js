@@ -10,6 +10,7 @@ const cairo = Cairo({ subsets: ["arabic"], weight: ["400","700"] });
 export const metadata = {
   title: "DevSeed",
   description: "نبني حلول رقمية قابلة للتوسع",
+viewport: "width=device-width, initial-scale=1.0",
 };
 
 export default function RootLayout({ children }) {
