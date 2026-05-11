@@ -108,8 +108,7 @@ export default function Footer() {
           {/* حقوق النشر */}
           <p className="text-gray-500 text-sm text-center md:text-left">
             &copy; {currentYear} DevSeed. جميع الحقوق محفوظة.
-            <span className="mx-2 text-gray-700">|</span>
-            <span className="text-gray-600">نزرع كوداً، نحصد نجاحاً 🌱</span>
+            
           </p>
 
           {/* أيقونات التواصل الاجتماعي */}
