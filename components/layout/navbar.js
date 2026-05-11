@@ -27,13 +27,13 @@ export default function Navbar() {
         
         
         {/* الشعار */}
-        <Link 
-          href="/" 
-          className="flex items-center gap-2 text-white font-bold text-2xl hover:scale-105 transition-transform group"
-        >
-          <span className="text-3xl group-hover:animate-bounce"> </> </span>
-          <span>DevSeed</span>
-        </Link>
+       <Link 
+  href="/" 
+  className="flex items-center gap-2 text-white font-bold text-2xl hover:scale-105 transition-transform group"
+>
+  <span className="text-teal-400 font-mono text-2xl group-hover:animate-pulse">&lt;/&gt;</span>
+  <span>DevSeed</span>
+</Link>
 
         {/* روابط سطح المكتب */}
         <div className="hidden md:flex items-center gap-8">
