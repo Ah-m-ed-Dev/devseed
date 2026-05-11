@@ -16,14 +16,14 @@ export default function Navbar() {
   };
 
   const navLinks = [
-    { name: "Work", href: "#work" },
-    { name: "Services", href: "#services" },
-    { name: "Home", href: "/" },
+    { name: "الرئيسية", href: "/" },
+    { name: "الخدمات", href: "#services" },
+    { name: "أعمالنا", href: "#work" },
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/80 backdrop-blur-md border-b border-white/5" dir="ltr">
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/80 backdrop-blur-md border-b border-white/5">
+      <div className="w-full max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         
         {/* الشعار */}
         <Link 
@@ -34,7 +34,7 @@ export default function Navbar() {
           <span>DevSeed</span>
         </Link>
 
-        {/* روابط سطح المكتب */}
+        {/* روابط سطح المكتب + زر CTA */}
         <div className="hidden md:flex items-center gap-6">
           {navLinks.map((link) => (
             <a
@@ -45,22 +45,21 @@ export default function Navbar() {
                   handleSmoothScroll(e, link.href.replace("#", ""));
                 }
               }}
-              className="text-gray-300 hover:text-teal-400 transition-colors text-sm font-medium whitespace-nowrap"
+              className="text-gray-300 hover:text-teal-400 transition-colors text-sm font-medium relative group whitespace-nowrap"
             >
               {link.name}
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-teal-400 transition-all duration-300 group-hover:w-full" />
             </a>
           ))}
           
-          {/* زر CTA */}
           <a
             href="#contact"
             onClick={(e) => handleSmoothScroll(e, "contact")}
-            className="inline-flex items-center gap-1.5 bg-teal-500 text-white px-3 py-1.5 rounded-lg font-medium text-sm hover:bg-teal-400 transition-all shadow-lg shadow-teal-500/25 whitespace-nowrap shrink-0"
+            className="inline-flex items-center gap-1.5 bg-teal-500 text-white px-4 py-2 rounded-lg font-medium text-sm hover:bg-teal-400 transition-all shadow-lg shadow-teal-500/25 whitespace-nowrap shrink-0"
           >
-            Start
+            ابدأ مشروعك
             <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M5 12h14" />
-              <path d="M12 5l7 7-7 7" />
+              <path d="M12 5l-7 7 7 7" />
             </svg>
           </a>
         </div>
@@ -69,7 +68,7 @@ export default function Navbar() {
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="md:hidden text-gray-300 hover:text-white p-1.5 transition-colors shrink-0"
-          aria-label="Menu"
+          aria-label="القائمة"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             {isOpen ? (
@@ -106,10 +105,9 @@ export default function Navbar() {
               onClick={(e) => handleSmoothScroll(e, "contact")}
               className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white px-5 py-3 rounded-xl font-medium text-sm hover:bg-teal-400 transition-all mt-1"
             >
-              Start Project
+              تواصل معنا
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M5 12h14" />
-                <path d="M12 5l7 7-7 7" />
+                <path d="M12 5l-7 7 7 7" />
               </svg>
             </a>
           </div>
