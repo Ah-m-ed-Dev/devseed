@@ -1,64 +1,31 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap');
 
-/* ----- الأساسيات ----- */
+/* ----- ألوان الموقع ----- */
+:root {
+  --background: #ffffff;      /* خلفية فاتحة */
+  --foreground: #0f172a;      /* نص داكن */
+  --primary: #0f766e;         /* أخضر داكن */
+  --secondary: #5eead4;       /* أخضر فاتح */
+  --font-sans: 'Cairo', sans-serif; /* الخط العربي */
+}
+
+/* دعم الوضع الداكن */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0f172a;    /* خلفية داكنة */
+    --foreground: #ffffff;    /* نص فاتح */
+    --primary: #5eead4;       /* أخضر فاتح للداكن */
+  }
+}
+
+/* تطبيق الخط والألوان على الجسم */
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+/* سكرول ناعم */
 html {
   scroll-behavior: smooth;
-  direction: rtl;
-  -webkit-text-size-adjust: 100%;
-  -ms-text-size-adjust: 100%;
-}
-
-body {
-  background: #0a0a0f;
-  color: #ffffff;
-  font-family: 'Cairo', sans-serif;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* ----- تثبيت حجم الخط الأساسي ----- */
-@media screen and (max-width: 640px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-@media screen and (min-width: 641px) and (max-width: 1024px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-@media screen and (min-width: 1025px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-/* ----- شريط التمرير ----- */
-::-webkit-scrollbar {
-  width: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: #06060a;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(20, 184, 166, 0.2);
-  border-radius: 3px;
-}
-
-/* ----- تحديد النص ----- */
-::selection {
-  background: rgba(20, 184, 166, 0.3);
-  color: #ffffff;
-}
-
-/* ----- منع overflow أفقي ----- */
-img, video, canvas, svg {
-  max-width: 100%;
-  height: auto;
 }
