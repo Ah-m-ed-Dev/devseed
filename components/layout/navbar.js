@@ -19,25 +19,24 @@ export default function Navbar() {
     { name: "الرئيسية", href: "/" },
     { name: "الخدمات", href: "#services" },
     { name: "أعمالنا", href: "#work" },
-    { name: "المدونة", href: "/blog"}, 
+    { name: "المدونة", href: "/blog" }, 
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/80 backdrop-blur-md border-b border-white/5">
-      <div className="w-full max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-        
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/80 backdrop-blur-md border-b border-white/5" dir="ltr">
+      <div className="w-full max-w-7xl mx-auto px-5 py-3 flex items-center justify-between">
+
         {/* الشعار */}
         <Link 
           href="/" 
-          className="flex items-center gap-1.5 text-white font-bold text-xl hover:scale-105 transition-transform shrink-0"
+          className="flex items-center gap-1.5 text-white font-bold text-lg hover:scale-105 transition-transform shrink-0"
         >
-<span>DevSeed</span>
+          <span>DevSeed</span>
           <span className="text-teal-400 font-mono">&lt;/&gt;</span>
-          
         </Link>
 
         {/* روابط سطح المكتب + زر CTA */}
-        <div className="hidden md:flex items-center gap-6">
+        <div className="hidden md:flex items-center gap-5">
           {navLinks.map((link) => (
             <a
               key={link.name}
@@ -53,7 +52,7 @@ export default function Navbar() {
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-teal-400 transition-all duration-300 group-hover:w-full" />
             </a>
           ))}
-          
+
           <a
             href="#contact"
             onClick={(e) => handleSmoothScroll(e, "contact")}
@@ -61,7 +60,8 @@ export default function Navbar() {
           >
             ابدأ مشروعك
             <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 5l-7 7 7 7" />
+              <path d="M5 12h14" />
+              <path d="M12 5l7 7-7 7" />
             </svg>
           </a>
         </div>
@@ -109,7 +109,8 @@ export default function Navbar() {
             >
               تواصل معنا
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 5l-7 7 7 7" />
+                <path d="M5 12h14" />
+                <path d="M12 5l7 7-7 7" />
               </svg>
             </a>
           </div>
