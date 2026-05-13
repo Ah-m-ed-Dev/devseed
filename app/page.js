@@ -6,7 +6,7 @@ import Contact from "@/sections/contact";
 
 export default function Home() {
   return (
-    <main className="scroll-smooth">
+    <main className="overflow-hidden">
       <Hero />
       <Services />
       <Projects />
