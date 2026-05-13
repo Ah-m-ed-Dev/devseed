@@ -33,10 +33,10 @@ export default function About() {
         <div className="text-center px-5 sm:px-0">
           
           {/* أيقونة كبيرة مع تأثير نبض */}
-          <div className="mb-8 sm:mb-10 inline-flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-teal-500/10 border border-teal-500/20 text-teal-400 animate-pulse">
-            <span className="text-4xl sm:text-5xl font-mono font-bold">&lt;/&gt;</span>
-          <span>DevSeed</span>
-          </div>
+<div className="mb-8 sm:mb-10 inline-flex items-center justify-center gap-3 px-8 py-4 rounded-3xl bg-teal-500/10 border border-teal-500/20 animate-pulse">
+  <span className="text-4xl sm:text-5xl font-mono font-bold text-teal-400">&lt;/&gt;</span>
+  <span className="text-2xl sm:text-3xl font-bold text-white">DevSeed</span>
+</div>
 
           {/* العنوان */}
           <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-white mb-6 sm:mb-8 leading-tight">
