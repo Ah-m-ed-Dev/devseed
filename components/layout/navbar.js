@@ -31,8 +31,9 @@ export default function Navbar() {
           href="/" 
           className="flex items-center gap-1.5 text-white font-bold text-lg hover:scale-105 transition-transform shrink-0"
         >
-          <span>DevSeed</span>
+          
           <span className="text-teal-400 font-mono">&lt;/&gt;</span>
+<span>DevSeed</span>
         </Link>
 
         {/* روابط سطح المكتب + زر CTA */}
