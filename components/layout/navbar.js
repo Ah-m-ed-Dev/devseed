@@ -24,9 +24,10 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/80 backdrop-blur-md border-b border-white/5">
-      <div className="flex items-center justify-between px-4 py-2.5 max-w-7xl mx-auto">
+      {/* ← هذا السطر يتحكم في عرض النافبار: px-4 = padding, max-w-7xl = أقصى عرض */}
+      <div className="flex items-center justify-between px-4 py-2.5 max-w-4xl mx-auto">
         
-        {/* الشعار */}
+        {/* الشعار - أقصى اليسار */}
         <Link 
           href="/" 
           className="flex items-center gap-1 text-white font-bold text-base shrink-0"
@@ -36,7 +37,7 @@ export default function Navbar() {
         </Link>
 
         {/* روابط سطح المكتب */}
-        <div className="hidden md:flex items-center gap-3 lg:gap-4">
+        <div className="hidden md:flex items-center gap-3">
           {navLinks.map((link) => (
             <a
               key={link.name}
@@ -60,7 +61,7 @@ export default function Navbar() {
           </a>
         </div>
 
-        {/* زر الهامبرغر */}
+        {/* الهامبرغر - أقصى اليمين */}
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="md:hidden text-gray-300 hover:text-white p-1 shrink-0"
@@ -79,7 +80,7 @@ export default function Navbar() {
       {/* قائمة الجوال */}
       {isOpen && (
         <div className="md:hidden bg-[#0a0a0f]/95 backdrop-blur-md border-b border-white/5">
-          <div className="px-4 py-3 flex flex-col">
+          <div className="px-4 py-3 flex flex-col max-w-4xl mx-auto">
             {navLinks.map((link) => (
               <a
                 key={link.name}
