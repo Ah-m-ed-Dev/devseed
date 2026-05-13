@@ -24,20 +24,19 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/80 backdrop-blur-md border-b border-white/5" dir="ltr">
-      <div className="w-full max-w-7xl mx-auto px-5 py-3 flex items-center justify-between">
+      <div className="w-full max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
 
         {/* الشعار */}
         <Link 
           href="/" 
           className="flex items-center gap-1.5 text-white font-bold text-lg hover:scale-105 transition-transform shrink-0"
         >
-          
           <span className="text-teal-400 font-mono">&lt;/&gt;</span>
-<span>DevSeed</span>
+          <span>DevSeed</span>
         </Link>
 
         {/* روابط سطح المكتب + زر CTA */}
-        <div className="hidden md:flex items-center gap-5">
+        <div className="hidden lg:flex items-center gap-4 xl:gap-5">
           {navLinks.map((link) => (
             <a
               key={link.name}
@@ -47,7 +46,7 @@ export default function Navbar() {
                   handleSmoothScroll(e, link.href.replace("#", ""));
                 }
               }}
-              className="text-gray-300 hover:text-teal-400 transition-colors text-sm font-medium relative group whitespace-nowrap"
+              className="text-gray-300 hover:text-teal-400 transition-colors text-xs xl:text-sm font-medium relative group whitespace-nowrap"
             >
               {link.name}
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-teal-400 transition-all duration-300 group-hover:w-full" />
@@ -57,10 +56,10 @@ export default function Navbar() {
           <a
             href="#contact"
             onClick={(e) => handleSmoothScroll(e, "contact")}
-            className="inline-flex items-center gap-1.5 bg-teal-500 text-white px-4 py-2 rounded-lg font-medium text-sm hover:bg-teal-400 transition-all shadow-lg shadow-teal-500/25 whitespace-nowrap shrink-0"
+            className="inline-flex items-center gap-1.5 bg-teal-500 text-white px-3 py-1.5 rounded-lg font-medium text-xs xl:text-sm hover:bg-teal-400 transition-all shadow-lg shadow-teal-500/25 whitespace-nowrap shrink-0"
           >
             ابدأ مشروعك
-            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M5 12h14" />
               <path d="M12 5l7 7-7 7" />
             </svg>
@@ -70,7 +69,7 @@ export default function Navbar() {
         {/* زر القائمة للجوال */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden text-gray-300 hover:text-white p-1.5 transition-colors shrink-0"
+          className="lg:hidden text-gray-300 hover:text-white p-1.5 transition-colors shrink-0"
           aria-label="القائمة"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -85,7 +84,7 @@ export default function Navbar() {
 
       {/* قائمة الجوال */}
       {isOpen && (
-        <div className="md:hidden bg-[#0a0a0f]/95 backdrop-blur-md border-b border-white/5">
+        <div className="lg:hidden bg-[#0a0a0f]/95 backdrop-blur-md border-b border-white/5">
           <div className="px-4 py-4 flex flex-col gap-2">
             {navLinks.map((link) => (
               <a
