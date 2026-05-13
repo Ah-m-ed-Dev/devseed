@@ -9,6 +9,7 @@ export default function Footer() {
         { name: "الخدمات", href: "#services" },
         { name: "المشاريع", href: "#projects" },
         { name: "من نحن", href: "#about" },
+{ name: "المدونة", href: "/blog" },
       ],
     },
     {
