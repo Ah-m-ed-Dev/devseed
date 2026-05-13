@@ -19,6 +19,7 @@ export default function Navbar() {
     { name: "الرئيسية", href: "/" },
     { name: "الخدمات", href: "#services" },
     { name: "أعمالنا", href: "#work" },
+    { name: "المدونة", href: "/blog"}, 
   ];
 
   return (
