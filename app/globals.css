@@ -51,11 +51,3 @@ img, video, canvas, svg {
   max-width: 100%;
   height: auto;
 }
-/* تشخيص مؤقت - احذفه بعد الإصلاح */
-* {
-  border: 2px solid red !important;
-}
-
-*dev {
-  border: 1px solid yellow !important;
-}
