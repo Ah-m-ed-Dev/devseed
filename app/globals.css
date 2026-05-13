@@ -52,10 +52,10 @@ img, video, canvas, svg {
   height: auto;
 }
 /* تشخيص مؤقت - احذفه بعد الإصلاح */
-section {
+* {
   border: 2px solid red !important;
 }
 
-section > div {
+*dev {
   border: 1px solid yellow !important;
 }
