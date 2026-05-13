@@ -25,7 +25,7 @@ export default function Navbar() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/80 backdrop-blur-md border-b border-white/5">
       {/* ← هذا السطر يتحكم في عرض النافبار: px-4 = padding, max-w-7xl = أقصى عرض */}
-      <div className="flex items-center justify-between px-4 py-2.5 max-w-4xl mx-auto">
+      <div className="flex items-center justify-between px-4 py-0.5 max-w-4xl mx-auto">
         
         {/* الشعار - أقصى اليسار */}
         <Link 
