@@ -90,14 +90,16 @@ export function generateStaticParams() {
   return Object.keys(articles).map((slug) => ({ slug }));
 }
 
-export default function BlogPostPage({ params }) {
-  const { slug } = params;
+export default async function BlogPostPage({ params }) {
+  const resolvedParams = await params;
+  const slug = resolvedParams.slug;
   const article = articles[slug];
 
   if (!article) {
     return (
-      <section className="min-h-screen pt-24 px-5 bg-[#0a0a0f] text-center">
+      <section className="min-h-screen pt-24 px-5 bg-[#0a0a0f] text-center flex flex-col items-center justify-center">
         <h1 className="text-3xl text-white font-bold mb-4">المقال غير موجود</h1>
+        <p className="text-gray-400 mb-6">slug: {slug}</p>
         <a href="/blog" className="text-teal-400 hover:underline">العودة إلى المدونة</a>
       </section>
     );
