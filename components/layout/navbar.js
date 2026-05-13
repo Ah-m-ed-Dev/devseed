@@ -24,7 +24,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="fixed top-3 sm:top-4 left-0 right-0 z-50 mx-3 sm:mx-4 md:mx-6 lg:mx-auto lg:max-w-3xl xl:max-w-4xl bg-[#0a0a0f]/90 backdrop-blur-md border border-white/10 rounded-2xl shadow-lg shadow-black/20">
+      <nav className="fixed top-3 sm:top-4 left-0 right-0 z-50 mx-4 lg:mx-auto lg:max-w-3xl xl:max-w-4xl bg-[#0a0a0f]/90 backdrop-blur-md border border-white/10 rounded-2xl shadow-lg shadow-black/20">
         <div className="flex items-center justify-between px-3 sm:px-4 py-2.5">
           
           {/* الشعار - أقصى اليمين في RTL */}
