@@ -35,6 +35,7 @@ export default function About() {
           {/* أيقونة كبيرة مع تأثير نبض */}
           <div className="mb-8 sm:mb-10 inline-flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-teal-500/10 border border-teal-500/20 text-teal-400 animate-pulse">
             <span className="text-4xl sm:text-5xl font-mono font-bold">&lt;/&gt;</span>
+          <span>DevSeed</span>
           </div>
 
           {/* العنوان */}
