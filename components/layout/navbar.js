@@ -24,11 +24,10 @@ export default function Navbar() {
 
   return (
     <>
-      {/* النافبار العائم */}
       <nav className="fixed top-3 sm:top-4 left-0 right-0 z-50 mx-3 sm:mx-4 md:mx-6 lg:mx-auto lg:max-w-3xl xl:max-w-4xl bg-[#0a0a0f]/90 backdrop-blur-md border border-white/10 rounded-2xl shadow-lg shadow-black/20">
         <div className="flex items-center justify-between px-3 sm:px-4 py-2.5">
           
-          {/* الشعار */}
+          {/* الشعار - أقصى اليمين في RTL */}
           <Link 
             href="/" 
             className="flex items-center gap-1 sm:gap-1.5 text-white font-bold text-sm sm:text-base shrink-0"
@@ -37,7 +36,7 @@ export default function Navbar() {
             <span>DevSeed</span>
           </Link>
 
-          {/* روابط سطح المكتب */}
+          {/* روابط سطح المكتب - في المنتصف */}
           <div className="hidden md:flex items-center gap-2 lg:gap-3">
             {navLinks.map((link) => (
               <a
@@ -53,10 +52,14 @@ export default function Navbar() {
                 {link.name}
               </a>
             ))}
+          </div>
+
+          {/* زر ابدأ مشروعك - أقصى اليسار في RTL */}
+          <div className="hidden md:block">
             <a
               href="#contact"
               onClick={(e) => handleSmoothScroll(e, "contact")}
-              className="bg-teal-500 text-white px-2.5 lg:px-3 py-1.5 rounded-lg font-medium text-xs lg:text-sm hover:bg-teal-400 transition-all whitespace-nowrap shrink-0 ml-1"
+              className="bg-teal-500 text-white px-2.5 lg:px-3 py-1.5 rounded-lg font-medium text-xs lg:text-sm hover:bg-teal-400 transition-all whitespace-nowrap"
             >
               ابدأ مشروعك
             </a>
@@ -110,7 +113,6 @@ export default function Navbar() {
         )}
       </nav>
 
-      {/* سبيسر لمنع المحتوى من الاختفاء خلف النافبار */}
       <div className="h-14 sm:h-16" />
     </>
   );
