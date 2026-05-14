@@ -11,7 +11,7 @@ export default function NotFound() {
       <div className="relative z-10 text-center max-w-lg mx-auto">
         
         {/* أيقونة 404 */}
-        <div className="mb-8 inline-flex items-center justify-center w-24 h-24 rounded-3xl bg-teal-500/10 border border-teal-500/20">
+        <div>
           <span className="text-5xl font-mono font-bold text-teal-400">404</span>
         </div>
 
