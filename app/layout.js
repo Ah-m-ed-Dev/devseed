@@ -72,7 +72,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ar" dir="rtl" className={cairo.variable}>
       <body className="antialiased">
-        <Navbar />
+        
         {children}
         <Footer />
       </body>
