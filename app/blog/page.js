@@ -1,6 +1,10 @@
 export const metadata = {
   title: "المدونة",
-  description: "مقالات تقنية، دراسات حالة، ونصائح عملية في تطوير البرمجيات وتصميم الواجهات.",
+  description:
+    "مقالات تقنية، دراسات حالة، ونصائح عملية في تطوير البرمجيات وتصميم الواجهات.",
+  alternates: {
+    canonical: "/blog",
+  },
 };
 
 const blogPosts = [
