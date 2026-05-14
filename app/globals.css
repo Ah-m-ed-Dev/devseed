@@ -51,4 +51,18 @@ img, video, canvas, svg {
   max-width: 100%;
   height: auto;
 }
+/* ----- تأثيرات التحميل ----- */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
 
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
