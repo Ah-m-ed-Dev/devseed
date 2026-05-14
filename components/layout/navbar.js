@@ -20,6 +20,7 @@ export default function Navbar() {
     { name: "الخدمات", href: "#services" },
     { name: "أعمالنا", href: "#work" },
     { name: "المدونة", href: "/blog" },
+{ name: "سياسة الخصوصية", href: "/privacy" },
   ];
 
   return (
