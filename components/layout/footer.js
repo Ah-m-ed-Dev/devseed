@@ -25,7 +25,7 @@ export default function Footer() {
       title: "تواصل معنا",
       links: [
         { name: "hello@devseed.com", href: "mailto:hello@devseed.com" },
-        { name: "السعودية، الرياض", href: "#" },
+        { name: "السودان، الخرطوم", href: "#" },
       ],
     },
   ];
