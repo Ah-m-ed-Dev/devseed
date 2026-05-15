@@ -65,7 +65,7 @@ export default function Contact() {
                   </svg>
                 ),
                 label: "موقعنا",
-                value: "السعودية، الرياض",
+                value: "السودان، الخرطوم",
                 href: null,
               },
             ].map((info, index) => (
