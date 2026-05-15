@@ -1,7 +1,7 @@
 const articles = {
   "mvp-launch-2-months": {
     title: "كيف ساعدنا عميلاً في إطلاق MVP خلال شهرين فقط",
-    date: "٢٥ ديسمبر ٢٠٢٤",
+    date: "١ مايو ٢٠٢٦",
     readTime: "٧ دقائق",
     category: "دراسة حالة",
     content: `
@@ -41,7 +41,7 @@ const articles = {
 
   "why-nextjs-2025": {
     title: "لماذا نعتقد أن Next.js هو الخيار الأمثل لتطبيقات الويب في ٢٠٢٥",
-    date: "٢٠ ديسمبر ٢٠٢٤",
+    date: "١ مايو ٢٠٢٦",
     readTime: "٥ دقائق",
     category: "تقنية",
     content: `
@@ -62,7 +62,7 @@ const articles = {
 
   "startup-mistakes": {
     title: "٥ أخطاء قاتلة ترتكبها الشركات الناشئة عند بناء منتجها الرقمي الأول",
-    date: "١٥ ديسمبر ٢٠٢٤",
+    date: "١ مايو ٢٠٢٦",
     readTime: "٦ دقائق",
     category: "نصائح",
     content: `
@@ -89,7 +89,7 @@ const articles = {
 
   "react-native-vs-flutter": {
     title: "تطوير تطبيقك باستخدام React Native أم Flutter: مقارنة عملية",
-    date: "١٠ ديسمبر ٢٠٢٤",
+    date: "١ مايو ٢٠٢٦",
     readTime: "٨ دقائق",
     category: "مقارنة",
     content: `
@@ -118,7 +118,7 @@ const articles = {
 
   "aws-scalable-infrastructure": {
     title: "دليلك الشامل لبناء بنية تحتية سحابية قابلة للتوسع على AWS",
-    date: "٥ ديسمبر ٢٠٢٤",
+    date: "١ مايو ٢٠٢٦",
     readTime: "١٠ دقائق",
     category: "تقنية",
     content: `
@@ -145,7 +145,7 @@ const articles = {
 
   "translate-idea-to-requirements": {
     title: "كيف تترجم فكرتك إلى متطلبات تقنية واضحة: دليل لرواد الأعمال غير التقنيين",
-    date: "١ ديسمبر ٢٠٢٤",
+    date: "١ مايو ٢٠٢٦",
     readTime: "٥ دقائق",
     category: "نصائح",
     content: `
@@ -169,7 +169,7 @@ const articles = {
 
   "how-we-ensure-code-quality": {
     title: "كيف نضمن جودة الكود في DevSeed: رحلتنا مع الاختبارات الآلية ومراجعة الكود",
-    date: "٢٨ نوفمبر ٢٠٢٤",
+    date: "١ مايو ٢٠٢٦",
     readTime: "٧ دقائق",
     category: "منهجية العمل",
     content: `
@@ -196,7 +196,7 @@ const articles = {
 
   "ai-impact-software-2025": {
     title: "تأثير الذكاء الاصطناعي على تطوير البرمجيات في ٢٠٢٥ وما بعده",
-    date: "٢٢ نوفمبر ٢٠٢٤",
+    date: "١ مايو ٢٠٢٦",
     readTime: "٦ دقائق",
     category: "تقنية",
     content: `
@@ -220,7 +220,7 @@ const articles = {
 
   "what-happens-after-contact": {
     title: "ماذا يحدث بعد أن تتواصل معنا؟ رحلة مشروعك في DevSeed خطوة بخطوة",
-    date: "١٨ نوفمبر ٢٠٢٤",
+    date: "١ مايو ٢٠٢٦",
     readTime: "٥ دقائق",
     category: "منهجية العمل",
     content: `
@@ -247,7 +247,7 @@ const articles = {
 
   "web-app-security": {
     title: "الأمان في تطبيقات الويب ليس رفاهية: ١٠ ممارسات أمنية نطبقها في كل مشروع",
-    date: "١٢ نوفمبر ٢٠٢٤",
+    date: "١ مايو ٢٠٢٦",
     readTime: "٨ دقائق",
     category: "تقنية",
     content: `
