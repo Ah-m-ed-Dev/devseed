@@ -4,7 +4,7 @@ import Projects from "@/sections/projects";
 import About from "@/sections/about";
 import Contact from "@/sections/contact";
 import Navbar from "@/components/layout/navbar";
-import Footer from "@/components/layout/footer";
+
 
 export const metadata = {
   title: "DevSeed | نزرع حلولاً رقمية",
