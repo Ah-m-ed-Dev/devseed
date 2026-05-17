@@ -11,8 +11,8 @@ export default function About() {
       {/* خلفية زخرفية */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(20,184,166,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(20,184,166,0.02)_1px,transparent_1px)] bg-[size:80px_80px]" />
       
-      {/* وهج مركزي */}
-      {<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-teal-500/5 rounded-full blur-[120px]" />
+      {/* وهج مركزي - الحجم مصغر على الجوال */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-teal-500/5 rounded-full blur-[120px]" />
 
       <div className="max-w-5xl mx-auto relative z-10">
         
@@ -33,10 +33,11 @@ export default function About() {
         <div className="text-center px-5 sm:px-0">
           
           {/* أيقونة كبيرة مع تأثير نبض */}
-<div className="mb-8 sm:mb-10 inline-flex items-center justify-center gap-3 px-8 py-4 rounded-3xl bg-teal-500/10 border border-teal-500/20 animate-pulse">
-  <span className="text-2xl sm:text-3xl font-bold text-white">DevSeed</span>
-  <span className="text-4xl sm:text-5xl font-mono font-bold text-teal-400">&lt;/&gt;</span>
-</div>
+          <div className="mb-8 sm:mb-10 inline-flex items-center justify-center gap-3 px-8 py-4 rounded-3xl bg-teal-500/10 border border-teal-500/20 animate-pulse">
+            <span className="text-2xl sm:text-3xl font-bold text-white">DevSeed</span>
+            <span className="text-4xl sm:text-5xl font-mono font-bold text-teal-400">&lt;/&gt;</span>
+          </div>
+
           {/* العنوان */}
           <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-white mb-6 sm:mb-8 leading-tight">
             نحن لا نكتب
