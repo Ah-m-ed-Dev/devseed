@@ -67,13 +67,15 @@ img, video, canvas, svg {
   animation: shimmer 2s infinite;
 }
 
-/* إصلاح نهائي - عرض كامل + توسيط */
-main, section, header, footer, nav {
+/* إصلاح توسيط جميع الأقسام */
+section {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
   width: 100% !important;
-  max-width: 100%;
 }
 
-.w-full.max-w-7xl {
-  margin-left: auto !important;
-  margin-right: auto !important;
+section > div:not(.absolute):not(.fixed) {
+  width: 100% !important;
+  max-width: 1280px !important;
 }
