@@ -23,23 +23,23 @@ const ArrowDownIcon = ({ className = "w-5 h-5" }) => (
 export default function Hero() {
   return (
     <section className="relative h-dvh w-full flex flex-col items-center justify-center overflow-hidden bg-[#0a0a0f]">
-      
+
       {/* شبكة التربة */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(20,184,166,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(20,184,166,0.03)_1px,transparent_1px)] bg-[size:64px_64px]" />
-      
+
       {/* بذور متطايرة */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-1 h-1 bg-teal-400 rounded-full animate-ping [animation-duration:3s] opacity-40" />
         <div className="absolute top-1/3 right-1/3 w-1.5 h-1.5 bg-teal-300 rounded-full animate-ping [animation-duration:4s] [animation-delay:1s] opacity-30" />
         <div className="absolute bottom-1/3 left-1/3 w-1 h-1 bg-emerald-400 rounded-full animate-ping [animation-duration:5s] [animation-delay:2s] opacity-40" />
       </div>
-      
+
       {/* وهج النمو */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[300px] sm:w-[600px] h-[200px] sm:h-[400px] bg-teal-500/5 rounded-full blur-[100px]" />
 
       {/* المحتوى الرئيسي */}
-      <div className="relative z-10 text-center w-full px-5 sm:px-6">
-        
+      <div className="relative z-10 text-center w-full max-w-7xl mx-auto px-4 sm:px-6">
+
         {/* الشارة العلوية */}
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-teal-500/20 bg-teal-500/5 text-teal-300 text-sm mb-6 sm:mb-8">
           <SparklesIcon className="w-4 h-4" />
@@ -64,7 +64,7 @@ export default function Hero() {
         </p>
 
         {/* أزرار الإجراء */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full px-0 sm:px-0">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full">
           <a
             href="#contact"
             className="group relative inline-flex items-center justify-center gap-2 bg-teal-500 text-white px-8 py-4 rounded-2xl font-semibold text-lg w-full sm:w-auto hover:bg-teal-400 transition-all shadow-lg shadow-teal-500/25 hover:shadow-teal-500/40 hover:-translate-y-0.5"
@@ -74,7 +74,7 @@ export default function Hero() {
             </span>
             ابدأ مشروعك
           </a>
-          
+
           <a
             href="#work"
             className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl font-medium text-gray-300 hover:text-white border border-gray-700 hover:border-gray-500 transition-all w-full sm:w-auto"
