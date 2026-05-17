@@ -39,18 +39,18 @@ export default function Services() {
   ];
 
   return (
-    <section id="services" className="py-16 sm:py-24 px-0 sm:px-6 relative overflow-hidden bg-[#06060a]">
-      
+    <section id="services" className="py-16 sm:py-24 relative overflow-hidden bg-[#06060a]">
+
       {/* خلفية زخرفية */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(20,184,166,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(20,184,166,0.02)_1px,transparent_1px)] bg-[size:80px_80px]" />
-      
+
       {/* وهج */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[800px] h-[300px] sm:h-[800px] bg-teal-500/3 rounded-full blur-[150px]" />
 
-      <div className="max-w-7xl mx-auto relative z-10">
-        
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+
         {/* عنوان القسم */}
-        <div className="text-center mb-12 sm:mb-16 px-5 sm:px-0">
+        <div className="text-center mb-12 sm:mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-teal-500/20 bg-teal-500/5 text-teal-300 text-sm mb-6">
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 2L2 7l10 5 10-5-10-5z" />
@@ -59,7 +59,7 @@ export default function Services() {
             </svg>
             <span>ماذا نزرع معاً؟</span>
           </div>
-          
+
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
             خدمات
             <span className="text-teal-400"> برمجية متكاملة</span>
@@ -70,7 +70,7 @@ export default function Services() {
         </div>
 
         {/* بطاقات الخدمات */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-0 sm:gap-6 px-0 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-0 sm:gap-6">
           {services.map((service, index) => (
             <div
               key={index}
@@ -106,7 +106,7 @@ export default function Services() {
           ))}
         </div>
 
-        <p className="text-center text-gray-500 text-sm mt-8 sm:mt-12 px-5">
+        <p className="text-center text-gray-500 text-sm mt-8 sm:mt-12">
           كل خدمة نقدمها تُبنى على أساس متين، لتنمو مع مشروعك خطوة بخطوة 🌱
         </p>
       </div>
