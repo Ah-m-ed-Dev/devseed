@@ -1,10 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const menuRef = useRef(null);
+
+  const openMenu = () => {
+    setIsOpen(true);
+    setIsAnimating(true);
+  };
+
+  const closeMenu = () => {
+    setIsAnimating(false);
+    setTimeout(() => {
+      setIsOpen(false);
+    }, 250);
+  };
 
   const handleSmoothScroll = (e, targetId) => {
     e.preventDefault();
@@ -12,8 +26,24 @@ export default function Navbar() {
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
     }
-    setIsOpen(false);
+    closeMenu();
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        closeMenu();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
 
   const navLinks = [
     { name: "الرئيسية", href: "/" },
@@ -24,7 +54,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="fixed top-3 sm:top-4 left-0 right-0 z-50 mx-4 lg:mx-auto lg:max-w-3xl xl:max-w-4xl bg-[#0a0a0f]/90 backdrop-blur-md border border-white/10 rounded-2xl shadow-lg shadow-black/20">
+      <nav className="fixed top-3 sm:top-4 left-0 right-0 z-50 mx-4 lg:mx-auto lg:max-w-3xl xl:max-w-4xl bg-[#0a0a0f]/90 backdrop-blur-md border border-white/10 rounded-2xl shadow-lg shadow-black/20" ref={menuRef}>
         <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 py-2.5 flex items-center justify-between">
 
           {/* الشعار */}
@@ -63,12 +93,12 @@ export default function Navbar() {
 
           {/* زر الهامبرغر */}
           <button
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={() => isOpen ? closeMenu() : openMenu()}
             className="md:hidden text-gray-300 hover:text-white p-1 shrink-0"
             aria-label="القائمة"
           >
             <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              {isOpen ? (
+              {isOpen && isAnimating ? (
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               ) : (
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -81,7 +111,12 @@ export default function Navbar() {
         {isOpen && (
           <div 
             className="md:hidden border-t border-white/5"
-            style={{ animation: 'navbarSlideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}
+            style={{ 
+              animation: isAnimating 
+                ? 'navbarSlideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards' 
+                : 'navbarSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+              opacity: isAnimating ? 1 : 0,
+            }}
           >
             <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 py-2 flex flex-col">
               {navLinks.map((link) => (
@@ -92,7 +127,7 @@ export default function Navbar() {
                     if (link.href.startsWith("#")) {
                       handleSmoothScroll(e, link.href.replace("#", ""));
                     } else {
-                      setIsOpen(false);
+                      closeMenu();
                     }
                   }}
                   className="text-gray-300 hover:text-teal-400 text-sm py-2.5 border-b border-white/5 last:border-0"
@@ -123,6 +158,17 @@ export default function Navbar() {
           to {
             opacity: 1;
             transform: translateY(0) scale(1);
+          }
+        }
+        
+        @keyframes navbarSlideUp {
+          from {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+          to {
+            opacity: 0;
+            transform: translateY(-8px) scale(0.98);
           }
         }
       `}</style>
