@@ -66,3 +66,9 @@ img, video, canvas, svg {
   background-size: 200% 100%;
   animation: shimmer 2s infinite;
 }
+section {
+  border: 3px solid red !important;
+}
+::-webkit-scrollbar {
+  display: none;
+}
