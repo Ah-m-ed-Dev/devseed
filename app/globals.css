@@ -67,13 +67,13 @@ img, video, canvas, svg {
   animation: shimmer 2s infinite;
 }
 
-/* إصلاح نهائي - يستهدف الأقسام الرئيسية فقط */
-main, section, header, footer, nav, .section-container {
+/* إصلاح نهائي - عرض كامل + توسيط */
+main, section, header, footer, nav {
   width: 100% !important;
   max-width: 100%;
 }
 
-.w-full.max-w-7xl.mx-auto {
+.w-full.max-w-7xl {
   margin-left: auto !important;
   margin-right: auto !important;
 }
