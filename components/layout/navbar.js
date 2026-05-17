@@ -20,15 +20,14 @@ export default function Navbar() {
     { name: "الخدمات", href: "#services" },
     { name: "أعمالنا", href: "#work" },
     { name: "المدونة", href: "/blog" },
-{ name: "سياسة الخصوصية", href: "/privacy" },
   ];
 
   return (
     <>
       <nav className="fixed top-3 sm:top-4 left-0 right-0 z-50 mx-4 lg:mx-auto lg:max-w-3xl xl:max-w-4xl bg-[#0a0a0f]/90 backdrop-blur-md border border-white/10 rounded-2xl shadow-lg shadow-black/20">
-        <div className="flex items-center justify-between px-3 sm:px-4 py-2.5">
-          
-          {/* الشعار - أقصى اليمين في RTL */}
+        <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 py-2.5 flex items-center justify-between">
+
+          {/* الشعار */}
           <Link 
             href="/" 
             className="flex items-center gap-1 sm:gap-1.5 text-white font-bold text-sm sm:text-base shrink-0"
@@ -37,7 +36,7 @@ export default function Navbar() {
             <span>DevSeed</span>
           </Link>
 
-          {/* روابط سطح المكتب - في المنتصف */}
+          {/* روابط سطح المكتب */}
           <div className="hidden md:flex items-center gap-2 lg:gap-3">
             {navLinks.map((link) => (
               <a
@@ -53,20 +52,16 @@ export default function Navbar() {
                 {link.name}
               </a>
             ))}
-          </div>
-
-          {/* زر ابدأ مشروعك - أقصى اليسار في RTL */}
-          <div className="hidden md:block">
             <a
               href="#contact"
               onClick={(e) => handleSmoothScroll(e, "contact")}
-              className="bg-teal-500 text-white px-2.5 lg:px-3 py-1.5 rounded-lg font-medium text-xs lg:text-sm hover:bg-teal-400 transition-all whitespace-nowrap"
+              className="bg-teal-500 text-white px-2.5 lg:px-3 py-1.5 rounded-lg font-medium text-xs lg:text-sm hover:bg-teal-400 transition-all whitespace-nowrap shrink-0 mr-1"
             >
               ابدأ مشروعك
             </a>
           </div>
 
-          {/* زر الهامبرغر - الجوال فقط */}
+          {/* زر الهامبرغر */}
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="md:hidden text-gray-300 hover:text-white p-1 shrink-0"
@@ -82,10 +77,10 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* قائمة الجوال المنسدلة */}
+        {/* قائمة الجوال */}
         {isOpen && (
           <div className="md:hidden border-t border-white/5">
-            <div className="px-3 sm:px-4 py-2 flex flex-col">
+            <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 py-2 flex flex-col">
               {navLinks.map((link) => (
                 <a
                   key={link.name}
