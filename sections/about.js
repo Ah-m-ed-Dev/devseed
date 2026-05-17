@@ -6,18 +6,18 @@ export default function About() {
   ];
 
   return (
-    <section id="about" className="py-16 sm:py-24 px-0 sm:px-6 relative overflow-hidden bg-[#06060a]">
-      
+    <section id="about" className="py-16 sm:py-24 relative overflow-hidden bg-[#06060a]">
+
       {/* خلفية زخرفية */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(20,184,166,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(20,184,166,0.02)_1px,transparent_1px)] bg-[size:80px_80px]" />
-      
-      {/* وهج مركزي - الحجم مصغر على الجوال */}
+
+      {/* وهج مركزي */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-teal-500/5 rounded-full blur-[120px]" />
 
-      <div className="max-w-5xl mx-auto relative z-10">
-        
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+
         {/* الشارة العلوية */}
-        <div className="text-center mb-8 px-5 sm:px-0">
+        <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-teal-500/20 bg-teal-500/5 text-teal-300 text-sm mb-6">
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
@@ -30,8 +30,8 @@ export default function About() {
         </div>
 
         {/* المحتوى الرئيسي */}
-        <div className="text-center px-5 sm:px-0">
-          
+        <div className="text-center">
+
           {/* أيقونة كبيرة مع تأثير نبض */}
           <div className="mb-8 sm:mb-10 inline-flex items-center justify-center gap-3 px-8 py-4 rounded-3xl bg-teal-500/10 border border-teal-500/20 animate-pulse">
             <span className="text-2xl sm:text-3xl font-bold text-white">DevSeed</span>
