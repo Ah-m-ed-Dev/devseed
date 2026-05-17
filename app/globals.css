@@ -66,3 +66,17 @@ img, video, canvas, svg {
   background-size: 200% 100%;
   animation: shimmer 2s infinite;
 }
+/* إصلاح طارئ لمشكلة الإزاحة */
+main, section, div {
+  max-width: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#__next, main {
+  width: 100%;
+}
