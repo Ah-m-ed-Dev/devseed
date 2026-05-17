@@ -66,3 +66,14 @@ img, video, canvas, svg {
   background-size: 200% 100%;
   animation: shimmer 2s infinite;
 }
+
+/* إصلاح نهائي - يستهدف الأقسام الرئيسية فقط */
+main, section, header, footer, nav, .section-container {
+  width: 100% !important;
+  max-width: 100%;
+}
+
+.w-full.max-w-7xl.mx-auto {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
