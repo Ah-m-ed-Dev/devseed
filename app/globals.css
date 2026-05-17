@@ -68,8 +68,10 @@ img, video, canvas, svg {
 }
 
 /* إصلاح طارئ لمشكلة الإزاحة */
-main, section, div {
+main, section, header, footer, nav {
   max-width: 100%;
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
 
 body {
@@ -80,4 +82,9 @@ body {
 
 #__next, main {
   width: 100%;
+}
+
+section > div:first-of-type {
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
