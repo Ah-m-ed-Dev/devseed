@@ -24,6 +24,7 @@ export default function WhatsappBubble() {
           boxShadow: '0 20px 60px rgba(0,0,0,0.5)',
           border: '1px solid rgba(20,184,166,0.2)',
           overflow: 'hidden',
+          animation: 'devseedSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
         }}>
           {/* الرأس */}
           <div style={{ backgroundColor: '#0a0a0f', padding: '16px', display: 'flex', alignItems: 'center', gap: '12px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
@@ -62,7 +63,7 @@ export default function WhatsappBubble() {
           {/* الزر */}
           <div style={{ padding: '0 16px 16px 16px' }}>
             <a
-              href={`https://wa.me/${phoneNumber}?text=${message}`}
+              href={`https://wa.me/${phoneNumber}`}
               target="_blank"
               style={{
                 display: 'flex',
@@ -77,14 +78,16 @@ export default function WhatsappBubble() {
                 fontWeight: 600,
                 fontSize: '14px',
                 textDecoration: 'none',
+                transition: 'background 0.2s',
               }}
+              onMouseEnter={(e) => e.target.style.backgroundColor = '#0d9488'}
+              onMouseLeave={(e) => e.target.style.backgroundColor = '#14b8a6'}
             >
               ابدأ المحادثة
-              {/* سهم ↗️ احترافي */}
-<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-  <path d="M7 17L17 7" />
-  <path d="M7 7h10v10" />
-</svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M7 17L17 7" />
+                <path d="M7 7h10v10" />
+              </svg>
             </a>
           </div>
         </div>
@@ -110,6 +113,15 @@ export default function WhatsappBubble() {
           boxShadow: '0 4px 20px rgba(37,211,102,0.3)',
           maxWidth: 'none',
           margin: '0',
+          transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease',
+        }}
+        onMouseEnter={(e) => {
+          e.target.style.transform = 'scale(1.1)';
+          e.target.style.boxShadow = '0 6px 25px rgba(37,211,102,0.4)';
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.transform = 'scale(1)';
+          e.target.style.boxShadow = '0 4px 20px rgba(37,211,102,0.3)';
         }}
       >
         {isOpen ? (
@@ -117,12 +129,24 @@ export default function WhatsappBubble() {
             <path d="M18 6L6 18M6 6l12 12"/>
           </svg>
         ) : (
-          /* أيقونة واتساب الرسمية */
           <svg width="30" height="30" viewBox="0 0 24 24" fill="white">
             <path d="M19.05 4.91A9.816 9.816 0 0012.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.24-1.38a9.89 9.89 0 004.75 1.21c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01m-7.01 15.24c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.19-.31a8.22 8.22 0 01-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.19 8.19 0 012.42 5.83c0 4.54-3.7 8.23-8.24 8.23m4.54-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.38-.12-.54.12-.15.25-.58.81-.71.97-.13.17-.27.19-.5.06-.23-.12-1-.35-1.94-1.2-.72-.64-1.21-1.43-1.36-1.67-.15-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.15.17-.25.25-.42.08-.17.04-.31-.02-.43-.06-.12-.54-1.3-.74-1.78-.2-.48-.4-.42-.54-.43-.14-.01-.3-.01-.47-.01-.16 0-.43.06-.66.31-.23.25-.87.85-.87 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.6.19 1.14.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.08.15-1.18-.06-.1-.23-.17-.48-.29"/>
           </svg>
         )}
       </button>
+
+      <style jsx>{`
+        @keyframes devseedSlideUp {
+          from {
+            opacity: 0;
+            transform: translateY(16px) scale(0.92);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+      `}</style>
     </>
   );
 }
