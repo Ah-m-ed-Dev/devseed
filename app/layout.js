@@ -74,7 +74,7 @@ export default function RootLayout({ children }) {
     <html lang="ar" dir="rtl" className={cairo.variable}>
       <body className="antialiased">
         <Navbar />
-        {children}
+      <main>{children}</main>
         <Footer />
         <WhatsappBubble />
       </body>
