@@ -76,6 +76,7 @@ export default function RootLayout({ children }) {
         <Navbar />
         {children}
         <Footer />
+        <WhatsappBubble />
       </body>
     </html>
   );
