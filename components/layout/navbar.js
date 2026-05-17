@@ -79,7 +79,10 @@ export default function Navbar() {
 
         {/* قائمة الجوال */}
         {isOpen && (
-          <div className="md:hidden border-t border-white/5">
+          <div 
+            className="md:hidden border-t border-white/5"
+            style={{ animation: 'navbarSlideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}
+          >
             <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 py-2 flex flex-col">
               {navLinks.map((link) => (
                 <a
@@ -110,6 +113,19 @@ export default function Navbar() {
       </nav>
 
       <div className="h-14 sm:h-16" />
+
+      <style jsx>{`
+        @keyframes navbarSlideDown {
+          from {
+            opacity: 0;
+            transform: translateY(-8px) scale(0.98);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+      `}</style>
     </>
   );
 }
