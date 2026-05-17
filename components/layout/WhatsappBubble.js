@@ -5,8 +5,7 @@ import { useState } from "react";
 export default function WhatsappBubble() {
   const [isOpen, setIsOpen] = useState(false);
   const phoneNumber = "249997143276";
-  const message = encodeURIComponent("السلام عليكم، عندي استفسار عن خدمات DevSeed");
-
+  
   return (
     <>
       {/* نافذة الدردشة */}
