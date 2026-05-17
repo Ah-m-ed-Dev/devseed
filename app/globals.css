@@ -80,8 +80,3 @@ body {
 #__next, main {
   width: 100%;
 }
-
-/* استثناء البوبل من الإصلاح */
-.fixed {
-  max-width: none !important;
-}
