@@ -1,17 +1,17 @@
 export default function Contact() {
   return (
-    <section id="contact" className="py-16 sm:py-24 px-0 sm:px-6 relative overflow-hidden bg-[#0a0a0f]">
-      
+    <section id="contact" className="py-16 sm:py-24 relative overflow-hidden bg-[#0a0a0f]">
+
       {/* خلفية زخرفية */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(20,184,166,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(20,184,166,0.02)_1px,transparent_1px)] bg-[size:80px_80px]" />
-      
+
       {/* وهج مركزي */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-teal-500/5 rounded-full blur-[120px]" />
 
-      <div className="max-w-4xl mx-auto relative z-10">
-        
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+
         {/* الشارة العلوية */}
-        <div className="text-center mb-8 px-5 sm:px-0">
+        <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-teal-500/20 bg-teal-500/5 text-teal-300 text-sm mb-6">
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
@@ -22,7 +22,7 @@ export default function Contact() {
         </div>
 
         {/* العنوان */}
-        <div className="text-center mb-12 px-5 sm:px-0">
+        <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-white mb-4">
             تواصل
             <span className="text-teal-400"> معنا</span>
@@ -32,10 +32,10 @@ export default function Contact() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-5 gap-0 sm:gap-8 max-w-4xl mx-auto px-0 sm:px-0">
-          
+        <div className="grid md:grid-cols-5 gap-0 sm:gap-8">
+
           {/* معلومات التواصل */}
-          <div className="md:col-span-2 space-y-0 sm:space-y-6 px-5 sm:px-0 mb-6 sm:mb-0">
+          <div className="md:col-span-2 space-y-0 sm:space-y-6 mb-6 sm:mb-0">
             {[
               {
                 icon: (
@@ -90,7 +90,7 @@ export default function Contact() {
           </div>
 
           {/* نموذج التواصل */}
-          <div className="md:col-span-3 px-5 sm:px-0">
+          <div className="md:col-span-3">
             <form className="space-y-4 p-6 sm:p-8 rounded-none sm:rounded-2xl border-0 sm:border border-white/5 bg-white/[0.02]">
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
@@ -110,7 +110,7 @@ export default function Contact() {
                   />
                 </div>
               </div>
-              
+
               <div>
                 <label className="block text-gray-400 text-sm mb-2">نوع المشروع</label>
                 <select className="w-full p-4 bg-white/[0.03] border border-white/10 rounded-xl text-gray-400 focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/50 transition-all">
