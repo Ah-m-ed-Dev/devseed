@@ -44,7 +44,7 @@ const plans = [
     ],
     color: "from-teal-400 to-emerald-400",
     popular: true,
-    cta: "الأكثر طلباً",
+    cta: "ابدأ الآن",
     href: "/#contact",
   },
   {
@@ -66,7 +66,7 @@ const plans = [
     ],
     color: "from-purple-400 to-pink-400",
     popular: false,
-    cta: "تواصل معنا",
+    cta: "ابدأ الآن",
     href: "/#contact",
   },
 ];
