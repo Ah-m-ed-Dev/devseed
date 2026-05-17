@@ -47,7 +47,9 @@ export default function Projects() {
       
       {/* خلفية زخرفية */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(20,184,166,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(20,184,166,0.02)_1px,transparent_1px)] bg-[size:80px_80px]" />
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-teal-500/3 rounded-full blur-[150px]" />
+      
+      {/* وهج */}
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[300px] sm:w-[800px] h-[200px] sm:h-[400px] bg-teal-500/3 rounded-full blur-[150px]" />
 
       <div className="max-w-7xl mx-auto relative z-10">
         
@@ -77,31 +79,25 @@ export default function Projects() {
               key={index}
               className="group relative p-6 sm:p-8 border-b sm:border border-white/5 bg-white/[0.02] sm:rounded-2xl hover:bg-white/[0.04] hover:border-teal-500/20 transition-all duration-500 sm:hover:-translate-y-2 last:border-b-0 sm:last:border-b"
             >
-              {/* وهج خلف البطاقة */}
               <div className="absolute inset-0 sm:rounded-2xl bg-teal-500/0 group-hover:bg-teal-500/[0.03] transition-colors duration-500" />
 
               <div className="relative z-10">
-                {/* أيقونة المشروع */}
                 <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${project.color} bg-opacity-10 text-white flex items-center justify-center mb-6 group-hover:scale-110 transition-all duration-500 shadow-lg`}>
                   {project.icon}
                 </div>
 
-                {/* عنوان المشروع */}
                 <h3 className="text-xl font-semibold text-white mb-3 group-hover:text-teal-300 transition-colors duration-300">
                   {project.title}
                 </h3>
 
-                {/* وصف المشروع */}
                 <p className="text-gray-400 leading-relaxed mb-6 text-sm sm:text-base">
                   {project.description}
                 </p>
 
-                {/* التقنيات المستخدمة */}
                 <div className="pt-4 border-t border-white/5">
                   <span className="text-xs text-gray-500 font-mono">{project.tech}</span>
                 </div>
 
-                {/* سهم يظهر عند hover */}
                 <div className="absolute bottom-6 sm:bottom-8 right-6 sm:right-8 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-x-2 group-hover:translate-x-0">
                   <svg className="w-5 h-5 text-teal-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M5 12h14" />
@@ -113,7 +109,6 @@ export default function Projects() {
           ))}
         </div>
 
-        {/* نص ختامي */}
         <p className="text-center text-gray-500 text-sm mt-8 sm:mt-12 px-5">
           هذه مجرد نماذج. كل مشروع جديد هو فرصة لنزرع شيئاً مختلفاً ✨
         </p>
