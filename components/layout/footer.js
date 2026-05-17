@@ -10,7 +10,7 @@ export default function Footer() {
         { name: "المشاريع", href: "#projects" },
         { name: "من نحن", href: "#about" },
 { name: "المدونة", href: "/blog" },
-{ name: "الأسعار", href: "/pricing" },
+{ name: "باقات الخدمات", href: "/pricing" },
 { name: "سياسة الخصوصية", href: "/privacy" },
       ],
     },
