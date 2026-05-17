@@ -8,7 +8,7 @@ export default function WhatsappBubble() {
   const message = encodeURIComponent("السلام عليكم، عندي استفسار عن خدمات DevSeed");
 
   return (
-    <div className="fixed bottom-5 right-5 z-[9999]">
+    <div className="fixed bottom-5 right-5 z-[9999]" style={{ maxWidth: 'none' }}>
       
       {/* نافذة الدردشة */}
       {isOpen && (
