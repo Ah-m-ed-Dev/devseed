@@ -35,8 +35,7 @@ export default function Hero() {
       </div>
       
       {/* وهج النمو */}
-      
-      {<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-teal-500/5 rounded-full blur-[120px]" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[300px] sm:w-[600px] h-[200px] sm:h-[400px] bg-teal-500/5 rounded-full blur-[100px]" />
 
       {/* المحتوى الرئيسي */}
       <div className="relative z-10 text-center w-full px-5 sm:px-6">
