@@ -9,6 +9,8 @@ export default function WhatsappBubble() {
 
   return (
    <div className="fixed bottom-5 right-5 z-[9999] pointer-events-none" style={{ right: '20px', maxWidth: 'none', width: 'auto', margin: '0' }}>
+
+<div className ="relative w-full h-full" >
         
         {/* نافذة الدردشة */}
         {isOpen && (
