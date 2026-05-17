@@ -17,8 +17,8 @@ export const metadata = {
 
 export default function Home() {
   return (
-    <>
-      <Navbar />
+    
+      
       <main className="overflow-hidden">
         <Hero />
         <Services />
@@ -27,6 +27,6 @@ export default function Home() {
         <Contact />
       </main>
       
-    </>
+    
   );
 }
