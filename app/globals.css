@@ -69,6 +69,6 @@ img, video, canvas, svg {
 section {
   border: 3px solid red !important;
 }
-::-webkit-scrollbar {
-  display: none;
+section {
+  overflow: hidden;
 }
