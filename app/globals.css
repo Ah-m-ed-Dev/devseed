@@ -67,9 +67,17 @@ img, video, canvas, svg {
   animation: shimmer 2s infinite;
 }
 
-/* إصلاح مباشر لكل الأقسام */
-#hero, #services, #work, #about, #contact {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
+/* إصلاح طارئ لمشكلة الإزاحة */
+main, section, div {
+  max-width: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#__next, main {
+  width: 100%;
 }
