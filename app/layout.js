@@ -2,7 +2,7 @@ import "./globals.css";
 import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
 import { Cairo } from "next/font/google";
-import WhatsappBubble from "@/components/WhatsappBubble";
+import WhatsappBubble from "@/components/layout/WhatsappBubble";
 
 const cairo = Cairo({
   subsets: ["arabic"],
