@@ -43,18 +43,18 @@ export default function Projects() {
   ];
 
   return (
-    <section id="work" className="py-16 sm:py-24 px-0 sm:px-6 relative overflow-hidden bg-[#0a0a0f]">
-      
+    <section id="work" className="py-16 sm:py-24 relative overflow-hidden bg-[#0a0a0f]">
+
       {/* خلفية زخرفية */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(20,184,166,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(20,184,166,0.02)_1px,transparent_1px)] bg-[size:80px_80px]" />
-      
+
       {/* وهج */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[300px] sm:w-[800px] h-[200px] sm:h-[400px] bg-teal-500/3 rounded-full blur-[150px]" />
 
-      <div className="max-w-7xl mx-auto relative z-10">
-        
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+
         {/* عنوان القسم */}
-        <div className="text-center mb-12 sm:mb-16 px-5 sm:px-0">
+        <div className="text-center mb-12 sm:mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-teal-500/20 bg-teal-500/5 text-teal-300 text-sm mb-6">
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M3 3v18h18" />
@@ -62,7 +62,7 @@ export default function Projects() {
             </svg>
             <span>حصاد ما زرعناه</span>
           </div>
-          
+
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
             مشاريع
             <span className="text-teal-400"> نفتخر بها</span>
@@ -73,7 +73,7 @@ export default function Projects() {
         </div>
 
         {/* شبكة المشاريع */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-0 sm:gap-6 px-0 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-0 sm:gap-6">
           {projects.map((project, index) => (
             <div
               key={index}
@@ -109,7 +109,7 @@ export default function Projects() {
           ))}
         </div>
 
-        <p className="text-center text-gray-500 text-sm mt-8 sm:mt-12 px-5">
+        <p className="text-center text-gray-500 text-sm mt-8 sm:mt-12">
           هذه مجرد نماذج. كل مشروع جديد هو فرصة لنزرع شيئاً مختلفاً ✨
         </p>
       </div>
