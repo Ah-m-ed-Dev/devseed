@@ -1,4 +1,36 @@
+"use client";
+
+import { useState } from "react";
+import { createMessage } from "@/lib/supabase";
+
 export default function Contact() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    project_type: "",
+    details: "",
+  });
+  const [status, setStatus] = useState(null); // 'sending', 'success', 'error'
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus("sending");
+
+    try {
+      await createMessage(formData);
+      setStatus("success");
+      setFormData({ name: "", email: "", project_type: "", details: "" });
+      setTimeout(() => setStatus(null), 3000);
+    } catch (error) {
+      setStatus("error");
+      setTimeout(() => setStatus(null), 3000);
+    }
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
   return (
     <section id="contact" className="py-16 sm:py-24 relative overflow-hidden bg-[#0a0a0f]">
 
@@ -91,12 +123,16 @@ export default function Contact() {
 
           {/* نموذج التواصل */}
           <div className="md:col-span-3">
-            <form className="space-y-4 p-6 sm:p-8 rounded-none sm:rounded-2xl border-0 sm:border border-white/5 bg-white/[0.02]">
+            <form onSubmit={handleSubmit} className="space-y-4 p-6 sm:p-8 rounded-none sm:rounded-2xl border-0 sm:border border-white/5 bg-white/[0.02]">
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-gray-400 text-sm mb-2">الاسم</label>
                   <input
                     type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
                     placeholder="أحمد محمد"
                     className="w-full p-4 bg-white/[0.03] border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/50 transition-all"
                   />
@@ -105,6 +141,10 @@ export default function Contact() {
                   <label className="block text-gray-400 text-sm mb-2">البريد الإلكتروني</label>
                   <input
                     type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
                     placeholder="ahmed@example.com"
                     className="w-full p-4 bg-white/[0.03] border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/50 transition-all"
                   />
@@ -113,7 +153,12 @@ export default function Contact() {
 
               <div>
                 <label className="block text-gray-400 text-sm mb-2">نوع المشروع</label>
-                <select className="w-full p-4 bg-white/[0.03] border border-white/10 rounded-xl text-gray-400 focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/50 transition-all">
+                <select
+                  name="project_type"
+                  value={formData.project_type}
+                  onChange={handleChange}
+                  className="w-full p-4 bg-white/[0.03] border border-white/10 rounded-xl text-gray-400 focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/50 transition-all"
+                >
                   <option value="">اختر نوع المشروع...</option>
                   <option value="website">تطوير موقع إلكتروني</option>
                   <option value="webapp">تطبيق ويب متكامل</option>
@@ -125,6 +170,10 @@ export default function Contact() {
               <div>
                 <label className="block text-gray-400 text-sm mb-2">تفاصيل المشروع</label>
                 <textarea
+                  name="details"
+                  value={formData.details}
+                  onChange={handleChange}
+                  required
                   rows="4"
                   placeholder="أخبرنا عن فكرتك أو مشروعك..."
                   className="w-full p-4 bg-white/[0.03] border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/50 transition-all resize-none"
@@ -133,13 +182,32 @@ export default function Contact() {
 
               <button
                 type="submit"
-                className="w-full group inline-flex items-center justify-center gap-2 bg-teal-500 text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:bg-teal-400 transition-all shadow-lg shadow-teal-500/25 hover:shadow-teal-500/40 hover:-translate-y-0.5"
+                disabled={status === "sending"}
+                className={`w-full group inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl font-semibold text-lg transition-all shadow-lg ${
+                  status === "success"
+                    ? "bg-green-500 text-white"
+                    : status === "error"
+                    ? "bg-red-500 text-white"
+                    : "bg-teal-500 text-white hover:bg-teal-400 shadow-teal-500/25 hover:shadow-teal-500/40"
+                }`}
               >
-                أرسل الرسالة
-                <svg className="w-5 h-5 group-hover:-translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M5 12h14" />
-                  <path d="M12 5l7 7-7 7" />
-                </svg>
+                {status === "sending" ? (
+                  "جاري الإرسال..."
+                ) : status === "success" ? (
+                  <>
+                    تم الإرسال ✅
+                  </>
+                ) : status === "error" ? (
+                  "فشل الإرسال ❌"
+                ) : (
+                  <>
+                    أرسل الرسالة
+                    <svg className="w-5 h-5 group-hover:-translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M5 12h14" />
+                      <path d="M12 5l7 7-7 7" />
+                    </svg>
+                  </>
+                )}
               </button>
             </form>
           </div>
