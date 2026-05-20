@@ -46,11 +46,7 @@ export default function LoginModal({ isOpen, onClose }) {
           ×
         </button>
 
-        {/* الشعار */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-teal-500/10 border border-teal-500/20 text-teal-400 font-mono font-bold text-3xl mb-4">
-            &lt;/&gt;
-          </div>
+        
           <h2 className="text-2xl font-bold text-white mb-1">تسجيل الدخول</h2>
           <p className="text-gray-400 text-sm">لوحة تحكم DevSeed</p>
         </div>
