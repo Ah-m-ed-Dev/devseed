@@ -83,7 +83,7 @@ function Toast({ message, type, onClose }) {
 
   return (
     <div
-      className={`fixed top-4 right-4 z-[99999] px-4 py-3 rounded-xl border ${bgColor} text-sm flex items-center gap-2 shadow-lg`}
+      className={`fixed top-4 right-1/2 translate-x-1/2 z-[99999] px-4 py-3 rounded-xl border ${bgColor} text-sm flex items-center gap-2 shadow-lg`}
       style={{ animation: "toastSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1)" }}
     >
       <span>{icon}</span>
