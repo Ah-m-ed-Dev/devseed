@@ -38,6 +38,16 @@ export default function LoginModal({ isOpen, onClose }) {
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
+
+    if (!email.trim()) {
+      setError("الرجاء إدخال البريد الإلكتروني");
+      return;
+    }
+    if (!password.trim()) {
+      setError("الرجاء إدخال كلمة المرور");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -66,9 +76,9 @@ export default function LoginModal({ isOpen, onClose }) {
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
 
       <div 
-  className="relative bg-[#0f172a] border border-teal-500/20 rounded-2xl w-full sm:max-w-[320px] shadow-2xl p-6"
-  style={{ animation: "modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)" }}
->
+        className="relative bg-[#0f172a] border border-teal-500/20 rounded-2xl w-full sm:max-w-[320px] shadow-2xl p-6"
+        style={{ animation: "modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)" }}
+      >
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-500 hover:text-white text-xl leading-none"
