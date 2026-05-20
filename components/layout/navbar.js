@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import LoginModal from "@/components/LoginModal";
+import LoginModal from "@/components/layout/LoginModal";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
