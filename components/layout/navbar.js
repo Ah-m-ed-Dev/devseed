@@ -2,10 +2,12 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import LoginModal from "@/components/LoginModal";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
   const menuRef = useRef(null);
 
   const openMenu = () => {
@@ -49,6 +51,7 @@ export default function Navbar() {
     { name: "الرئيسية", href: "/" },
     { name: "الخدمات", href: "#services" },
     { name: "أعمالنا", href: "#work" },
+    { name: "الأسعار", href: "/pricing" },
     { name: "المدونة", href: "/blog" },
   ];
 
@@ -82,6 +85,16 @@ export default function Navbar() {
                 {link.name}
               </a>
             ))}
+            
+            {/* أيقونة القفل للداشبورد */}
+            <button
+              onClick={() => setShowLogin(true)}
+              className="text-gray-300 hover:text-teal-400 transition-colors text-xs lg:text-sm font-medium whitespace-nowrap px-1"
+              title="لوحة التحكم"
+            >
+              🔒
+            </button>
+
             <a
               href="#contact"
               onClick={(e) => handleSmoothScroll(e, "contact")}
@@ -135,6 +148,18 @@ export default function Navbar() {
                   {link.name}
                 </a>
               ))}
+              
+              {/* زر الداشبورد في الجوال */}
+              <button
+                onClick={() => {
+                  closeMenu();
+                  setShowLogin(true);
+                }}
+                className="text-gray-300 hover:text-teal-400 text-sm py-2.5 border-b border-white/5 text-right"
+              >
+                🔒 لوحة التحكم
+              </button>
+
               <a
                 href="#contact"
                 onClick={(e) => handleSmoothScroll(e, "contact")}
@@ -148,6 +173,9 @@ export default function Navbar() {
       </nav>
 
       <div className="h-14 sm:h-16" />
+
+      {/* مودال تسجيل الدخول */}
+      <LoginModal isOpen={showLogin} onClose={() => setShowLogin(false)} />
 
       <style jsx>{`
         @keyframes navbarSlideDown {
