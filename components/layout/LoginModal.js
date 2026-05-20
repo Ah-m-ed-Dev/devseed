@@ -69,8 +69,7 @@ export default function LoginModal({ isOpen, onClose }) {
 
       {/* المودال */}
       <div 
-        className="relative bg-[#0f172a] border border-teal-500/20 rounded-2xl w-full max-w-sm shadow-2xl p-6"
-        style={{ animation: "modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)" }}
+        className="relative bg-[#0f172a] border border-teal-500/20 rounded-2xl w-full max-w-xs shadow-2xl p-6" }}
       >
         {/* زر الإغلاق */}
         <button
