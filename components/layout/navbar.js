@@ -51,7 +51,7 @@ export default function Navbar() {
     { name: "الرئيسية", href: "/" },
     { name: "الخدمات", href: "#services" },
     { name: "أعمالنا", href: "#work" },
-    { name: "الأسعار", href: "/pricing" },
+    { name: "باقات الخدمات", href: "/pricing" },
     { name: "المدونة", href: "/blog" },
   ];
 
@@ -157,7 +157,7 @@ export default function Navbar() {
                 }}
                 className="text-gray-300 hover:text-teal-400 text-sm py-2.5 border-b border-white/5 text-right"
               >
-                🔒 لوحة التحكم
+               لوحة التحكم
               </button>
 
               <a
