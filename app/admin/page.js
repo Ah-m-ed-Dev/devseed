@@ -4,17 +4,105 @@ import { useState, useEffect } from "react";
 import { getMessages, markAsRead, deleteMessage } from "@/lib/supabase";
 import Link from "next/link";
 
+// أيقونات SVG احترافية
+const OverviewIcon = () => (
+  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="3" width="7" height="7" rx="1" />
+    <rect x="14" y="3" width="7" height="7" rx="1" />
+    <rect x="3" y="14" width="7" height="7" rx="1" />
+    <rect x="14" y="14" width="7" height="7" rx="1" />
+  </svg>
+);
+
+const MessagesIcon = () => (
+  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+  </svg>
+);
+
+const EyeIcon = () => (
+  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+    <circle cx="12" cy="12" r="3" />
+  </svg>
+);
+
+const ReplyIcon = () => (
+  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+    <path d="M8 9h8M8 13h6" />
+  </svg>
+);
+
+const TrashIcon = () => (
+  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+  </svg>
+);
+
+const CheckIcon = () => (
+  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M20 6L9 17l-5-5" />
+  </svg>
+);
+
+const LogoutIcon = () => (
+  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" />
+  </svg>
+);
+
+const ExternalIcon = () => (
+  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" />
+  </svg>
+);
+
+const MailIcon = () => (
+  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+    <path d="M22 6l-10 7L2 6" />
+  </svg>
+);
+
+const CalendarIcon = () => (
+  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="4" width="18" height="18" rx="2" />
+    <path d="M16 2v4M8 2v4M3 10h18" />
+  </svg>
+);
+
+// مكون Toast
+function Toast({ message, type, onClose }) {
+  const bgColor = type === "success" ? "bg-green-500/10 border-green-500/20 text-green-400" : "bg-red-500/10 border-red-500/20 text-red-400";
+  const icon = type === "success" ? "✅" : "❌";
+
+  return (
+    <div className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-[99999] px-5 py-3 rounded-xl border ${bgColor} text-sm flex items-center gap-2 shadow-lg`}>
+      <span>{icon}</span>
+      <span>{message}</span>
+      <button onClick={onClose} className="ml-3 hover:opacity-70">×</button>
+    </div>
+  );
+}
+
 export default function AdminDashboard() {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("overview"); // overview, messages
+  const [activeTab, setActiveTab] = useState("overview");
+  const [toast, setToast] = useState(null);
+
+  const showToast = (message, type) => {
+    setToast({ message, type });
+    setTimeout(() => setToast(null), 3000);
+  };
 
   const fetchMessages = async () => {
     try {
       const data = await getMessages();
       setMessages(data);
     } catch (error) {
-      console.error("Error:", error);
+      showToast("فشل تحميل الرسائل", "error");
     } finally {
       setLoading(false);
     }
@@ -25,83 +113,94 @@ export default function AdminDashboard() {
   }, []);
 
   const handleMarkRead = async (id) => {
-    await markAsRead(id);
-    setMessages(messages.map((m) => (m.id === id ? { ...m, read: true } : m)));
+    try {
+      await markAsRead(id);
+      setMessages(messages.map((m) => (m.id === id ? { ...m, read: true } : m)));
+      showToast("تم تعليم الرسالة كمقروءة", "success");
+    } catch {
+      showToast("فشل التحديث", "error");
+    }
   };
 
   const handleDelete = async (id) => {
     if (confirm("هل أنت متأكد من حذف هذه الرسالة؟")) {
-      await deleteMessage(id);
-      setMessages(messages.filter((m) => m.id !== id));
+      try {
+        await deleteMessage(id);
+        setMessages(messages.filter((m) => m.id !== id));
+        showToast("تم حذف الرسالة", "success");
+      } catch {
+        showToast("فشل الحذف", "error");
+      }
     }
   };
 
   const newMessages = messages.filter((m) => !m.read).length;
   const totalMessages = messages.length;
+  const todayMessages = messages.filter((m) => {
+    const today = new Date().toDateString();
+    return new Date(m.created_at).toDateString() === today;
+  }).length;
 
   const stats = [
-    { label: "إجمالي الرسائل", value: totalMessages, icon: "✉️", color: "teal" },
-    { label: "رسائل جديدة", value: newMessages, icon: "🆕", color: "purple" },
-    { label: "اليوم", value: messages.filter((m) => {
-      const today = new Date().toDateString();
-      return new Date(m.created_at).toDateString() === today;
-    }).length, icon: "📅", color: "orange" },
+    { label: "إجمالي الرسائل", value: totalMessages, icon: <MailIcon /> },
+    { label: "رسائل جديدة", value: newMessages, icon: <MessagesIcon /> },
+    { label: "اليوم", value: todayMessages, icon: <CalendarIcon /> },
   ];
 
   return (
     <div className="min-h-screen bg-[#06060a]" dir="rtl">
       {/* الشريط العلوي */}
-      <header className="bg-[#0a0a0f] border-b border-white/5 px-6 py-4">
+      <header className="bg-[#0a0a0f] border-b border-white/5 px-4 sm:px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <span className="text-teal-400 font-mono text-xl">&lt;/&gt;</span>
-            <span className="text-white font-bold">DevSeed</span>
-            <span className="text-gray-500 text-sm mr-4">لوحة التحكم</span>
-          </div>
-          <div className="flex items-center gap-4">
+          <h1 className="text-white font-bold text-lg">لوحة التحكم</h1>
+          <div className="flex items-center gap-2 sm:gap-3">
             <Link
               href="/"
-              className="text-gray-400 hover:text-teal-400 text-sm transition-colors"
+              className="text-gray-400 hover:text-teal-400 text-sm transition-colors px-3 py-1.5 rounded-lg border border-white/5 hover:border-teal-500/20 flex items-center gap-1.5"
             >
-              مشاهدة الموقع ←
+              <ExternalIcon />
+              <span className="hidden sm:inline">مشاهدة الموقع</span>
             </Link>
             <button
               onClick={() => {
                 localStorage.removeItem("devseed_admin");
                 window.location.href = "/";
               }}
-              className="text-red-400 hover:text-red-300 text-sm transition-colors"
+              className="text-gray-400 hover:text-red-400 text-sm transition-colors px-3 py-1.5 rounded-lg border border-white/5 hover:border-red-500/20 flex items-center gap-1.5"
             >
-              تسجيل خروج
+              <LogoutIcon />
+              <span className="hidden sm:inline">تسجيل خروج</span>
             </button>
           </div>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto p-6">
+      <div className="max-w-7xl mx-auto p-4 sm:p-6">
         {/* أزرار التبويب */}
         <div className="flex gap-2 mb-8">
           <button
             onClick={() => setActiveTab("overview")}
-            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-2 ${
               activeTab === "overview"
                 ? "bg-teal-500 text-white"
                 : "bg-white/[0.02] text-gray-400 hover:text-white border border-white/5"
             }`}
           >
-            📊 نظرة عامة
+            <OverviewIcon />
+            نظرة عامة
           </button>
           <button
             onClick={() => setActiveTab("messages")}
-            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all relative ${
+            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all relative flex items-center gap-2 ${
               activeTab === "messages"
                 ? "bg-teal-500 text-white"
                 : "bg-white/[0.02] text-gray-400 hover:text-white border border-white/5"
             }`}
           >
-            ✉️ الرسائل
+            <MessagesIcon />
+            الرسائل
             {newMessages > 0 && (
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center">
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold">
                 {newMessages}
               </span>
             )}
@@ -111,59 +210,35 @@ export default function AdminDashboard() {
         {/* محتوى التبويب */}
         {activeTab === "overview" && (
           <div>
-            {/* الإحصائيات */}
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
               {stats.map((stat, index) => (
-                <div
-                  key={index}
-                  className="p-5 rounded-xl border border-white/5 bg-white/[0.02]"
-                >
-                  <span className="text-2xl mb-3 block">{stat.icon}</span>
-                  <div className="text-2xl font-bold text-white mb-1">
-                    {stat.value}
-                  </div>
+                <div key={index} className="p-5 rounded-xl border border-white/5 bg-white/[0.02]">
+                  <div className="text-teal-400 mb-3">{stat.icon}</div>
+                  <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
                   <div className="text-gray-500 text-sm">{stat.label}</div>
                 </div>
               ))}
             </div>
 
-            {/* آخر 5 رسائل */}
             <div className="rounded-xl border border-white/5 bg-white/[0.02] p-6">
-              <h2 className="text-white font-semibold text-lg mb-4">
-                آخر الرسائل
-              </h2>
+              <h2 className="text-white font-semibold text-lg mb-4">آخر الرسائل</h2>
               {messages.slice(0, 5).map((msg) => (
-                <div
-                  key={msg.id}
-                  className="flex items-start gap-4 py-4 border-b border-white/5 last:border-0 last:pb-0"
-                >
+                <div key={msg.id} className="flex items-start gap-4 py-4 border-b border-white/5 last:border-0 last:pb-0">
                   <div className="w-10 h-10 rounded-xl bg-teal-500/10 text-teal-400 flex items-center justify-center flex-shrink-0 font-bold text-sm">
                     {msg.name?.charAt(0)}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-white font-medium text-sm">
-                        {msg.name}
-                      </span>
-                      <span className="text-gray-500 text-xs">
-                        {new Date(msg.created_at).toLocaleDateString("ar-SA")}
-                      </span>
+                      <span className="text-white font-medium text-sm">{msg.name}</span>
+                      <span className="text-gray-500 text-xs">{new Date(msg.created_at).toLocaleDateString("ar-SA")}</span>
                     </div>
                     <p className="text-gray-400 text-xs">{msg.email}</p>
-                    <p className="text-gray-300 text-sm mt-1 truncate">
-                      {msg.details}
-                    </p>
+                    <p className="text-gray-300 text-sm mt-1 truncate">{msg.details}</p>
                   </div>
-                  {!msg.read && (
-                    <span className="w-2 h-2 bg-teal-400 rounded-full flex-shrink-0 mt-2" />
-                  )}
+                  {!msg.read && <span className="w-2 h-2 bg-teal-400 rounded-full flex-shrink-0 mt-2" />}
                 </div>
               ))}
-              {messages.length === 0 && (
-                <p className="text-gray-500 text-sm py-8 text-center">
-                  لا توجد رسائل بعد
-                </p>
-              )}
+              {messages.length === 0 && <p className="text-gray-500 text-sm py-8 text-center">لا توجد رسائل بعد</p>}
             </div>
           </div>
         )}
@@ -171,74 +246,42 @@ export default function AdminDashboard() {
         {activeTab === "messages" && (
           <div>
             {loading ? (
-              <div className="text-center py-20 text-gray-400">
-                جاري التحميل...
-              </div>
+              <div className="text-center py-20 text-gray-400">جاري التحميل...</div>
             ) : messages.length === 0 ? (
-              <div className="text-center py-20 text-gray-500">
-                لا توجد رسائل بعد
-              </div>
+              <div className="text-center py-20 text-gray-500">لا توجد رسائل بعد</div>
             ) : (
               <div className="space-y-4">
                 {messages.map((msg) => (
-                  <div
-                    key={msg.id}
-                    className={`p-5 rounded-xl border ${
-                      msg.read
-                        ? "border-white/5 bg-white/[0.02]"
-                        : "border-teal-500/20 bg-teal-500/[0.02]"
-                    }`}
-                  >
+                  <div key={msg.id} className={`p-5 rounded-xl border ${msg.read ? "border-white/5 bg-white/[0.02]" : "border-teal-500/20 bg-teal-500/[0.02]"}`}>
                     <div className="flex items-start gap-4">
                       <div className="w-10 h-10 rounded-xl bg-teal-500/10 text-teal-400 flex items-center justify-center flex-shrink-0 font-bold text-sm">
                         {msg.name?.charAt(0)}
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between mb-2">
-                          <span className="text-white font-medium">
-                            {msg.name}
-                          </span>
-                          <span className="text-gray-500 text-xs">
-                            {new Date(msg.created_at).toLocaleDateString("ar-SA")}
-                          </span>
+                          <span className="text-white font-medium">{msg.name}</span>
+                          <span className="text-gray-500 text-xs">{new Date(msg.created_at).toLocaleDateString("ar-SA")}</span>
                         </div>
-                        <p className="text-gray-400 text-xs mb-1">
-                          {msg.email}
-                        </p>
+                        <p className="text-gray-400 text-xs mb-1">{msg.email}</p>
                         {msg.project_type && (
-                          <span className="inline-block bg-white/[0.03] text-gray-400 text-xs px-2 py-0.5 rounded-full mb-2">
-                            {msg.project_type}
-                          </span>
+                          <span className="inline-block bg-white/[0.03] text-gray-400 text-xs px-2 py-0.5 rounded-full mb-2">{msg.project_type}</span>
                         )}
-                        <p className="text-gray-300 text-sm mt-2">
-                          {msg.details}
-                        </p>
+                        <p className="text-gray-300 text-sm mt-2">{msg.details}</p>
                         <div className="flex gap-3 mt-3">
                           {!msg.read && (
-                            <button
-                              onClick={() => handleMarkRead(msg.id)}
-                              className="text-teal-400 text-xs hover:underline"
-                            >
-                              تعليم كمقروء
+                            <button onClick={() => handleMarkRead(msg.id)} className="text-teal-400 text-xs hover:underline flex items-center gap-1">
+                              <EyeIcon /> تعليم كمقروء
                             </button>
                           )}
-                          <a
-                            href={`mailto:${msg.email}`}
-                            className="text-gray-400 text-xs hover:underline"
-                          >
-                            رد
+                          <a href={`mailto:${msg.email}`} className="text-gray-400 text-xs hover:underline flex items-center gap-1">
+                            <ReplyIcon /> رد
                           </a>
-                          <button
-                            onClick={() => handleDelete(msg.id)}
-                            className="text-red-400 text-xs hover:underline"
-                          >
-                            حذف
+                          <button onClick={() => handleDelete(msg.id)} className="text-red-400 text-xs hover:underline flex items-center gap-1">
+                            <TrashIcon /> حذف
                           </button>
                         </div>
                       </div>
-                      {!msg.read && (
-                        <span className="w-2 h-2 bg-teal-400 rounded-full flex-shrink-0 mt-2" />
-                      )}
+                      {!msg.read && <span className="w-2 h-2 bg-teal-400 rounded-full flex-shrink-0 mt-2" />}
                     </div>
                   </div>
                 ))}
@@ -247,6 +290,9 @@ export default function AdminDashboard() {
           </div>
         )}
       </div>
+
+      {/* Toast */}
+      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
     </div>
   );
-    }
+}
