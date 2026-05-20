@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getMessages, markAsRead, deleteMessage, getUsers, createUser, updateUser, deleteUser, supabaseFetch } from "@/lib/supabase";
+import { getMessages, markAsRead, deleteMessage, getUsers, createUser, updateUser, deleteUser } from "@/lib/supabase";
 import Link from "next/link";
 
 // أيقونات SVG
@@ -67,18 +67,73 @@ const CalendarIcon = () => (
 
 // Toast
 function Toast({ message, type, onClose }) {
-  const bgColor = type === "success" ? "bg-green-500/10 border-green-500/20 text-green-400" : "bg-red-500/10 border-red-500/20 text-red-400";
+  const bgColor = type === "success"
+    ? "bg-green-500/10 border-green-500/20 text-green-400"
+    : "bg-red-500/10 border-red-500/20 text-red-400";
+
+  const icon = type === "success" ? (
+    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20 6L9 17l-5-5" />
+    </svg>
+  ) : (
+    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M18 6L6 18M6 6l12 12" />
+    </svg>
+  );
+
   return (
-    <div className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-[99999] px-5 py-3 rounded-xl border ${bgColor} text-sm flex items-center gap-2 shadow-lg`}>
-      <span>{type === "success" ? "✅" : "❌"}</span>
+    <div
+      className={`fixed top-4 right-4 z-[99999] px-4 py-3 rounded-xl border ${bgColor} text-sm flex items-center gap-2 shadow-lg`}
+      style={{ animation: "toastSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1)" }}
+    >
+      <span>{icon}</span>
       <span>{message}</span>
-      <button onClick={onClose} className="ml-3 hover:opacity-70">×</button>
+      <button onClick={onClose} className="mr-2 hover:opacity-70 text-lg leading-none">&times;</button>
+      
+      <style jsx>{`
+        @keyframes toastSlideIn {
+          from {
+            opacity: 0;
+            transform: translateX(20px) scale(0.95);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+          }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+// Confirm Toast
+function ConfirmToast({ message, onConfirm, onCancel }) {
+  return (
+    <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4" style={{ animation: "fadeIn 0.2s ease" }}>
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onCancel} />
+      <div className="relative bg-[#0f172a] border border-white/10 rounded-2xl w-full max-w-sm p-6 shadow-2xl text-center" style={{ animation: "modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)" }}>
+        <p className="text-white text-sm mb-6">{message}</p>
+        <div className="flex gap-3 justify-center">
+          <button onClick={onConfirm} className="bg-red-500 text-white px-5 py-2 rounded-xl text-sm font-medium hover:bg-red-400 transition-all">تأكيد</button>
+          <button onClick={onCancel} className="bg-white/[0.05] text-gray-300 border border-white/10 px-5 py-2 rounded-xl text-sm font-medium hover:bg-white/[0.08] transition-all">إلغاء</button>
+        </div>
+      </div>
+      <style jsx>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes modalSlideUp {
+          from { opacity: 0; transform: translateY(20px) scale(0.95); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+      `}</style>
     </div>
   );
 }
 
 // تبويب المستخدمين
-function UsersTab({ showToast }) {
+function UsersTab({ showToast, confirm, setConfirm }) {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -109,11 +164,9 @@ function UsersTab({ showToast }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormError("");
-
     if (!form.name.trim()) { setFormError("الاسم مطلوب"); return; }
     if (!form.email.trim()) { setFormError("البريد مطلوب"); return; }
     if (!form.password.trim()) { setFormError("كلمة المرور مطلوبة"); return; }
-
     try {
       if (editUser) {
         await updateUser(editUser.id, form);
@@ -135,16 +188,21 @@ function UsersTab({ showToast }) {
     setShowForm(true);
   };
 
-  const handleDelete = async (id) => {
-    if (confirm("حذف هذا المستخدم؟")) {
-      try {
-        await deleteUser(id);
-        setUsers(users.filter(u => u.id !== id));
-        showToast("تم حذف المستخدم", "success");
-      } catch {
-        showToast("فشل الحذف", "error");
-      }
-    }
+  const handleDelete = (id) => {
+    setConfirm({
+      message: "هل أنت متأكد من حذف هذا المستخدم؟",
+      onConfirm: async () => {
+        try {
+          await deleteUser(id);
+          setUsers(users.filter(u => u.id !== id));
+          showToast("تم حذف المستخدم", "success");
+        } catch {
+          showToast("فشل الحذف", "error");
+        }
+        setConfirm(null);
+      },
+      onCancel: () => setConfirm(null),
+    });
   };
 
   return (
@@ -181,9 +239,7 @@ function UsersTab({ showToast }) {
               </select>
             </div>
           </div>
-          <button type="submit" className="bg-teal-500 text-white px-6 py-2.5 rounded-xl text-sm font-medium hover:bg-teal-400 transition-all">
-            {editUser ? "تحديث" : "إضافة"}
-          </button>
+          <button type="submit" className="bg-teal-500 text-white px-6 py-2.5 rounded-xl text-sm font-medium hover:bg-teal-400 transition-all">{editUser ? "تحديث" : "إضافة"}</button>
         </form>
       )}
 
@@ -219,6 +275,7 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("overview");
   const [toast, setToast] = useState(null);
+  const [confirm, setConfirm] = useState(null);
 
   const showToast = (message, type) => {
     setToast({ message, type });
@@ -246,14 +303,21 @@ export default function AdminDashboard() {
     } catch { showToast("فشل التحديث", "error"); }
   };
 
-  const handleDelete = async (id) => {
-    if (confirm("حذف هذه الرسالة؟")) {
-      try {
-        await deleteMessage(id);
-        setMessages(messages.filter(m => m.id !== id));
-        showToast("تم حذف الرسالة", "success");
-      } catch { showToast("فشل الحذف", "error"); }
-    }
+  const handleDeleteMessage = (id) => {
+    setConfirm({
+      message: "هل أنت متأكد من حذف هذه الرسالة؟",
+      onConfirm: async () => {
+        try {
+          await deleteMessage(id);
+          setMessages(messages.filter(m => m.id !== id));
+          showToast("تم حذف الرسالة", "success");
+        } catch {
+          showToast("فشل الحذف", "error");
+        }
+        setConfirm(null);
+      },
+      onCancel: () => setConfirm(null),
+    });
   };
 
   const newMessages = messages.filter(m => !m.read).length;
@@ -344,7 +408,7 @@ export default function AdminDashboard() {
                     <div className="flex gap-3 mt-3">
                       {!msg.read && <button onClick={() => handleMarkRead(msg.id)} className="text-teal-400 text-xs hover:underline flex items-center gap-1"><EyeIcon />تعليم كمقروء</button>}
                       <a href={`mailto:${msg.email}`} className="text-gray-400 text-xs hover:underline flex items-center gap-1"><ReplyIcon />رد</a>
-                      <button onClick={() => handleDelete(msg.id)} className="text-red-400 text-xs hover:underline flex items-center gap-1"><TrashIcon />حذف</button>
+                      <button onClick={() => handleDeleteMessage(msg.id)} className="text-red-400 text-xs hover:underline flex items-center gap-1"><TrashIcon />حذف</button>
                     </div>
                   </div>
                   {!msg.read && <span className="w-2 h-2 bg-teal-400 rounded-full mt-2" />}
@@ -354,10 +418,11 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {activeTab === "users" && <UsersTab showToast={showToast} />}
+        {activeTab === "users" && <UsersTab showToast={showToast} confirm={confirm} setConfirm={setConfirm} />}
       </div>
 
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+      {confirm && <ConfirmToast message={confirm.message} onConfirm={confirm.onConfirm} onCancel={confirm.onCancel} />}
     </div>
   );
 }
