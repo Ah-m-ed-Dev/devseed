@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getMessages, markAsRead, deleteMessage, getUsers, createUser, updateUser, deleteUser } from "@/lib/supabase";
+import { getMessages, markAsRead, deleteMessage, getUsers, createUser, updateUser, deleteUser, getVisitorStats } from "@/lib/supabase";
 import Link from "next/link";
 
 // أيقونات SVG
@@ -20,6 +20,12 @@ const MessagesIcon = () => (
 const UsersIcon = () => (
   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" />
+  </svg>
+);
+
+const VisitorsIcon = () => (
+  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" />
   </svg>
 );
 
@@ -67,41 +73,17 @@ const CalendarIcon = () => (
 
 // Toast
 function Toast({ message, type, onClose }) {
-  const bgColor = type === "success"
-    ? "bg-green-500/10 border-green-500/20 text-green-400"
-    : "bg-red-500/10 border-red-500/20 text-red-400";
-
+  const bgColor = type === "success" ? "bg-green-500/10 border-green-500/20 text-green-400" : "bg-red-500/10 border-red-500/20 text-red-400";
   const icon = type === "success" ? (
-    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M20 6L9 17l-5-5" />
-    </svg>
+    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5" /></svg>
   ) : (
-    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M18 6L6 18M6 6l12 12" />
-    </svg>
+    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
   );
-
   return (
-    <div
-      className={`fixed top-4 right-1/2 translate-x-1/2 z-[99999] px-4 py-3 rounded-xl border ${bgColor} text-sm flex items-center gap-2 shadow-lg`}
-      style={{ animation: "toastSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1)" }}
-    >
-      <span>{icon}</span>
-      <span>{message}</span>
+    <div className={`fixed top-4 right-1/2 translate-x-1/2 z-[99999] px-4 py-3 rounded-xl border ${bgColor} text-sm flex items-center gap-2 shadow-lg`} style={{ animation: "toastSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1)" }}>
+      <span>{icon}</span><span>{message}</span>
       <button onClick={onClose} className="mr-2 hover:opacity-70 text-lg leading-none">&times;</button>
-      
-      <style jsx>{`
-        @keyframes toastSlideIn {
-          from {
-            opacity: 0;
-            transform: translateX(20px) scale(0.95);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0) scale(1);
-          }
-        }
-      `}</style>
+      <style jsx>{`@keyframes toastSlideIn { from { opacity: 0; transform: translateX(20px) scale(0.95); } to { opacity: 1; transform: translateX(0) scale(1); } }`}</style>
     </div>
   );
 }
@@ -118,16 +100,7 @@ function ConfirmToast({ message, onConfirm, onCancel }) {
           <button onClick={onCancel} className="bg-white/[0.05] text-gray-300 border border-white/10 px-5 py-2 rounded-xl text-sm font-medium hover:bg-white/[0.08] transition-all">إلغاء</button>
         </div>
       </div>
-      <style jsx>{`
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        @keyframes modalSlideUp {
-          from { opacity: 0; transform: translateY(20px) scale(0.95); }
-          to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-      `}</style>
+      <style jsx>{`@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } } @keyframes modalSlideUp { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }`}</style>
     </div>
   );
 }
@@ -142,63 +115,32 @@ function UsersTab({ showToast, confirm, setConfirm }) {
   const [formError, setFormError] = useState("");
 
   const fetchUsers = async () => {
-    try {
-      const data = await getUsers();
-      setUsers(data);
-    } catch {
-      showToast("فشل تحميل المستخدمين", "error");
-    } finally {
-      setLoading(false);
-    }
+    try { const data = await getUsers(); setUsers(data); } catch { showToast("فشل تحميل المستخدمين", "error"); } finally { setLoading(false); }
   };
 
   useEffect(() => { fetchUsers(); }, []);
 
-  const resetForm = () => {
-    setForm({ email: "", password: "", name: "", role: "admin" });
-    setEditUser(null);
-    setShowForm(false);
-    setFormError("");
-  };
+  const resetForm = () => { setForm({ email: "", password: "", name: "", role: "admin" }); setEditUser(null); setShowForm(false); setFormError(""); };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setFormError("");
+    e.preventDefault(); setFormError("");
     if (!form.name.trim()) { setFormError("الاسم مطلوب"); return; }
     if (!form.email.trim()) { setFormError("البريد مطلوب"); return; }
     if (!form.password.trim()) { setFormError("كلمة المرور مطلوبة"); return; }
     try {
-      if (editUser) {
-        await updateUser(editUser.id, form);
-        showToast("تم تحديث المستخدم", "success");
-      } else {
-        await createUser(form);
-        showToast("تم إضافة المستخدم", "success");
-      }
-      resetForm();
-      fetchUsers();
-    } catch {
-      showToast("فشل العملية", "error");
-    }
+      if (editUser) { await updateUser(editUser.id, form); showToast("تم تحديث المستخدم", "success"); }
+      else { await createUser(form); showToast("تم إضافة المستخدم", "success"); }
+      resetForm(); fetchUsers();
+    } catch { showToast("فشل العملية", "error"); }
   };
 
-  const handleEdit = (user) => {
-    setEditUser(user);
-    setForm({ email: user.email, password: user.password, name: user.name, role: user.role || "admin" });
-    setShowForm(true);
-  };
+  const handleEdit = (user) => { setEditUser(user); setForm({ email: user.email, password: user.password, name: user.name, role: user.role || "admin" }); setShowForm(true); };
 
   const handleDelete = (id) => {
     setConfirm({
       message: "هل أنت متأكد من حذف هذا المستخدم؟",
       onConfirm: async () => {
-        try {
-          await deleteUser(id);
-          setUsers(users.filter(u => u.id !== id));
-          showToast("تم حذف المستخدم", "success");
-        } catch {
-          showToast("فشل الحذف", "error");
-        }
+        try { await deleteUser(id); setUsers(users.filter(u => u.id !== id)); showToast("تم حذف المستخدم", "success"); } catch { showToast("فشل الحذف", "error"); }
         setConfirm(null);
       },
       onCancel: () => setConfirm(null),
@@ -209,52 +151,27 @@ function UsersTab({ showToast, confirm, setConfirm }) {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-white font-semibold text-lg">المستخدمين ({users.length})</h2>
-        <button onClick={() => { resetForm(); setShowForm(!showForm); }} className="bg-teal-500 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-teal-400 transition-all">
-          {showForm ? "إلغاء" : "+ إضافة مستخدم"}
-        </button>
+        <button onClick={() => { resetForm(); setShowForm(!showForm); }} className="bg-teal-500 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-teal-400 transition-all">{showForm ? "إلغاء" : "+ إضافة مستخدم"}</button>
       </div>
-
       {showForm && (
         <form onSubmit={handleSubmit} className="p-5 rounded-xl border border-teal-500/20 bg-teal-500/[0.02] mb-6 space-y-4">
           {formError && <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-sm p-3 rounded-xl">{formError}</div>}
           <div className="grid md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-gray-400 text-sm mb-2">الاسم</label>
-              <input type="text" value={form.name} onChange={(e) => setForm({...form, name: e.target.value})} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-white focus:border-teal-500/50 transition-all" />
-            </div>
-            <div>
-              <label className="block text-gray-400 text-sm mb-2">البريد</label>
-              <input type="email" value={form.email} onChange={(e) => setForm({...form, email: e.target.value})} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-white focus:border-teal-500/50 transition-all" />
-            </div>
-            <div>
-              <label className="block text-gray-400 text-sm mb-2">كلمة المرور</label>
-              <input type="text" value={form.password} onChange={(e) => setForm({...form, password: e.target.value})} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-white focus:border-teal-500/50 transition-all" />
-            </div>
-            <div>
-              <label className="block text-gray-400 text-sm mb-2">الدور</label>
-              <select value={form.role} onChange={(e) => setForm({...form, role: e.target.value})} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-gray-400 focus:border-teal-500/50 transition-all">
-                <option value="admin">مشرف</option>
-                <option value="super_admin">مدير</option>
-                <option value="editor">محرر</option>
-              </select>
-            </div>
+            <div><label className="block text-gray-400 text-sm mb-2">الاسم</label><input type="text" value={form.name} onChange={(e) => setForm({...form, name: e.target.value})} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-white focus:border-teal-500/50 transition-all" /></div>
+            <div><label className="block text-gray-400 text-sm mb-2">البريد</label><input type="email" value={form.email} onChange={(e) => setForm({...form, email: e.target.value})} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-white focus:border-teal-500/50 transition-all" /></div>
+            <div><label className="block text-gray-400 text-sm mb-2">كلمة المرور</label><input type="text" value={form.password} onChange={(e) => setForm({...form, password: e.target.value})} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-white focus:border-teal-500/50 transition-all" /></div>
+            <div><label className="block text-gray-400 text-sm mb-2">الدور</label><select value={form.role} onChange={(e) => setForm({...form, role: e.target.value})} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-gray-400 focus:border-teal-500/50 transition-all"><option value="admin">مشرف</option><option value="super_admin">مدير</option><option value="editor">محرر</option></select></div>
           </div>
           <button type="submit" className="bg-teal-500 text-white px-6 py-2.5 rounded-xl text-sm font-medium hover:bg-teal-400 transition-all">{editUser ? "تحديث" : "إضافة"}</button>
         </form>
       )}
-
-      {loading ? (
-        <div className="text-center py-20 text-gray-400">جاري التحميل...</div>
-      ) : (
+      {loading ? <div className="text-center py-20 text-gray-400">جاري التحميل...</div> : (
         <div className="space-y-3">
           {users.map((user) => (
             <div key={user.id} className="p-4 rounded-xl border border-white/5 bg-white/[0.02] flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-teal-500/10 text-teal-400 flex items-center justify-center font-bold text-sm">{user.name?.charAt(0)}</div>
-                <div>
-                  <div className="text-white font-medium text-sm">{user.name}</div>
-                  <div className="text-gray-500 text-xs">{user.email}</div>
-                </div>
+                <div><div className="text-white font-medium text-sm">{user.name}</div><div className="text-gray-500 text-xs">{user.email}</div></div>
                 <span className="text-[10px] bg-teal-500/10 text-teal-400 px-2 py-0.5 rounded-full">{user.role}</span>
               </div>
               <div className="flex gap-2">
@@ -276,44 +193,29 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
   const [toast, setToast] = useState(null);
   const [confirm, setConfirm] = useState(null);
+  const [visitorStats, setVisitorStats] = useState({ total: 0, today: 0, thisWeek: 0, unique: 0 });
 
-  const showToast = (message, type) => {
-    setToast({ message, type });
-    setTimeout(() => setToast(null), 3000);
-  };
+  const showToast = (message, type) => { setToast({ message, type }); setTimeout(() => setToast(null), 3000); };
 
   const fetchMessages = async () => {
-    try {
-      const data = await getMessages();
-      setMessages(data);
-    } catch {
-      showToast("فشل تحميل الرسائل", "error");
-    } finally {
-      setLoading(false);
-    }
+    try { const data = await getMessages(); setMessages(data); } catch { showToast("فشل تحميل الرسائل", "error"); } finally { setLoading(false); }
   };
 
-  useEffect(() => { fetchMessages(); }, []);
+  const fetchVisitors = async () => {
+    try { const stats = await getVisitorStats(); setVisitorStats(stats); } catch { /* silent */ }
+  };
+
+  useEffect(() => { fetchMessages(); fetchVisitors(); }, []);
 
   const handleMarkRead = async (id) => {
-    try {
-      await markAsRead(id);
-      setMessages(messages.map(m => m.id === id ? { ...m, read: true } : m));
-      showToast("تم تعليم الرسالة كمقروءة", "success");
-    } catch { showToast("فشل التحديث", "error"); }
+    try { await markAsRead(id); setMessages(messages.map(m => m.id === id ? { ...m, read: true } : m)); showToast("تم تعليم الرسالة كمقروءة", "success"); } catch { showToast("فشل التحديث", "error"); }
   };
 
   const handleDeleteMessage = (id) => {
     setConfirm({
       message: "هل أنت متأكد من حذف هذه الرسالة؟",
       onConfirm: async () => {
-        try {
-          await deleteMessage(id);
-          setMessages(messages.filter(m => m.id !== id));
-          showToast("تم حذف الرسالة", "success");
-        } catch {
-          showToast("فشل الحذف", "error");
-        }
+        try { await deleteMessage(id); setMessages(messages.filter(m => m.id !== id)); showToast("تم حذف الرسالة", "success"); } catch { showToast("فشل الحذف", "error"); }
         setConfirm(null);
       },
       onCancel: () => setConfirm(null),
@@ -329,12 +231,8 @@ export default function AdminDashboard() {
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <h1 className="text-white font-bold text-lg">لوحة التحكم</h1>
           <div className="flex items-center gap-2 sm:gap-3">
-            <Link href="/" className="text-gray-400 hover:text-teal-400 text-sm transition-colors px-3 py-1.5 rounded-lg border border-white/5 hover:border-teal-500/20 flex items-center gap-1.5">
-              <ExternalIcon /><span>مشاهدة الموقع</span>
-            </Link>
-            <button onClick={() => { localStorage.removeItem("devseed_admin"); window.location.href = "/"; }} className="text-gray-400 hover:text-red-400 text-sm transition-colors px-3 py-1.5 rounded-lg border border-white/5 hover:border-red-500/20 flex items-center gap-1.5">
-              <LogoutIcon /><span>تسجيل خروج</span>
-            </button>
+            <Link href="/" className="text-gray-400 hover:text-teal-400 text-sm transition-colors px-3 py-1.5 rounded-lg border border-white/5 hover:border-teal-500/20 flex items-center gap-1.5"><ExternalIcon /><span>مشاهدة الموقع</span></Link>
+            <button onClick={() => { localStorage.removeItem("devseed_admin"); window.location.href = "/"; }} className="text-gray-400 hover:text-red-400 text-sm transition-colors px-3 py-1.5 rounded-lg border border-white/5 hover:border-red-500/20 flex items-center gap-1.5"><LogoutIcon /><span>تسجيل خروج</span></button>
           </div>
         </div>
       </header>
@@ -345,6 +243,7 @@ export default function AdminDashboard() {
             { tab: "overview", icon: <OverviewIcon />, label: "نظرة عامة" },
             { tab: "messages", icon: <MessagesIcon />, label: "الرسائل", badge: newMessages },
             { tab: "users", icon: <UsersIcon />, label: "المستخدمين" },
+            { tab: "visitors", icon: <VisitorsIcon />, label: "الزوار" },
           ].map(({ tab, icon, label, badge }) => (
             <button key={tab} onClick={() => setActiveTab(tab)} className={`px-4 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-2 relative ${activeTab === tab ? "bg-teal-500 text-white" : "bg-white/[0.02] text-gray-400 hover:text-white border border-white/5"}`}>
               {icon}{label}
@@ -355,11 +254,12 @@ export default function AdminDashboard() {
 
         {activeTab === "overview" && (
           <div>
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
               {[
                 { label: "إجمالي الرسائل", value: messages.length, icon: <MailIcon /> },
                 { label: "رسائل جديدة", value: newMessages, icon: <MessagesIcon /> },
-                { label: "اليوم", value: todayMessages, icon: <CalendarIcon /> },
+                { label: "زوار اليوم", value: visitorStats?.today || 0, icon: <VisitorsIcon /> },
+                { label: "إجمالي الزوار", value: visitorStats?.total || 0, icon: <CalendarIcon /> },
               ].map((stat, i) => (
                 <div key={i} className="p-5 rounded-xl border border-white/5 bg-white/[0.02]">
                   <div className="text-teal-400 mb-3">{stat.icon}</div>
@@ -374,10 +274,7 @@ export default function AdminDashboard() {
                 <div key={msg.id} className="flex items-start gap-4 py-4 border-b border-white/5 last:border-0">
                   <div className="w-10 h-10 rounded-xl bg-teal-500/10 text-teal-400 flex items-center justify-center font-bold text-sm">{msg.name?.charAt(0)}</div>
                   <div className="flex-1">
-                    <div className="flex justify-between mb-1">
-                      <span className="text-white font-medium text-sm">{msg.name}</span>
-                      <span className="text-gray-500 text-xs">{new Date(msg.created_at).toLocaleDateString("ar-SA")}</span>
-                    </div>
+                    <div className="flex justify-between mb-1"><span className="text-white font-medium text-sm">{msg.name}</span><span className="text-gray-500 text-xs">{new Date(msg.created_at).toLocaleDateString("ar-SA")}</span></div>
                     <p className="text-gray-400 text-xs">{msg.email}</p>
                     <p className="text-gray-300 text-sm mt-1 truncate">{msg.details}</p>
                   </div>
@@ -398,10 +295,7 @@ export default function AdminDashboard() {
                 <div className="flex items-start gap-4">
                   <div className="w-10 h-10 rounded-xl bg-teal-500/10 text-teal-400 flex items-center justify-center font-bold text-sm">{msg.name?.charAt(0)}</div>
                   <div className="flex-1">
-                    <div className="flex justify-between mb-2">
-                      <span className="text-white font-medium">{msg.name}</span>
-                      <span className="text-gray-500 text-xs">{new Date(msg.created_at).toLocaleDateString("ar-SA")}</span>
-                    </div>
+                    <div className="flex justify-between mb-2"><span className="text-white font-medium">{msg.name}</span><span className="text-gray-500 text-xs">{new Date(msg.created_at).toLocaleDateString("ar-SA")}</span></div>
                     <p className="text-gray-400 text-xs mb-1">{msg.email}</p>
                     {msg.project_type && <span className="inline-block bg-white/[0.03] text-gray-400 text-xs px-2 py-0.5 rounded-full mb-2">{msg.project_type}</span>}
                     <p className="text-gray-300 text-sm mt-2">{msg.details}</p>
@@ -415,6 +309,28 @@ export default function AdminDashboard() {
                 </div>
               </div>
             ))}
+          </div>
+        )}
+
+        {activeTab === "visitors" && (
+          <div>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+              {[
+                { label: "إجمالي الزوار", value: visitorStats?.total || 0, color: "text-teal-400" },
+                { label: "اليوم", value: visitorStats?.today || 0, color: "text-blue-400" },
+                { label: "هذا الأسبوع", value: visitorStats?.thisWeek || 0, color: "text-purple-400" },
+                { label: "زوار فريدون", value: visitorStats?.unique || 0, color: "text-orange-400" },
+              ].map((stat, i) => (
+                <div key={i} className="p-5 rounded-xl border border-white/5 bg-white/[0.02]">
+                  <div className={`text-3xl font-bold ${stat.color} mb-1`}>{stat.value}</div>
+                  <div className="text-gray-500 text-sm">{stat.label}</div>
+                </div>
+              ))}
+            </div>
+            <div className="rounded-xl border border-white/5 bg-white/[0.02] p-6 text-center">
+              <div className="text-6xl mb-4">📊</div>
+              <p className="text-gray-400 text-sm">يتم تحديث الإحصائيات تلقائياً مع كل زيارة للموقع</p>
+            </div>
           </div>
         )}
 
