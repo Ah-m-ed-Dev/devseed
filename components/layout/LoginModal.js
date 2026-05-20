@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabaseFetch } from "@/lib/supabase";
 
-// أيقونات SVG
 const EyeIcon = () => (
   <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
@@ -64,14 +63,12 @@ export default function LoginModal({ isOpen, onClose }) {
 
   return (
     <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4">
-      {/* خلفية داكنة */}
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
 
-      {/* المودال */}
       <div 
-        className="relative bg-[#0f172a] border border-teal-500/20 rounded-2xl w-full max-w-xs shadow-2xl p-6" }}
+        className="relative bg-[#0f172a] border border-teal-500/20 rounded-2xl w-full max-w-xs shadow-2xl p-6"
+        style={{ animation: "modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)" }}
       >
-        {/* زر الإغلاق */}
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-500 hover:text-white text-xl leading-none"
@@ -79,15 +76,12 @@ export default function LoginModal({ isOpen, onClose }) {
           ×
         </button>
 
-        {/* العنوان */}
         <div className="text-center mb-6 mt-2">
           <h2 className="text-xl font-bold text-white mb-1">تسجيل الدخول</h2>
           <p className="text-gray-400 text-sm">لوحة تحكم DevSeed</p>
         </div>
 
-        {/* نموذج */}
         <form onSubmit={handleLogin} className="space-y-4">
-          {/* البريد الإلكتروني */}
           <div>
             <label className="block text-gray-400 text-sm mb-2">البريد الإلكتروني</label>
             <input
@@ -101,7 +95,6 @@ export default function LoginModal({ isOpen, onClose }) {
             />
           </div>
 
-          {/* كلمة المرور مع عين */}
           <div>
             <label className="block text-gray-400 text-sm mb-2">كلمة المرور</label>
             <div className="relative">
@@ -125,14 +118,12 @@ export default function LoginModal({ isOpen, onClose }) {
             </div>
           </div>
 
-          {/* رسالة خطأ */}
           {error && (
             <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-sm p-3 rounded-xl">
               {error}
             </div>
           )}
 
-          {/* زر الدخول */}
           <button
             type="submit"
             disabled={loading}
