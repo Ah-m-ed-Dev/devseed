@@ -72,13 +72,13 @@ export default function LoginModal({ isOpen, onClose }) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
+  <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4" onClick={onClose}>
 
-      <div 
-        className="relative bg-[#0f172a] border border-teal-500/20 rounded-2xl w-full sm:max-w-[320px] shadow-2xl p-6"
-        style={{ animation: "modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)" }}
-      >
+    <div 
+      className="bg-[#0f172a] rounded-2xl shadow-2xl w-full max-w-md p-6 relative border border-teal-500/20"
+      onClick={(e) => e.stopPropagation()}
+      style={{ animation: "modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)" }}
+    >
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-500 hover:text-white text-xl leading-none"
