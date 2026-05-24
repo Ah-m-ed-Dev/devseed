@@ -13,11 +13,11 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const resolvedParams = await params;
   const post = await getPostBySlug(resolvedParams.slug);
-  
+
   if (!post) {
     return { title: "المقال غير موجود | DevSeed" };
   }
-  
+
   return {
     title: `${post.title} | DevSeed`,
     description: post.excerpt || "مقال من مدونة DevSeed",
@@ -39,12 +39,12 @@ export default async function BlogPostPage({ params }) {
 
   return (
     <section className="min-h-screen pt-24 pb-16 sm:pb-24 relative overflow-hidden bg-[#0a0a0f]">
-      
+
       <div className="absolute inset-0 bg-[linear-gradient(rgba(20,184,166,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(20,184,166,0.02)_1px,transparent_1px)] bg-[size:80px_80px]" />
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-teal-500/5 rounded-full blur-[120px]" />
 
       <div className="w-full max-w-3xl mx-auto px-4 sm:px-6 relative z-10">
-        
+
         <div className="mb-8 sm:mb-12">
           <Link href="/blog" className="inline-flex items-center gap-2 text-gray-400 hover:text-teal-400 transition-colors text-sm mb-6">
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -64,13 +64,7 @@ export default async function BlogPostPage({ params }) {
         </div>
 
         <div
-          className="prose prose-invert max-w-none text-gray-300 leading-relaxed
-            prose-headings:text-white prose-headings:font-bold
-            prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4
-            prose-p:mb-6 prose-p:leading-loose
-            prose-ul:list-disc prose-ul:mr-6 prose-ul:mb-6
-            prose-ol:list-decimal prose-ol:mr-6 prose-ol:mb-6
-            prose-li:mb-2 prose-strong:text-white prose-a:text-teal-400"
+          className="blog-content"
           dangerouslySetInnerHTML={{ __html: article.content || "" }}
         />
 
