@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { getMessages, markAsRead, deleteMessage, getUsers, createUser, updateUser, deleteUser, getVisitorStats } from "@/lib/supabase";
+import { useState, useEffect, useRef } from "react";
+import { getMessages, markAsRead, deleteMessage, getUsers, createUser, updateUser, deleteUser, getPosts, createPost, updatePost, deletePost } from "@/lib/supabase";
 import Link from "next/link";
 
 // أيقونات SVG
@@ -26,12 +26,6 @@ const PostsIcon = () => (
 const UsersIcon = () => (
   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" />
-  </svg>
-);
-
-const VisitorsIcon = () => (
-  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" />
   </svg>
 );
 
@@ -68,12 +62,6 @@ const ExternalIcon = () => (
 const MailIcon = () => (
   <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><path d="M22 6l-10 7L2 6" />
-  </svg>
-);
-
-const CalendarIcon = () => (
-  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" />
   </svg>
 );
 
@@ -192,6 +180,103 @@ function UsersTab({ showToast, confirm, setConfirm }) {
   );
 }
 
+// تبويب المقالات
+function PostsTab({ showToast, confirm, setConfirm }) {
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [editPost, setEditPost] = useState(null);
+  const [form, setForm] = useState({ title: "", slug: "", excerpt: "", category: "تقنية", content: "", read_time: "5 دقائق" });
+  const [formError, setFormError] = useState("");
+
+  const fetchPosts = async () => {
+    try { const data = await getPosts(); setPosts(data); } catch { showToast("فشل تحميل المقالات", "error"); } finally { setLoading(false); }
+  };
+
+  useEffect(() => { fetchPosts(); }, []);
+
+  const resetForm = () => {
+    setForm({ title: "", slug: "", excerpt: "", category: "تقنية", content: "", read_time: "5 دقائق" });
+    setEditPost(null); setShowForm(false); setFormError("");
+  };
+
+  const generateSlug = (title) => {
+    return title.replace(/[^\w\s]/gi, '').replace(/\s+/g, '-').toLowerCase().substring(0, 60);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault(); setFormError("");
+    if (!form.title.trim()) { setFormError("العنوان مطلوب"); return; }
+    const slug = form.slug || generateSlug(form.title);
+    try {
+      const data = { ...form, slug };
+      if (editPost) { await updatePost(editPost.id, data); showToast("تم تحديث المقال", "success"); }
+      else { await createPost(data); showToast("تم إضافة المقال", "success"); }
+      resetForm(); fetchPosts();
+    } catch { showToast("فشل العملية", "error"); }
+  };
+
+  const handleEdit = (post) => {
+    setEditPost(post);
+    setForm({ title: post.title, slug: post.slug, excerpt: post.excerpt || "", category: post.category, content: post.content || "", read_time: post.read_time || "5 دقائق" });
+    setShowForm(true);
+  };
+
+  const handleDelete = (id) => {
+    setConfirm({
+      message: "هل أنت متأكد من حذف هذا المقال؟",
+      onConfirm: async () => {
+        try { await deletePost(id); setPosts(posts.filter(p => p.id !== id)); showToast("تم حذف المقال", "success"); } catch { showToast("فشل الحذف", "error"); }
+        setConfirm(null);
+      },
+      onCancel: () => setConfirm(null),
+    });
+  };
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-white font-semibold text-lg">المقالات ({posts.length})</h2>
+        <button onClick={() => { resetForm(); setShowForm(!showForm); }} className="bg-teal-500 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-teal-400 transition-all">{showForm ? "إلغاء" : "+ إضافة مقال"}</button>
+      </div>
+      {showForm && (
+        <form onSubmit={handleSubmit} className="p-5 rounded-xl border border-teal-500/20 bg-teal-500/[0.02] mb-6 space-y-4">
+          {formError && <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-sm p-3 rounded-xl">{formError}</div>}
+          <div>
+            <label className="block text-gray-400 text-sm mb-2">العنوان</label>
+            <input type="text" value={form.title} onChange={(e) => { setForm({...form, title: e.target.value}); if (!form.slug) setForm({...form, title: e.target.value, slug: generateSlug(e.target.value)}); }} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-white focus:border-teal-500/50 transition-all" />
+          </div>
+          <div className="grid md:grid-cols-3 gap-4">
+            <div><label className="block text-gray-400 text-sm mb-2">الرابط (slug)</label><input type="text" value={form.slug} onChange={(e) => setForm({...form, slug: e.target.value})} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-white focus:border-teal-500/50 transition-all" /></div>
+            <div><label className="block text-gray-400 text-sm mb-2">التصنيف</label><select value={form.category} onChange={(e) => setForm({...form, category: e.target.value})} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-gray-400 focus:border-teal-500/50 transition-all"><option value="تقنية">تقنية</option><option value="نصائح">نصائح</option><option value="دراسة حالة">دراسة حالة</option><option value="مقارنة">مقارنة</option><option value="منهجية العمل">منهجية العمل</option></select></div>
+            <div><label className="block text-gray-400 text-sm mb-2">وقت القراءة</label><input type="text" value={form.read_time} onChange={(e) => setForm({...form, read_time: e.target.value})} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-white focus:border-teal-500/50 transition-all" /></div>
+          </div>
+          <div><label className="block text-gray-400 text-sm mb-2">المقتطف</label><textarea value={form.excerpt} onChange={(e) => setForm({...form, excerpt: e.target.value})} rows="2" className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-white focus:border-teal-500/50 transition-all resize-none" /></div>
+          <div><label className="block text-gray-400 text-sm mb-2">المحتوى (HTML)</label><textarea value={form.content} onChange={(e) => setForm({...form, content: e.target.value})} rows="8" className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-white font-mono text-sm focus:border-teal-500/50 transition-all resize-none" dir="ltr" /></div>
+          <button type="submit" className="bg-teal-500 text-white px-6 py-2.5 rounded-xl text-sm font-medium hover:bg-teal-400 transition-all">{editPost ? "تحديث" : "إضافة"}</button>
+        </form>
+      )}
+      {loading ? <div className="text-center py-20 text-gray-400">جاري التحميل...</div> : (
+        <div className="space-y-3">
+          {posts.map((post) => (
+            <div key={post.id} className="p-4 rounded-xl border border-white/5 bg-white/[0.02] flex items-center justify-between">
+              <div className="flex items-center gap-3 flex-1 min-w-0">
+                <span className="text-[10px] bg-teal-500/10 text-teal-400 px-2 py-0.5 rounded-full flex-shrink-0">{post.category}</span>
+                <div className="min-w-0"><div className="text-white font-medium text-sm truncate">{post.title}</div><div className="text-gray-500 text-xs">{new Date(post.created_at).toLocaleDateString("ar-SA")}</div></div>
+              </div>
+              <div className="flex gap-2 flex-shrink-0 mr-3">
+                <a href={`/blog/${post.slug}`} target="_blank" className="text-teal-400 text-xs hover:underline">عرض</a>
+                <button onClick={() => handleEdit(post)} className="text-gray-400 hover:text-teal-400 text-xs">تعديل</button>
+                <button onClick={() => handleDelete(post.id)} className="text-red-400 hover:text-red-300 text-xs">حذف</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // المكون الرئيسي
 export default function AdminDashboard() {
   const [messages, setMessages] = useState([]);
@@ -199,7 +284,7 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
   const [toast, setToast] = useState(null);
   const [confirm, setConfirm] = useState(null);
-  const [visitorStats, setVisitorStats] = useState({ total: 0, today: 0, thisWeek: 0, unique: 0 });
+  const tabsRef = useRef(null);
 
   const showToast = (message, type) => { setToast({ message, type }); setTimeout(() => setToast(null), 3000); };
 
@@ -207,11 +292,7 @@ export default function AdminDashboard() {
     try { const data = await getMessages(); setMessages(data); } catch { showToast("فشل تحميل الرسائل", "error"); } finally { setLoading(false); }
   };
 
-  const fetchVisitors = async () => {
-    try { const stats = await getVisitorStats(); setVisitorStats(stats); } catch { /* silent */ }
-  };
-
-  useEffect(() => { fetchMessages(); fetchVisitors(); }, []);
+  useEffect(() => { fetchMessages(); }, []);
 
   const handleMarkRead = async (id) => {
     try { await markAsRead(id); setMessages(messages.map(m => m.id === id ? { ...m, read: true } : m)); showToast("تم تعليم الرسالة كمقروءة", "success"); } catch { showToast("فشل التحديث", "error"); }
@@ -229,7 +310,13 @@ export default function AdminDashboard() {
   };
 
   const newMessages = messages.filter(m => !m.read).length;
-  const todayMessages = messages.filter(m => new Date(m.created_at).toDateString() === new Date().toDateString()).length;
+
+  const tabs = [
+    { tab: "overview", icon: <OverviewIcon />, label: "نظرة عامة" },
+    { tab: "messages", icon: <MessagesIcon />, label: "الرسائل", badge: newMessages },
+    { tab: "posts", icon: <PostsIcon />, label: "المقالات" },
+    { tab: "users", icon: <UsersIcon />, label: "المستخدمين" },
+  ];
 
   return (
     <div className="min-h-screen bg-[#06060a]" dir="rtl">
@@ -244,28 +331,36 @@ export default function AdminDashboard() {
       </header>
 
       <div className="max-w-7xl mx-auto p-4 sm:p-6">
-        <div className="flex gap-2 mb-8">
-          {[
-            { tab: "overview", icon: <OverviewIcon />, label: "نظرة عامة" },
-            { tab: "messages", icon: <MessagesIcon />, label: "الرسائل", badge: newMessages },
-            { tab: "users", icon: <UsersIcon />, label: "المستخدمين" },
-            { tab: "visitors", icon: <VisitorsIcon />, label: "الزوار" },
-          ].map(({ tab, icon, label, badge }) => (
-            <button key={tab} onClick={() => setActiveTab(tab)} className={`px-4 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-2 relative ${activeTab === tab ? "bg-teal-500 text-white" : "bg-white/[0.02] text-gray-400 hover:text-white border border-white/5"}`}>
-              {icon}{label}
-              {badge > 0 && <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold">{badge}</span>}
-            </button>
-          ))}
+        {/* تبويبات قابلة للسحب على الجوال */}
+        <div className="mb-8 -mx-4 sm:mx-0">
+          <div
+            ref={tabsRef}
+            className="flex gap-2 overflow-x-auto scrollbar-hide px-4 sm:px-0 pb-2 -mb-2 snap-x snap-mandatory"
+            style={{ scrollBehavior: "smooth", WebkitOverflowScrolling: "touch" }}
+          >
+            {tabs.map(({ tab, icon, label, badge }) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-2 relative whitespace-nowrap snap-start flex-shrink-0 ${
+                  activeTab === tab ? "bg-teal-500 text-white" : "bg-white/[0.02] text-gray-400 hover:text-white border border-white/5"
+                }`}
+              >
+                {icon}{label}
+                {badge > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold">{badge}</span>
+                )}
+              </button>
+            ))}
+          </div>
         </div>
 
         {activeTab === "overview" && (
           <div>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <div className="grid grid-cols-2 gap-4 mb-8">
               {[
                 { label: "إجمالي الرسائل", value: messages.length, icon: <MailIcon /> },
                 { label: "رسائل جديدة", value: newMessages, icon: <MessagesIcon /> },
-                { label: "زوار اليوم", value: visitorStats?.today || 0, icon: <VisitorsIcon /> },
-                { label: "إجمالي الزوار", value: visitorStats?.total || 0, icon: <CalendarIcon /> },
               ].map((stat, i) => (
                 <div key={i} className="p-5 rounded-xl border border-white/5 bg-white/[0.02]">
                   <div className="text-teal-400 mb-3">{stat.icon}</div>
@@ -318,30 +413,15 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {activeTab === "visitors" && (
-          <div>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-              {[
-                { label: "إجمالي الزوار", value: visitorStats?.total || 0, color: "text-teal-400" },
-                { label: "اليوم", value: visitorStats?.today || 0, color: "text-blue-400" },
-                { label: "هذا الأسبوع", value: visitorStats?.thisWeek || 0, color: "text-purple-400" },
-                { label: "زوار فريدون", value: visitorStats?.unique || 0, color: "text-orange-400" },
-              ].map((stat, i) => (
-                <div key={i} className="p-5 rounded-xl border border-white/5 bg-white/[0.02]">
-                  <div className={`text-3xl font-bold ${stat.color} mb-1`}>{stat.value}</div>
-                  <div className="text-gray-500 text-sm">{stat.label}</div>
-                </div>
-              ))}
-            </div>
-            <div className="rounded-xl border border-white/5 bg-white/[0.02] p-6 text-center">
-              <div className="text-6xl mb-4">📊</div>
-              <p className="text-gray-400 text-sm">يتم تحديث الإحصائيات تلقائياً مع كل زيارة للموقع</p>
-            </div>
-          </div>
-        )}
-
+        {activeTab === "posts" && <PostsTab showToast={showToast} confirm={confirm} setConfirm={setConfirm} />}
         {activeTab === "users" && <UsersTab showToast={showToast} confirm={confirm} setConfirm={setConfirm} />}
       </div>
+
+      {/* إخفاء شريط التمرير */}
+      <style jsx>{`
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
 
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
       {confirm && <ConfirmToast message={confirm.message} onConfirm={confirm.onConfirm} onCancel={confirm.onCancel} />}
