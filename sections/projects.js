@@ -85,15 +85,28 @@ export default function Projects() {
             return (
               <div
                 key={project.id}
-                className="group relative p-6 sm:p-8 border-b sm:border border-white/5 bg-white/[0.02] sm:rounded-2xl hover:bg-white/[0.04] hover:border-teal-500/20 transition-all duration-500 sm:hover:-translate-y-2 last:border-b-0 sm:last:border-b"
+                className="group relative border-b sm:border border-white/5 bg-white/[0.02] sm:rounded-2xl hover:bg-white/[0.04] hover:border-teal-500/20 transition-all duration-500 sm:hover:-translate-y-2 last:border-b-0 sm:last:border-b overflow-hidden"
               >
                 <div className="absolute inset-0 sm:rounded-2xl bg-teal-500/0 group-hover:bg-teal-500/[0.03] transition-colors duration-500" />
 
-                <div className="relative z-10">
-                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${color} bg-opacity-10 text-white flex items-center justify-center mb-6 group-hover:scale-110 transition-all duration-500 shadow-lg`}>
-                    {icon}
+                {/* صورة المشروع */}
+                {project.image ? (
+                  <div className="w-full h-48 sm:h-52 overflow-hidden bg-white/[0.03]">
+                    <img 
+                      src={project.image} 
+                      alt={project.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
                   </div>
+                ) : (
+                  <div className={`w-full h-48 sm:h-52 bg-gradient-to-br ${color} bg-opacity-10 flex items-center justify-center`}>
+                    <div className="text-white opacity-30 scale-150">
+                      {icon}
+                    </div>
+                  </div>
+                )}
 
+                <div className="relative z-10 p-6 sm:p-8">
                   <h3 className="text-xl font-semibold text-white mb-3 group-hover:text-teal-300 transition-colors duration-300">
                     {project.title}
                   </h3>
@@ -102,9 +115,11 @@ export default function Projects() {
                     {project.description}
                   </p>
 
-                  <div className="pt-4 border-t border-white/5">
-                    <span className="text-xs text-gray-500 font-mono">{project.tech}</span>
-                  </div>
+                  {project.tech && (
+                    <div className="pt-4 border-t border-white/5">
+                      <span className="text-xs text-gray-500 font-mono">{project.tech}</span>
+                    </div>
+                  )}
                 </div>
               </div>
             );
