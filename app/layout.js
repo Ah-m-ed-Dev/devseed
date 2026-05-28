@@ -78,6 +78,28 @@ export default function RootLayout({ children }) {
       <main>{children}</main>
         <Footer />
         <WhatsappBubble />
+
+<script dangerouslySetInnerHTML={{ __html: `
+  (function() {
+    var oldLog = console.log;
+    var oldError = console.error;
+    var div = document.createElement('div');
+    div.style.cssText = 'position:fixed;bottom:0;left:0;right:0;max-height:200px;overflow:auto;background:rgba(0,0,0,0.9);color:#0f0;font-size:11px;font-family:monospace;padding:8px;z-index:999999;';
+    document.body.appendChild(div);
+    console.log = function() {
+      oldLog.apply(console, arguments);
+      div.innerHTML += '<div style="border-bottom:1px solid #333;padding:2px 0">' + Array.from(arguments).join(' ') + '</div>';
+    };
+    console.error = function() {
+      oldError.apply(console, arguments);
+      div.innerHTML += '<div style="color:red;border-bottom:1px solid #333;padding:2px 0">❌ ' + Array.from(arguments).join(' ') + '</div>';
+    };
+    window.onerror = function(msg) {
+      div.innerHTML += '<div style="color:red;border-bottom:1px solid #333;padding:2px 0">❌ ' + msg + '</div>';
+    };
+  })();
+`}} />
+
       </body>
     </html>
   );
