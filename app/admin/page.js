@@ -1,83 +1,71 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { getMessages, markAsRead, deleteMessage, getUsers, createUser, updateUser, deleteUser, getPosts, createPost, updatePost, deletePost, getProjects, createProject, updateProject, deleteProject } from "@/lib/supabase";
+import { getMessages, markAsRead, deleteMessage, getUsers, createUser, updateUser, deleteUser, getPosts, createPost, updatePost, deletePost, getProjects, createProject, updateProject, deleteProject, uploadImage } from "@/lib/supabase";
 import Link from "next/link";
 
-// أيقونات SVG
 const OverviewIcon = () => (
   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" />
   </svg>
 );
-
 const MessagesIcon = () => (
   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
   </svg>
 );
-
 const PostsIcon = () => (
   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
   </svg>
 );
-
 const ProjectsIcon = () => (
   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
   </svg>
 );
-
 const UsersIcon = () => (
   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" />
   </svg>
 );
-
 const EyeIcon = () => (
   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" />
   </svg>
 );
-
 const ReplyIcon = () => (
   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /><path d="M8 9h8M8 13h6" />
   </svg>
 );
-
 const TrashIcon = () => (
   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
   </svg>
 );
-
 const LogoutIcon = () => (
   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" />
   </svg>
 );
-
 const ExternalIcon = () => (
   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" />
   </svg>
 );
-
 const MailIcon = () => (
   <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><path d="M22 6l-10 7L2 6" />
   </svg>
 );
 
-// Toast
 function Toast({ message, type, onClose }) {
   const bgColor = type === "success" ? "bg-green-500/10 border-green-500/20 text-green-400" : "bg-red-500/10 border-red-500/20 text-red-400";
   const icon = type === "success" ? (
-    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5" /></svg>
+    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M20 6L9 17l-5-5" /></svg>
   ) : (
-    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
+    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 6L6 18M6 6l12 12" /></svg>
   );
   return (
     <div className={`fixed top-4 right-1/2 translate-x-1/2 z-[99999] px-4 py-3 rounded-xl border ${bgColor} text-sm flex items-center gap-2 shadow-lg`} style={{ animation: "toastSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1)" }}>
@@ -88,7 +76,6 @@ function Toast({ message, type, onClose }) {
   );
 }
 
-// Confirm Toast
 function ConfirmToast({ message, onConfirm, onCancel }) {
   return (
     <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4" style={{ animation: "fadeIn 0.2s ease" }}>
@@ -105,7 +92,6 @@ function ConfirmToast({ message, onConfirm, onCancel }) {
   );
 }
 
-// تبويب المستخدمين
 function UsersTab({ showToast, confirm, setConfirm }) {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -117,7 +103,6 @@ function UsersTab({ showToast, confirm, setConfirm }) {
   const fetchUsers = async () => {
     try { const data = await getUsers(); setUsers(data); } catch { showToast("فشل تحميل المستخدمين", "error"); } finally { setLoading(false); }
   };
-
   useEffect(() => { fetchUsers(); }, []);
 
   const resetForm = () => { setForm({ email: "", password: "", name: "", role: "admin" }); setEditUser(null); setShowForm(false); setFormError(""); };
@@ -186,7 +171,6 @@ function UsersTab({ showToast, confirm, setConfirm }) {
   );
 }
 
-// تبويب المقالات
 function PostsTab({ showToast, confirm, setConfirm }) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -198,7 +182,6 @@ function PostsTab({ showToast, confirm, setConfirm }) {
   const fetchPosts = async () => {
     try { const data = await getPosts(); setPosts(data); } catch { showToast("فشل تحميل المقالات", "error"); } finally { setLoading(false); }
   };
-
   useEffect(() => { fetchPosts(); }, []);
 
   const resetForm = () => {
@@ -206,9 +189,7 @@ function PostsTab({ showToast, confirm, setConfirm }) {
     setEditPost(null); setShowForm(false); setFormError("");
   };
 
-  const generateSlug = (title) => {
-    return title.replace(/[^\w\s]/gi, '').replace(/\s+/g, '-').toLowerCase().substring(0, 60);
-  };
+  const generateSlug = (title) => title.replace(/[^\w\s]/gi, '').replace(/\s+/g, '-').toLowerCase().substring(0, 60);
 
   const handleSubmit = async (e) => {
     e.preventDefault(); setFormError("");
@@ -248,10 +229,7 @@ function PostsTab({ showToast, confirm, setConfirm }) {
       {showForm && (
         <form onSubmit={handleSubmit} className="p-5 rounded-xl border border-teal-500/20 bg-teal-500/[0.02] mb-6 space-y-4">
           {formError && <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-sm p-3 rounded-xl">{formError}</div>}
-          <div>
-            <label className="block text-gray-400 text-sm mb-2">العنوان</label>
-            <input type="text" value={form.title} onChange={(e) => { setForm({...form, title: e.target.value}); if (!form.slug) setForm({...form, title: e.target.value, slug: generateSlug(e.target.value)}); }} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-white focus:border-teal-500/50 transition-all" />
-          </div>
+          <div><label className="block text-gray-400 text-sm mb-2">العنوان</label><input type="text" value={form.title} onChange={(e) => { setForm({...form, title: e.target.value}); if (!form.slug) setForm({...form, title: e.target.value, slug: generateSlug(e.target.value)}); }} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-white focus:border-teal-500/50 transition-all" /></div>
           <div className="grid md:grid-cols-3 gap-4">
             <div><label className="block text-gray-400 text-sm mb-2">الرابط (slug)</label><input type="text" value={form.slug} onChange={(e) => setForm({...form, slug: e.target.value})} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-white focus:border-teal-500/50 transition-all" /></div>
             <div><label className="block text-gray-400 text-sm mb-2">التصنيف</label><select value={form.category} onChange={(e) => setForm({...form, category: e.target.value})} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-gray-400 focus:border-teal-500/50 transition-all"><option value="تقنية">تقنية</option><option value="نصائح">نصائح</option><option value="دراسة حالة">دراسة حالة</option><option value="مقارنة">مقارنة</option><option value="منهجية العمل">منهجية العمل</option></select></div>
@@ -283,24 +261,38 @@ function PostsTab({ showToast, confirm, setConfirm }) {
   );
 }
 
-// تبويب المشاريع
 function ProjectsTab({ showToast, confirm, setConfirm }) {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editProject, setEditProject] = useState(null);
-  const [form, setForm] = useState({ title: "", description: "", tech: "", color: "from-teal-400 to-emerald-400", icon: "default" });
+  const [form, setForm] = useState({ title: "", description: "", tech: "", color: "from-teal-400 to-emerald-400", icon: "default", image: "" });
   const [formError, setFormError] = useState("");
+  const [uploading, setUploading] = useState(false);
 
   const fetchProjects = async () => {
     try { const data = await getProjects(); setProjects(data); } catch { showToast("فشل تحميل المشاريع", "error"); } finally { setLoading(false); }
   };
-
   useEffect(() => { fetchProjects(); }, []);
 
   const resetForm = () => {
-    setForm({ title: "", description: "", tech: "", color: "from-teal-400 to-emerald-400", icon: "default" });
+    setForm({ title: "", description: "", tech: "", color: "from-teal-400 to-emerald-400", icon: "default", image: "" });
     setEditProject(null); setShowForm(false); setFormError("");
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      const url = await uploadImage(file);
+      setForm({ ...form, image: url });
+      showToast("تم رفع الصورة", "success");
+    } catch {
+      showToast("فشل رفع الصورة", "error");
+    } finally {
+      setUploading(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -313,7 +305,7 @@ function ProjectsTab({ showToast, confirm, setConfirm }) {
     } catch { showToast("فشل العملية", "error"); }
   };
 
-  const handleEdit = (p) => { setEditProject(p); setForm({ title: p.title, description: p.description || "", tech: p.tech || "", color: p.color || "from-teal-400 to-emerald-400", icon: p.icon || "default" }); setShowForm(true); };
+  const handleEdit = (p) => { setEditProject(p); setForm({ title: p.title, description: p.description || "", tech: p.tech || "", color: p.color || "from-teal-400 to-emerald-400", icon: p.icon || "default", image: p.image || "" }); setShowForm(true); };
 
   const handleDelete = (id) => {
     setConfirm({
@@ -338,18 +330,23 @@ function ProjectsTab({ showToast, confirm, setConfirm }) {
       {showForm && (
         <form onSubmit={handleSubmit} className="p-5 rounded-xl border border-teal-500/20 bg-teal-500/[0.02] mb-6 space-y-4">
           {formError && <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-sm p-3 rounded-xl">{formError}</div>}
-          <div>
-            <label className="block text-gray-400 text-sm mb-2">العنوان</label>
-            <input type="text" value={form.title} onChange={(e) => setForm({...form, title: e.target.value})} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-white focus:border-teal-500/50 transition-all" />
-          </div>
-          <div>
-            <label className="block text-gray-400 text-sm mb-2">الوصف</label>
-            <textarea value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} rows="2" className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-white focus:border-teal-500/50 transition-all resize-none" />
-          </div>
+          <div><label className="block text-gray-400 text-sm mb-2">العنوان</label><input type="text" value={form.title} onChange={(e) => setForm({...form, title: e.target.value})} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-white focus:border-teal-500/50 transition-all" /></div>
+          <div><label className="block text-gray-400 text-sm mb-2">الوصف</label><textarea value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} rows="2" className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-white focus:border-teal-500/50 transition-all resize-none" /></div>
           <div className="grid md:grid-cols-3 gap-4">
             <div><label className="block text-gray-400 text-sm mb-2">التقنيات</label><input type="text" value={form.tech} onChange={(e) => setForm({...form, tech: e.target.value})} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-white focus:border-teal-500/50 transition-all" /></div>
             <div><label className="block text-gray-400 text-sm mb-2">اللون</label><select value={form.color} onChange={(e) => setForm({...form, color: e.target.value})} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-gray-400 focus:border-teal-500/50 transition-all">{colorOptions.map(c => <option key={c} value={c}>{c}</option>)}</select></div>
             <div><label className="block text-gray-400 text-sm mb-2">الأيقونة</label><select value={form.icon} onChange={(e) => setForm({...form, icon: e.target.value})} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-gray-400 focus:border-teal-500/50 transition-all">{iconOptions.map(c => <option key={c} value={c}>{c}</option>)}</select></div>
+          </div>
+          <div>
+            <label className="block text-gray-400 text-sm mb-2">صورة المشروع</label>
+            {form.image ? (
+              <div className="relative mb-2">
+                <img src={form.image} alt="Preview" className="w-full h-32 rounded-xl object-cover" />
+                <button type="button" onClick={() => setForm({...form, image: ""})} className="absolute top-2 right-2 bg-red-500 text-white w-6 h-6 rounded-full text-xs flex items-center justify-center">×</button>
+              </div>
+            ) : null}
+            <input type="file" accept="image/*" onChange={handleImageUpload} disabled={uploading} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-white file:ml-2 file:bg-teal-500 file:text-white file:border-0 file:px-3 file:py-1 file:rounded-lg file:text-sm file:cursor-pointer focus:border-teal-500/50 transition-all" />
+            {uploading && <p className="text-teal-400 text-xs mt-1">جاري الرفع...</p>}
           </div>
           <button type="submit" className="bg-teal-500 text-white px-6 py-2.5 rounded-xl text-sm font-medium hover:bg-teal-400 transition-all">{editProject ? "تحديث" : "إضافة"}</button>
         </form>
@@ -359,7 +356,11 @@ function ProjectsTab({ showToast, confirm, setConfirm }) {
           {projects.map((p) => (
             <div key={p.id} className="p-4 rounded-xl border border-white/5 bg-white/[0.02] flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${p.color || 'from-teal-400 to-emerald-400'} opacity-80`} />
+                {p.image ? (
+                  <img src={p.image} alt={p.title} className="w-10 h-10 rounded-xl object-cover" />
+                ) : (
+                  <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${p.color || 'from-teal-400 to-emerald-400'} opacity-80`} />
+                )}
                 <div><div className="text-white font-medium text-sm">{p.title}</div><div className="text-gray-500 text-xs">{p.tech}</div></div>
               </div>
               <div className="flex gap-2">
@@ -374,7 +375,6 @@ function ProjectsTab({ showToast, confirm, setConfirm }) {
   );
 }
 
-// المكون الرئيسي
 export default function AdminDashboard() {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -388,7 +388,6 @@ export default function AdminDashboard() {
   const fetchMessages = async () => {
     try { const data = await getMessages(); setMessages(data); } catch { showToast("فشل تحميل الرسائل", "error"); } finally { setLoading(false); }
   };
-
   useEffect(() => { fetchMessages(); }, []);
 
   const handleMarkRead = async (id) => {
@@ -430,23 +429,11 @@ export default function AdminDashboard() {
 
       <div className="max-w-7xl mx-auto p-4 sm:p-6">
         <div className="mb-8 -mx-4 sm:mx-0">
-          <div
-            ref={tabsRef}
-            className="flex gap-2 overflow-x-auto scrollbar-hide px-4 sm:px-0 pb-2 -mb-2 snap-x snap-mandatory"
-            style={{ scrollBehavior: "smooth", WebkitOverflowScrolling: "touch" }}
-          >
+          <div ref={tabsRef} className="flex gap-2 overflow-x-auto scrollbar-hide px-4 sm:px-0 pb-2 -mb-2 snap-x snap-mandatory" style={{ scrollBehavior: "smooth", WebkitOverflowScrolling: "touch" }}>
             {tabs.map(({ tab, icon, label, badge }) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-2 relative whitespace-nowrap snap-start flex-shrink-0 ${
-                  activeTab === tab ? "bg-teal-500 text-white" : "bg-white/[0.02] text-gray-400 hover:text-white border border-white/5"
-                }`}
-              >
+              <button key={tab} onClick={() => setActiveTab(tab)} className={`px-4 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-2 relative whitespace-nowrap snap-start flex-shrink-0 ${activeTab === tab ? "bg-teal-500 text-white" : "bg-white/[0.02] text-gray-400 hover:text-white border border-white/5"}`}>
                 {icon}{label}
-                {badge > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold">{badge}</span>
-                )}
+                {badge > 0 && <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold">{badge}</span>}
               </button>
             ))}
           </div>
@@ -455,10 +442,7 @@ export default function AdminDashboard() {
         {activeTab === "overview" && (
           <div>
             <div className="grid grid-cols-2 gap-4 mb-8">
-              {[
-                { label: "إجمالي الرسائل", value: messages.length, icon: <MailIcon /> },
-                { label: "رسائل جديدة", value: newMessages, icon: <MessagesIcon /> },
-              ].map((stat, i) => (
+              {[{ label: "إجمالي الرسائل", value: messages.length, icon: <MailIcon /> }, { label: "رسائل جديدة", value: newMessages, icon: <MessagesIcon /> }].map((stat, i) => (
                 <div key={i} className="p-5 rounded-xl border border-white/5 bg-white/[0.02]">
                   <div className="text-teal-400 mb-3">{stat.icon}</div>
                   <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
@@ -515,11 +499,7 @@ export default function AdminDashboard() {
         {activeTab === "users" && <UsersTab showToast={showToast} confirm={confirm} setConfirm={setConfirm} />}
       </div>
 
-      <style jsx>{`
-        .scrollbar-hide::-webkit-scrollbar { display: none; }
-        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-      `}</style>
-
+      <style jsx>{`.scrollbar-hide::-webkit-scrollbar { display: none; } .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }`}</style>
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
       {confirm && <ConfirmToast message={confirm.message} onConfirm={confirm.onConfirm} onCancel={confirm.onCancel} />}
     </div>
