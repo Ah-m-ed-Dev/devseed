@@ -195,7 +195,7 @@ function PostsTab({ showToast, confirm, setConfirm }) {
     e.preventDefault(); setFormError("");
     if (!form.title.trim()) { setFormError("العنوان مطلوب"); return; }
     const slug = form.slug || generateSlug(form.title);
-console.log("Form data:", JSON.stringify(form));
+
     try {
       const data = { ...form, slug };
       if (editPost) { await updatePost(editPost.id, data); showToast("تم تحديث المقال", "success"); }
@@ -300,6 +300,9 @@ function ProjectsTab({ showToast, confirm, setConfirm }) {
     e.preventDefault();
     setFormError("");
     if (!form.title.trim()) { setFormError("العنوان مطلوب"); return; }
+
+console.log("Form data:", JSON.stringify(form));
+
     try {
       if (editProject) {
         await updateProject(editProject.id, form);
