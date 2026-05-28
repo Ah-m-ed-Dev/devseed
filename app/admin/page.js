@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { getMessages, markAsRead, deleteMessage, getUsers, createUser, updateUser, deleteUser, getPosts, createPost, updatePost, deletePost } from "@/lib/supabase";
+import { getMessages, markAsRead, deleteMessage, getUsers, createUser, updateUser, deleteUser, getPosts, createPost, updatePost, deletePost, getProjects, createProject, updateProject, deleteProject } from "@/lib/supabase";
 import Link from "next/link";
 
 // أيقونات SVG
@@ -20,6 +20,12 @@ const MessagesIcon = () => (
 const PostsIcon = () => (
   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+  </svg>
+);
+
+const ProjectsIcon = () => (
+  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
   </svg>
 );
 
@@ -277,6 +283,97 @@ function PostsTab({ showToast, confirm, setConfirm }) {
   );
 }
 
+// تبويب المشاريع
+function ProjectsTab({ showToast, confirm, setConfirm }) {
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [editProject, setEditProject] = useState(null);
+  const [form, setForm] = useState({ title: "", description: "", tech: "", color: "from-teal-400 to-emerald-400", icon: "default" });
+  const [formError, setFormError] = useState("");
+
+  const fetchProjects = async () => {
+    try { const data = await getProjects(); setProjects(data); } catch { showToast("فشل تحميل المشاريع", "error"); } finally { setLoading(false); }
+  };
+
+  useEffect(() => { fetchProjects(); }, []);
+
+  const resetForm = () => {
+    setForm({ title: "", description: "", tech: "", color: "from-teal-400 to-emerald-400", icon: "default" });
+    setEditProject(null); setShowForm(false); setFormError("");
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault(); setFormError("");
+    if (!form.title.trim()) { setFormError("العنوان مطلوب"); return; }
+    try {
+      if (editProject) { await updateProject(editProject.id, form); showToast("تم تحديث المشروع", "success"); }
+      else { await createProject(form); showToast("تم إضافة المشروع", "success"); }
+      resetForm(); fetchProjects();
+    } catch { showToast("فشل العملية", "error"); }
+  };
+
+  const handleEdit = (p) => { setEditProject(p); setForm({ title: p.title, description: p.description || "", tech: p.tech || "", color: p.color || "from-teal-400 to-emerald-400", icon: p.icon || "default" }); setShowForm(true); };
+
+  const handleDelete = (id) => {
+    setConfirm({
+      message: "هل أنت متأكد من حذف هذا المشروع؟",
+      onConfirm: async () => {
+        try { await deleteProject(id); setProjects(projects.filter(p => p.id !== id)); showToast("تم حذف المشروع", "success"); } catch { showToast("فشل الحذف", "error"); }
+        setConfirm(null);
+      },
+      onCancel: () => setConfirm(null),
+    });
+  };
+
+  const colorOptions = ["from-teal-400 to-emerald-400", "from-purple-400 to-pink-400", "from-orange-400 to-red-400", "from-blue-400 to-cyan-400", "from-green-400 to-lime-400"];
+  const iconOptions = ["default", "education", "inventory", "delivery"];
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-white font-semibold text-lg">المشاريع ({projects.length})</h2>
+        <button onClick={() => { resetForm(); setShowForm(!showForm); }} className="bg-teal-500 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-teal-400 transition-all">{showForm ? "إلغاء" : "+ إضافة مشروع"}</button>
+      </div>
+      {showForm && (
+        <form onSubmit={handleSubmit} className="p-5 rounded-xl border border-teal-500/20 bg-teal-500/[0.02] mb-6 space-y-4">
+          {formError && <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-sm p-3 rounded-xl">{formError}</div>}
+          <div>
+            <label className="block text-gray-400 text-sm mb-2">العنوان</label>
+            <input type="text" value={form.title} onChange={(e) => setForm({...form, title: e.target.value})} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-white focus:border-teal-500/50 transition-all" />
+          </div>
+          <div>
+            <label className="block text-gray-400 text-sm mb-2">الوصف</label>
+            <textarea value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} rows="2" className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-white focus:border-teal-500/50 transition-all resize-none" />
+          </div>
+          <div className="grid md:grid-cols-3 gap-4">
+            <div><label className="block text-gray-400 text-sm mb-2">التقنيات</label><input type="text" value={form.tech} onChange={(e) => setForm({...form, tech: e.target.value})} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-white focus:border-teal-500/50 transition-all" /></div>
+            <div><label className="block text-gray-400 text-sm mb-2">اللون</label><select value={form.color} onChange={(e) => setForm({...form, color: e.target.value})} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-gray-400 focus:border-teal-500/50 transition-all">{colorOptions.map(c => <option key={c} value={c}>{c}</option>)}</select></div>
+            <div><label className="block text-gray-400 text-sm mb-2">الأيقونة</label><select value={form.icon} onChange={(e) => setForm({...form, icon: e.target.value})} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-gray-400 focus:border-teal-500/50 transition-all">{iconOptions.map(c => <option key={c} value={c}>{c}</option>)}</select></div>
+          </div>
+          <button type="submit" className="bg-teal-500 text-white px-6 py-2.5 rounded-xl text-sm font-medium hover:bg-teal-400 transition-all">{editProject ? "تحديث" : "إضافة"}</button>
+        </form>
+      )}
+      {loading ? <div className="text-center py-20 text-gray-400">جاري التحميل...</div> : (
+        <div className="space-y-3">
+          {projects.map((p) => (
+            <div key={p.id} className="p-4 rounded-xl border border-white/5 bg-white/[0.02] flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${p.color || 'from-teal-400 to-emerald-400'} opacity-80`} />
+                <div><div className="text-white font-medium text-sm">{p.title}</div><div className="text-gray-500 text-xs">{p.tech}</div></div>
+              </div>
+              <div className="flex gap-2">
+                <button onClick={() => handleEdit(p)} className="text-gray-400 hover:text-teal-400 text-xs">تعديل</button>
+                <button onClick={() => handleDelete(p.id)} className="text-red-400 hover:text-red-300 text-xs">حذف</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // المكون الرئيسي
 export default function AdminDashboard() {
   const [messages, setMessages] = useState([]);
@@ -315,6 +412,7 @@ export default function AdminDashboard() {
     { tab: "overview", icon: <OverviewIcon />, label: "نظرة عامة" },
     { tab: "messages", icon: <MessagesIcon />, label: "الرسائل", badge: newMessages },
     { tab: "posts", icon: <PostsIcon />, label: "المقالات" },
+    { tab: "projects", icon: <ProjectsIcon />, label: "المشاريع" },
     { tab: "users", icon: <UsersIcon />, label: "المستخدمين" },
   ];
 
@@ -331,7 +429,6 @@ export default function AdminDashboard() {
       </header>
 
       <div className="max-w-7xl mx-auto p-4 sm:p-6">
-        {/* تبويبات قابلة للسحب على الجوال */}
         <div className="mb-8 -mx-4 sm:mx-0">
           <div
             ref={tabsRef}
@@ -414,10 +511,10 @@ export default function AdminDashboard() {
         )}
 
         {activeTab === "posts" && <PostsTab showToast={showToast} confirm={confirm} setConfirm={setConfirm} />}
+        {activeTab === "projects" && <ProjectsTab showToast={showToast} confirm={confirm} setConfirm={setConfirm} />}
         {activeTab === "users" && <UsersTab showToast={showToast} confirm={confirm} setConfirm={setConfirm} />}
       </div>
 
-      {/* إخفاء شريط التمرير */}
       <style jsx>{`
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
