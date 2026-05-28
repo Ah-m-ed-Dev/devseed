@@ -3,7 +3,6 @@ import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
 import { Cairo } from "next/font/google";
 import WhatsappBubble from "@/components/layout/WhatsappBubble";
-import VisitorTracker from "@/components/layout/VisitorTracker";
 
 
 const cairo = Cairo({
@@ -75,7 +74,6 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ar" dir="rtl" className={cairo.variable}>
       <body className="antialiased">
-       <VisitorTracker />
         <Navbar />
       <main>{children}</main>
         <Footer />
