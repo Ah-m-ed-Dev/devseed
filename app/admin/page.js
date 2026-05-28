@@ -266,7 +266,7 @@ function ProjectsTab({ showToast, confirm, setConfirm }) {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editProject, setEditProject] = useState(null);
-  const [form, setForm] = useState({ title: "", description: "", tech: "", color: "from-teal-400 to-emerald-400", icon: "default", image: "" });
+  const [form, setForm] = useState({ title: "", description: "", tech: "", color: "from-teal-400 to-emerald-400", icon: "default", image: "", link: "" });
   const [formError, setFormError] = useState("");
   const [uploading, setUploading] = useState(false);
 
@@ -276,7 +276,7 @@ function ProjectsTab({ showToast, confirm, setConfirm }) {
   useEffect(() => { fetchProjects(); }, []);
 
   const resetForm = () => {
-    setForm({ title: "", description: "", tech: "", color: "from-teal-400 to-emerald-400", icon: "default", image: "" });
+    setForm({ title: "", description: "", tech: "", color: "from-teal-400 to-emerald-400", icon: "default", image: "", link: "" });
     setEditProject(null); setShowForm(false); setFormError("");
   };
 
@@ -305,7 +305,7 @@ function ProjectsTab({ showToast, confirm, setConfirm }) {
     } catch { showToast("فشل العملية", "error"); }
   };
 
-  const handleEdit = (p) => { setEditProject(p); setForm({ title: p.title, description: p.description || "", tech: p.tech || "", color: p.color || "from-teal-400 to-emerald-400", icon: p.icon || "default", image: p.image || "" }); setShowForm(true); };
+  const handleEdit = (p) => { setEditProject(p); setForm({ title: p.title, description: p.description || "", tech: p.tech || "", color: p.color || "from-teal-400 to-emerald-400", icon: p.icon || "default", image: p.image || "", link: p.link || "" }); setShowForm(true); };
 
   const handleDelete = (id) => {
     setConfirm({
@@ -347,6 +347,10 @@ function ProjectsTab({ showToast, confirm, setConfirm }) {
             ) : null}
             <input type="file" accept="image/*" onChange={handleImageUpload} disabled={uploading} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-white file:ml-2 file:bg-teal-500 file:text-white file:border-0 file:px-3 file:py-1 file:rounded-lg file:text-sm file:cursor-pointer focus:border-teal-500/50 transition-all" />
             {uploading && <p className="text-teal-400 text-xs mt-1">جاري الرفع...</p>}
+          </div>
+          <div>
+            <label className="block text-gray-400 text-sm mb-2">رابط المشروع (اختياري)</label>
+            <input type="url" value={form.link} onChange={(e) => setForm({...form, link: e.target.value})} placeholder="https://example.com" className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-white focus:border-teal-500/50 transition-all" />
           </div>
           <button type="submit" className="bg-teal-500 text-white px-6 py-2.5 rounded-xl text-sm font-medium hover:bg-teal-400 transition-all">{editProject ? "تحديث" : "إضافة"}</button>
         </form>
