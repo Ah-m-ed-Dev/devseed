@@ -296,16 +296,37 @@ function ProjectsTab({ showToast, confirm, setConfirm }) {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); setFormError("");
+    e.preventDefault();
+    setFormError("");
     if (!form.title.trim()) { setFormError("العنوان مطلوب"); return; }
     try {
-      if (editProject) { await updateProject(editProject.id, form); showToast("تم تحديث المشروع", "success"); }
-      else { await createProject(form); showToast("تم إضافة المشروع", "success"); }
-      resetForm(); fetchProjects();
-    } catch { showToast("فشل العملية", "error"); }
+      if (editProject) {
+        await updateProject(editProject.id, form);
+        showToast("تم تحديث المشروع", "success");
+      } else {
+        await createProject(form);
+        showToast("تم إضافة المشروع", "success");
+      }
+      resetForm();
+      fetchProjects();
+    } catch (err) {
+      showToast("فشل العملية", "error");
+    }
   };
 
-  const handleEdit = (p) => { setEditProject(p); setForm({ title: p.title, description: p.description || "", tech: p.tech || "", color: p.color || "from-teal-400 to-emerald-400", icon: p.icon || "default", image: p.image || "", link: p.link || "" }); setShowForm(true); };
+  const handleEdit = (p) => {
+    setEditProject(p);
+    setForm({
+      title: p.title || "",
+      description: p.description || "",
+      tech: p.tech || "",
+      color: p.color || "from-teal-400 to-emerald-400",
+      icon: p.icon || "default",
+      image: p.image || "",
+      link: p.link || "",
+    });
+    setShowForm(true);
+  };
 
   const handleDelete = (id) => {
     setConfirm({
