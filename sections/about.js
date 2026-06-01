@@ -54,7 +54,7 @@ export default function About() {
             {" "}نؤمن أن كل مشروع يبدأ كبذرة. نجمع بين الشغف التقني والخبرة العميقة لنحول أفكارك إلى منتجات رقمية قوية، سريعة، وقابلة للنمو. لسنا مجرد مطورين، نحن شركاء في رحلة نجاحك.
           </p>
 
-          {/* الإحصائيات */}
+     /*     {/* الإحصائيات */}
           <div className="grid grid-cols-3 gap-6 sm:gap-8 max-w-lg mx-auto mb-10 sm:mb-12">
             {stats.map((stat, index) => (
               <div key={index} className="text-center group">
@@ -66,7 +66,7 @@ export default function About() {
                 </div>
               </div>
             ))}
-          </div>
+          </div> */
 
           {/* القيم الأساسية */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-0 sm:gap-6 max-w-3xl mx-auto">
