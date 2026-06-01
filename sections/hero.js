@@ -88,7 +88,7 @@ export default function Hero() {
         <div className="mt-10 sm:mt-16 flex flex-wrap items-center justify-center gap-4 sm:gap-8 text-xs sm:text-sm text-gray-500">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 bg-teal-400 rounded-full" />
-            إنجاز متقن وفق خطة زمنية واضحة
+             إطلاق سريع
           </div>
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 bg-teal-400 rounded-full" />
