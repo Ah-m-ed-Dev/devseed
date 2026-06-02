@@ -7,11 +7,11 @@ export const metadata = {
 
 const plans = [
   {
-    name: "البذرة",
-    nameEn: "Seed",
-    price: "$350",
+    name: "البداية الذكية",
+    nameEn: "Starter",
+    price: "$299",
     period: "للمشروع",
-    originalPrice: "$599",
+    originalPrice: "$499",
     description: "للمشاريع الصغيرة والنماذج الأولية",
     features: [
       "صفحة هبوط احترافية",
@@ -29,28 +29,28 @@ const plans = [
   {
     name: "النمو",
     nameEn: "Growth",
-    price: "$700",
+    price: "$599",
     period: "للمشروع",
-    originalPrice: "$1,199",
+    originalPrice: "$999",
     description: "للشركات الناشئة والمواقع المتكاملة",
     features: [
-      "موقع متعدد الصفحات",
+      "موقع متعدد الصفحات (حتى ٥ صفحات)",
       "لوحة تحكم إدارية",
       "تصميم UI/UX احترافي",
       "SEO متقدم",
       "تكامل API خارجية",
-      "تسليم خلال ٣-٤ أسابيع",
+      "تسليم خلال ٢-٣ أسابيع",
       "دعم لمدة ٣٠ يوم",
     ],
     color: "from-teal-400 to-emerald-400",
     popular: true,
-    cta: "ابدأ الآن",
+    cta: "الأكثر طلباً",
     href: "/#contact",
   },
   {
-    name: "الحصاد",
-    nameEn: "Harvest",
-    price: "$1,000",
+    name: "الاحتراف",
+    nameEn: "Pro",
+    price: "$999",
     period: "للمشروع",
     originalPrice: "$1,799",
     description: "للمشاريع الكبيرة والتطبيقات المعقدة",
@@ -66,7 +66,7 @@ const plans = [
     ],
     color: "from-purple-400 to-pink-400",
     popular: false,
-    cta: "ابدأ الآن",
+    cta: "تواصل معنا",
     href: "/#contact",
   },
 ];
@@ -98,33 +98,27 @@ export default function PricingPage() {
   return (
     <section className="min-h-screen pt-20 sm:pt-24 pb-16 sm:pb-24 relative overflow-hidden bg-[#0a0a0f]">
       
-      {/* خلفية */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(20,184,166,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(20,184,166,0.02)_1px,transparent_1px)] bg-[size:80px_80px]" />
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-teal-500/5 rounded-full blur-[120px]" />
 
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         
-        {/* زر الرجوع */}
         <div className="mb-8">
           <Link 
             href="/" 
             className="inline-flex items-center gap-2 text-gray-400 hover:text-teal-400 transition-colors text-sm"
           >
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M19 12H5" />
-              <path d="M12 19l-7-7 7-7" />
+              <path d="M19 12H5" /><path d="M12 19l-7-7 7-7" />
             </svg>
             العودة للرئيسية
           </Link>
         </div>
 
-        {/* رأس الصفحة */}
         <div className="text-center mb-12 sm:mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-teal-500/20 bg-teal-500/5 text-teal-300 text-sm mb-6">
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 2L2 7l10 5 10-5-10-5z" />
-              <path d="M2 17l10 5 10-5" />
-              <path d="M2 12l10 5 10-5" />
+              <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
             </svg>
             <span>استثمر في مشروعك</span>
           </div>
@@ -138,7 +132,6 @@ export default function PricingPage() {
           </p>
         </div>
 
-        {/* بطاقات الأسعار */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 sm:mb-20 max-w-5xl mx-auto">
           {plans.map((plan, index) => (
             <div
@@ -149,14 +142,12 @@ export default function PricingPage() {
                   : "border-white/5 bg-white/[0.02]"
               } hover:border-teal-500/20 transition-all duration-300 group`}
             >
-              {/* شارة الأكثر طلباً */}
               {plan.popular && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-teal-500 text-white text-xs font-bold px-4 py-1 rounded-full">
                   الأكثر طلباً
                 </div>
               )}
 
-              {/* اسم الباقة */}
               <div className="text-center mb-6">
                 <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${plan.color} bg-opacity-10 mx-auto mb-3 flex items-center justify-center`}>
                   <span className="text-white font-bold text-sm">{plan.nameEn}</span>
@@ -165,7 +156,6 @@ export default function PricingPage() {
                 <p className="text-gray-500 text-xs">{plan.description}</p>
               </div>
 
-              {/* السعر */}
               <div className="text-center mb-6">
                 {plan.originalPrice && (
                   <span className="text-gray-500 line-through text-sm block mb-1">
@@ -183,7 +173,6 @@ export default function PricingPage() {
                 )}
               </div>
 
-              {/* الميزات */}
               <ul className="space-y-3 mb-8">
                 {plan.features.map((feature, fIndex) => (
                   <li key={fIndex} className="flex items-start gap-2 text-gray-400 text-sm">
@@ -195,7 +184,6 @@ export default function PricingPage() {
                 ))}
               </ul>
 
-              {/* زر CTA */}
               <a
                 href={plan.href}
                 className={`block text-center py-3 rounded-xl font-semibold text-sm transition-all ${
@@ -210,7 +198,6 @@ export default function PricingPage() {
           ))}
         </div>
 
-        {/* الأسئلة الشائعة */}
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl sm:text-3xl font-bold text-white text-center mb-8">
             أسئلة
@@ -234,7 +221,6 @@ export default function PricingPage() {
           </div>
         </div>
 
-        {/* CTA نهائي */}
         <div className="text-center mt-16 p-8 rounded-2xl border border-white/5 bg-white/[0.02] max-w-2xl mx-auto">
           <h3 className="text-xl font-semibold text-white mb-2">تحتاج خطة مخصصة؟</h3>
           <p className="text-gray-400 text-sm mb-6">كل مشروع فريد. تواصل معنا لمناقشة احتياجاتك ونصمم خطة تناسبك.</p>
@@ -244,12 +230,11 @@ export default function PricingPage() {
           >
             تواصل معنا
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M5 12h14" />
-              <path d="M12 5l7 7-7 7" />
+              <path d="M5 12h14" /><path d="M12 5l7 7-7 7" />
             </svg>
           </a>
         </div>
       </div>
     </section>
   );
-  }
+}
