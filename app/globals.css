@@ -1,6 +1,25 @@
 @import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap');
 
+/* ----- متغيرات Dark/Light ----- */
+:root {
+  --bg: #0a0a0f;
+  --bg-secondary: #06060a;
+  --text: #ffffff;
+  --text-secondary: #9ca3af;
+  --border: rgba(255, 255, 255, 0.05);
+  --card: rgba(255, 255, 255, 0.02);
+}
+
+.light {
+  --bg: #f8fafc;
+  --bg-secondary: #f1f5f9;
+  --text: #0f172a;
+  --text-secondary: #64748b;
+  --border: rgba(0, 0, 0, 0.08);
+  --card: rgba(0, 0, 0, 0.02);
+}
+
 /* ----- الأساسيات ----- */
 html {
   scroll-behavior: smooth;
@@ -9,56 +28,47 @@ html {
 }
 
 body {
-  background: #0a0a0f;
-  color: #ffffff;
+  background: var(--bg);
+  color: var(--text);
   font-family: 'Cairo', sans-serif;
   overflow-x: hidden;
   max-width: 100vw;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 * {
   box-sizing: border-box;
 }
 
+main, section, div {
+  max-width: 100%;
+}
+
+#__next, main {
+  width: 100%;
+}
+
 /* ----- شريط التمرير ----- */
-::-webkit-scrollbar {
-  width: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: #06060a;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(20, 184, 166, 0.2);
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(20, 184, 166, 0.4);
-}
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-secondary); }
+::-webkit-scrollbar-thumb { background: rgba(20, 184, 166, 0.2); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(20, 184, 166, 0.4); }
 
 /* ----- تحديد النص ----- */
-::selection {
-  background: rgba(20, 184, 166, 0.3);
-  color: #ffffff;
-}
+::selection { background: rgba(20, 184, 166, 0.3); color: #ffffff; }
 
 /* ----- منع تجاوز الصور ----- */
-img, video, canvas, svg {
-  max-width: 100%;
-  height: auto;
-}
+img, video, canvas, svg { max-width: 100%; height: auto; }
+
 /* ----- تأثيرات التحميل ----- */
 @keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 .animate-shimmer {
@@ -67,49 +77,11 @@ img, video, canvas, svg {
   animation: shimmer 2s infinite;
 }
 
-/* إصلاح طارئ لمشكلة الإزاحة */
-main, section, div {
-  max-width: 100%;
-}
-
-body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-#__next, main {
-  width: 100%;
-}
-
-/* تنسيق محتوى المقال */
-.blog-content h2 {
-  color: white;
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-top: 2.5rem;
-  margin-bottom: 1rem;
-}
-
-.blog-content p {
-  margin-bottom: 1.5rem;
-  line-height: 1.8;
-}
-
-.blog-content ul, .blog-content ol {
-  margin-right: 1.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.blog-content li {
-  margin-bottom: 0.5rem;
-}
-
-.blog-content strong {
-  color: white;
-}
-
-.blog-content a {
-  color: #14b8a6;
-  text-decoration: underline;
-}
+/* ----- تنسيق محتوى المقال ----- */
+.blog-content h2 { color: var(--text); font-size: 1.5rem; font-weight: bold; margin-top: 2.5rem; margin-bottom: 1rem; }
+.blog-content h3 { color: var(--text); font-size: 1.25rem; font-weight: 600; margin-top: 2rem; margin-bottom: 0.75rem; }
+.blog-content p { margin-bottom: 1.5rem; line-height: 1.8; color: var(--text-secondary); }
+.blog-content ul, .blog-content ol { margin-right: 1.5rem; margin-bottom: 1.5rem; color: var(--text-secondary); }
+.blog-content li { margin-bottom: 0.5rem; }
+.blog-content strong { color: var(--text); }
+.blog-content a { color: #14b8a6; text-decoration: underline; }
