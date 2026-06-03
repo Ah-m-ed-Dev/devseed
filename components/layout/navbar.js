@@ -160,7 +160,7 @@ export default function Navbar() {
               >
                لوحة التحكم
               </button>
-
+<ThemeToggle />
               <a
                 href="#contact"
                 onClick={(e) => handleSmoothScroll(e, "contact")}
