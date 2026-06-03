@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import LoginModal from "@/components/layout/LoginModal";
+import ThemeToggle from "@/components/layout/ThemeToggle";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -94,7 +95,7 @@ export default function Navbar() {
             >
               🔒
             </button>
-
+<ThemeToggle />
             <a
               href="#contact"
               onClick={(e) => handleSmoothScroll(e, "contact")}
