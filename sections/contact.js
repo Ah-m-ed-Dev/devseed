@@ -77,20 +77,10 @@ export default function Contact() {
                   </svg>
                 ),
                 label: "بريد إلكتروني",
-                value: "hello@devseed.com",
-                href: "mailto:hello@devseed.com",
+                value: "deevseed@gmail.com ",
+                href: "mailto:deevseed@gmail.com",
               },
-              {
-                icon: (
-                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29.94 29.94 0 0 0 1 11.75a29.94 29.94 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29.94 29.94 0 0 0 .46-5.25 29.94 29.94 0 0 0-.46-5.33z" />
-                    <path d="M9.75 9.31l5.47 4.88-5.47 4.88V9.31z" />
-                  </svg>
-                ),
-                label: "دعم فني",
-                value: "support@devseed.com",
-                href: "mailto:support@devseed.com",
-              },
+              
               {
                 icon: (
                   <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
