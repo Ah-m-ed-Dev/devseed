@@ -4,7 +4,6 @@ import Footer from "@/components/layout/footer";
 import { Cairo } from "next/font/google";
 import WhatsappBubble from "@/components/layout/WhatsappBubble";
 
-
 const cairo = Cairo({
   subsets: ["arabic"],
   weight: ["400", "500", "600", "700", "800", "900"],
@@ -30,6 +29,7 @@ export const metadata = {
   ],
   authors: [{ name: "DevSeed" }],
   creator: "DevSeed",
+  manifest: "/manifest.json",
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL ||
       `https://${process.env.NEXT_PUBLIC_VERCEL_URL || "devseed.vercel.app"}`
@@ -64,7 +64,6 @@ export const metadata = {
   },
 };
 
-// منفصل عن metadata في Next.js 14+
 export const viewport = {
   width: "device-width",
   initialScale: 1.0,
@@ -73,14 +72,25 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="ar" dir="rtl" className={cairo.variable}>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                  navigator.serviceWorker.register('/sw.js');
+                });
+              }
+            `,
+          }}
+        />
+      </head>
       <body className="antialiased">
         <Navbar />
-      <main>{children}</main>
+        <main>{children}</main>
         <Footer />
         <WhatsappBubble />
-        
       </body>
     </html>
   );
 }
-
