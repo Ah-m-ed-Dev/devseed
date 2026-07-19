@@ -30,7 +30,6 @@ export default function Home() {
   );
 }
 
-// زر التنشيط في مكون منفصل (عشان "use client")
 function WakeUpButton() {
   const [wakingUp, setWakingUp] = useState(false);
   const [done, setDone] = useState(false);
