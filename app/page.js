@@ -3,7 +3,7 @@ import Services from "@/sections/services";
 import Projects from "@/sections/projects";
 import About from "@/sections/about";
 import Contact from "@/sections/contact";
-import WakeUpButton from "@/components/WakeUpButton";
+import WakeUpButton from "@/components/layout/WakeUpButton";
 
 export const metadata = {
   title: "DevSeed | نزرع حلولاً رقمية",
