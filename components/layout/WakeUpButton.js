@@ -28,10 +28,13 @@ export default function WakeUpButton() {
     <button
       onClick={wakeUp}
       disabled={wakingUp}
-      className="fixed bottom-36 right-5 z-[9998] bg-teal-500 text-white w-9 h-9 rounded-full text-sm font-bold shadow-lg hover:bg-teal-400 transition-all flex items-center justify-center"
+      className="fixed bottom-40 right-5 z-[9999] bg-teal-500 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-lg shadow-teal-500/30 hover:bg-teal-400 transition-all flex items-center gap-2 border-2 border-teal-400"
       title="تنشيط البيانات"
     >
-      {wakingUp ? "⏳" : done ? "✅" : "⚡"}
+      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+      </svg>
+      {wakingUp ? "جاري..." : done ? "تم ✅" : "تنشيط"}
     </button>
   );
 }
