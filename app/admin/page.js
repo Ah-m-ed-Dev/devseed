@@ -267,7 +267,7 @@ function ProjectsTab({ showToast, confirm, setConfirm }) {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editProject, setEditProject] = useState(null);
-  const [form, setForm] = useState({ title: "", description: "", tech: "", color: "from-teal-400 to-emerald-400", icon: "default", image: "", link: "" });
+  const [form, setForm] = useState({ title: "", description: "", tech: "", color: "from-teal-400 to-emerald-400", icon: "default", image: "", link: "", aspect_ratio: "16:9" });
   const [formError, setFormError] = useState("");
   const [uploading, setUploading] = useState(false);
 
@@ -277,8 +277,63 @@ function ProjectsTab({ showToast, confirm, setConfirm }) {
   useEffect(() => { fetchProjects(); }, []);
 
   const resetForm = () => {
-    setForm({ title: "", description: "", tech: "", color: "from-teal-400 to-emerald-400", icon: "default", image: "", link: "" });
+    setForm({ title: "", description: "", tech: "", color: "from-teal-400 to-emerald-400", icon: "default", image: "", link: "", aspect_ratio: "16:9" });
     setEditProject(null); setShowForm(false); setFormError("");
+  };
+
+  const processAndCompressImage = (file, aspectRatio) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+          
+          let targetWidth = 1280;
+          let targetHeight = 720;
+
+          if (aspectRatio === "1:1") {
+            targetWidth = 1080;
+            targetHeight = 1080;
+          } else if (aspectRatio === "4:3") {
+            targetWidth = 1024;
+            targetHeight = 768;
+          }
+
+          const imgRatio = img.width / img.height;
+          const targetRatio = targetWidth / targetHeight;
+
+          let sx = 0, sy = 0, sWidth = img.width, sHeight = img.height;
+
+          if (imgRatio > targetRatio) {
+            sWidth = img.height * targetRatio;
+            sx = (img.width - sWidth) / 2;
+          } else if (imgRatio < targetRatio) {
+            sHeight = img.width / targetRatio;
+            sy = (img.height - sHeight) / 2;
+          }
+
+          canvas.width = targetWidth;
+          canvas.height = targetHeight;
+
+          ctx.drawImage(img, sx, sy, sWidth, sHeight, 0, 0, targetWidth, targetHeight);
+
+          canvas.toBlob((blob) => {
+            if (!blob) {
+              reject(new Error("فشل معالجة الصورة"));
+              return;
+            }
+            const processedFile = new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".webp", { type: "image/webp" });
+            resolve(processedFile);
+          }, "image/webp", 0.8);
+        };
+        img.onerror = () => reject(new Error("فشل تحميل الصورة"));
+        img.src = event.target.result;
+      };
+      reader.onerror = () => reject(new Error("فشل قراءة الملف"));
+      reader.readAsDataURL(file);
+    });
   };
 
   const handleImageUpload = async (e) => {
@@ -286,10 +341,12 @@ function ProjectsTab({ showToast, confirm, setConfirm }) {
     if (!file) return;
     setUploading(true);
     try {
-      const url = await uploadImage(file);
+      const processedFile = await processAndCompressImage(file, form.aspect_ratio);
+      const url = await uploadImage(processedFile);
       setForm({ ...form, image: url });
-      showToast("تم رفع الصورة", "success");
-    } catch {
+      showToast("تم رفع الصورة وتحجيمها بنجاح", "success");
+    } catch (error) {
+      console.error(error);
       showToast("فشل رفع الصورة", "error");
     } finally {
       setUploading(false);
@@ -300,8 +357,6 @@ function ProjectsTab({ showToast, confirm, setConfirm }) {
     e.preventDefault();
     setFormError("");
     if (!form.title.trim()) { setFormError("العنوان مطلوب"); return; }
-
-console.log("Form data:", JSON.stringify(form));
 
     try {
       if (editProject) {
@@ -328,6 +383,7 @@ console.log("Form data:", JSON.stringify(form));
       icon: p.icon || "default",
       image: p.image || "",
       link: p.link || "",
+      aspect_ratio: p.aspect_ratio || "16:9",
     });
     setShowForm(true);
   };
@@ -345,6 +401,13 @@ console.log("Form data:", JSON.stringify(form));
 
   const colorOptions = ["from-teal-400 to-emerald-400", "from-purple-400 to-pink-400", "from-orange-400 to-red-400", "from-blue-400 to-cyan-400", "from-green-400 to-lime-400"];
   const iconOptions = ["default", "education", "inventory", "delivery"];
+  const aspectRatioOptions = ["16:9", "1:1", "4:3"];
+
+  const getPreviewHeightClass = (ratio) => {
+    if (ratio === "1:1") return "h-48 sm:h-64";
+    if (ratio === "4:3") return "h-40 sm:h-56";
+    return "h-32 sm:h-44";
+  };
 
   return (
     <div>
@@ -357,22 +420,34 @@ console.log("Form data:", JSON.stringify(form));
           {formError && <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-sm p-3 rounded-xl">{formError}</div>}
           <div><label className="block text-gray-400 text-sm mb-2">العنوان</label><input type="text" value={form.title} onChange={(e) => setForm({...form, title: e.target.value})} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-white focus:border-teal-500/50 transition-all" /></div>
           <div><label className="block text-gray-400 text-sm mb-2">الوصف</label><textarea value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} rows="2" className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-white focus:border-teal-500/50 transition-all resize-none" /></div>
-          <div className="grid md:grid-cols-3 gap-4">
+          
+          <div className="grid md:grid-cols-2 gap-4">
             <div><label className="block text-gray-400 text-sm mb-2">التقنيات</label><input type="text" value={form.tech} onChange={(e) => setForm({...form, tech: e.target.value})} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-white focus:border-teal-500/50 transition-all" /></div>
             <div><label className="block text-gray-400 text-sm mb-2">اللون</label><select value={form.color} onChange={(e) => setForm({...form, color: e.target.value})} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-gray-400 focus:border-teal-500/50 transition-all">{colorOptions.map(c => <option key={c} value={c}>{c}</option>)}</select></div>
-            <div><label className="block text-gray-400 text-sm mb-2">الأيقونة</label><select value={form.icon} onChange={(e) => setForm({...form, icon: e.target.value})} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-gray-400 focus:border-teal-500/50 transition-all">{iconOptions.map(c => <option key={c} value={c}>{c}</option>)}</select></div>
           </div>
+          
+          <div className="grid md:grid-cols-2 gap-4">
+            <div><label className="block text-gray-400 text-sm mb-2">الأيقونة</label><select value={form.icon} onChange={(e) => setForm({...form, icon: e.target.value})} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-gray-400 focus:border-teal-500/50 transition-all">{iconOptions.map(c => <option key={c} value={c}>{c}</option>)}</select></div>
+            <div>
+              <label className="block text-gray-400 text-sm mb-2">تناسق صورة المشروع</label>
+              <select value={form.aspect_ratio} onChange={(e) => setForm({...form, aspect_ratio: e.target.value, image: ""})} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-gray-400 focus:border-teal-500/50 transition-all">
+                {aspectRatioOptions.map(r => <option key={r} value={r}>{r}</option>)}
+              </select>
+            </div>
+          </div>
+
           <div>
-            <label className="block text-gray-400 text-sm mb-2">صورة المشروع</label>
+            <label className="block text-gray-400 text-sm mb-2">صورة المشروع (سيتم ضغطها وتحجيمها تلقائياً)</label>
             {form.image ? (
               <div className="relative mb-2">
-                <img src={form.image} alt="Preview" className="w-full h-32 rounded-xl object-cover" />
-                <button type="button" onClick={() => setForm({...form, image: ""})} className="absolute top-2 right-2 bg-red-500 text-white w-6 h-6 rounded-full text-xs flex items-center justify-center">×</button>
+                <img src={form.image} alt="Preview" className={`w-full ${getPreviewHeightClass(form.aspect_ratio)} rounded-xl object-cover border border-white/10`} />
+                <button type="button" onClick={() => setForm({...form, image: ""})} className="absolute top-2 right-2 bg-red-500 text-white w-6 h-6 rounded-full text-xs flex items-center justify-center hover:bg-red-400">×</button>
               </div>
             ) : null}
-            <input type="file" accept="image/*" onChange={handleImageUpload} disabled={uploading} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-white file:ml-2 file:bg-teal-500 file:text-white file:border-0 file:px-3 file:py-1 file:rounded-lg file:text-sm file:cursor-pointer focus:border-teal-500/50 transition-all" />
-            {uploading && <p className="text-teal-400 text-xs mt-1">جاري الرفع...</p>}
+            <input type="file" accept="image/*" onChange={handleImageUpload} disabled={uploading} className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-white file:ml-2 file:bg-teal-500 file:text-white file:border-0 file:px-3 file:py-1 file:rounded-lg file:text-sm file:cursor-pointer focus:border-teal-500/50 transition-all disabled:opacity-50" />
+            {uploading && <p className="text-teal-400 text-xs mt-1 animate-pulse">جاري معالجة ورفع الصورة...</p>}
           </div>
+          
           <div>
             <label className="block text-gray-400 text-sm mb-2">رابط المشروع (اختياري)</label>
             <input type="url" value={form.link} onChange={(e) => setForm({...form, link: e.target.value})} placeholder="https://example.com" className="w-full p-3 bg-white/[0.03] border border-white/10 rounded-xl text-white focus:border-teal-500/50 transition-all" />
@@ -390,7 +465,7 @@ console.log("Form data:", JSON.stringify(form));
                 ) : (
                   <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${p.color || 'from-teal-400 to-emerald-400'} opacity-80`} />
                 )}
-                <div><div className="text-white font-medium text-sm">{p.title}</div><div className="text-gray-500 text-xs">{p.tech}</div></div>
+                <div><div className="text-white font-medium text-sm">{p.title}</div><div className="text-gray-500 text-xs">{p.tech} {p.aspect_ratio && `• ${p.aspect_ratio}`}</div></div>
               </div>
               <div className="flex gap-2">
                 <button onClick={() => handleEdit(p)} className="text-gray-400 hover:text-teal-400 text-xs">تعديل</button>
