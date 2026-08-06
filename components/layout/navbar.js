@@ -58,15 +58,15 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="fixed top-3 sm:top-4 left-0 right-0 z-50 mx-4 lg:mx-auto lg:max-w-3xl xl:max-w-4xl bg-[#0a0a0f]/90 backdrop-blur-md border border-white/10 rounded-2xl shadow-lg shadow-black/20" ref={menuRef}>
+      <nav className="fixed top-3 sm:top-4 left-0 right-0 z-50 mx-4 lg:mx-auto lg:max-w-3xl xl:max-w-4xl bg-[#0F3D2E]/90 backdrop-blur-md border border-[#F8F4E9]/15 rounded-2xl shadow-lg shadow-[#0F3D2E]/30" ref={menuRef}>
         <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 py-2.5 flex items-center justify-between">
 
           {/* الشعار */}
           <Link 
             href="/" 
-            className="flex items-center gap-1 sm:gap-1.5 text-white font-bold text-sm sm:text-base shrink-0"
+            className="flex items-center gap-1 sm:gap-1.5 text-[#F8F4E9] font-bold text-sm sm:text-base shrink-0"
           >
-            <span className="text-teal-400 font-mono text-base sm:text-lg">&lt;/&gt;</span>
+            <span className="text-[#F8F4E9]/70 font-mono text-base sm:text-lg">&lt;/&gt;</span>
             <span>DevSeed</span>
           </Link>
 
@@ -81,7 +81,7 @@ export default function Navbar() {
                     handleSmoothScroll(e, link.href.replace("#", ""));
                   }
                 }}
-                className="text-gray-300 hover:text-teal-400 transition-colors text-xs lg:text-sm font-medium whitespace-nowrap px-1"
+                className="text-[#F8F4E9]/70 hover:text-[#F8F4E9] transition-colors text-xs lg:text-sm font-medium whitespace-nowrap px-1"
               >
                 {link.name}
               </a>
@@ -90,16 +90,16 @@ export default function Navbar() {
             {/* أيقونة القفل للداشبورد */}
             <button
               onClick={() => setShowLogin(true)}
-              className="text-gray-300 hover:text-teal-400 transition-colors text-xs lg:text-sm font-medium whitespace-nowrap px-1"
+              className="text-[#F8F4E9]/70 hover:text-[#F8F4E9] transition-colors text-xs lg:text-sm font-medium whitespace-nowrap px-1"
               title="لوحة التحكم"
             >
               🔒
             </button>
-<ThemeToggle />
+            <ThemeToggle />
             <a
               href="#contact"
               onClick={(e) => handleSmoothScroll(e, "contact")}
-              className="bg-teal-500 text-white px-2.5 lg:px-3 py-1.5 rounded-lg font-medium text-xs lg:text-sm hover:bg-teal-400 transition-all whitespace-nowrap shrink-0 mr-1"
+              className="bg-[#F8F4E9] text-[#0F3D2E] px-2.5 lg:px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm hover:bg-white transition-all whitespace-nowrap shrink-0 mr-1"
             >
               ابدأ مشروعك
             </a>
@@ -108,7 +108,7 @@ export default function Navbar() {
           {/* زر الهامبرغر */}
           <button
             onClick={() => isOpen ? closeMenu() : openMenu()}
-            className="md:hidden text-gray-300 hover:text-white p-1 shrink-0"
+            className="md:hidden text-[#F8F4E9]/80 hover:text-[#F8F4E9] p-1 shrink-0"
             aria-label="القائمة"
           >
             <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -124,7 +124,7 @@ export default function Navbar() {
         {/* قائمة الجوال */}
         {isOpen && (
           <div 
-            className="md:hidden border-t border-white/5"
+            className="md:hidden border-t border-[#F8F4E9]/10"
             style={{ 
               animation: isAnimating 
                 ? 'navbarSlideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards' 
@@ -144,7 +144,7 @@ export default function Navbar() {
                       closeMenu();
                     }
                   }}
-                  className="text-gray-300 hover:text-teal-400 text-sm py-2.5 border-b border-white/5 last:border-0"
+                  className="text-[#F8F4E9]/70 hover:text-[#F8F4E9] text-sm py-2.5 border-b border-[#F8F4E9]/10 last:border-0"
                 >
                   {link.name}
                 </a>
@@ -156,15 +156,15 @@ export default function Navbar() {
                   closeMenu();
                   setShowLogin(true);
                 }}
-                className="text-gray-300 hover:text-teal-400 text-sm py-2.5 border-b border-white/5 text-right"
+                className="text-[#F8F4E9]/70 hover:text-[#F8F4E9] text-sm py-2.5 border-b border-[#F8F4E9]/10 text-right"
               >
                لوحة التحكم
               </button>
-<ThemeToggle />
+              <ThemeToggle />
               <a
                 href="#contact"
                 onClick={(e) => handleSmoothScroll(e, "contact")}
-                className="inline-flex items-center justify-center gap-2 bg-teal-500 text-white px-4 py-2.5 rounded-xl font-medium text-sm hover:bg-teal-400 transition-all mt-2 mb-1"
+                className="inline-flex items-center justify-center gap-2 bg-[#F8F4E9] text-[#0F3D2E] px-4 py-2.5 rounded-xl font-bold text-sm hover:bg-white transition-all mt-2 mb-1"
               >
                 تواصل معنا
               </a>
