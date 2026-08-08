@@ -2,7 +2,7 @@ import "./globals.css";
 import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
 import { Cairo } from "next/font/google";
-import DevSeedChatBot from "@/components/layout/DevSeedChatBot";
+import AiBot from "@/components/layout/AiBot";
 
 const cairo = Cairo({
   subsets: ["arabic"],
