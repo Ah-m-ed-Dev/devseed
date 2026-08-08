@@ -1,9 +1,9 @@
-"use client"; 
+"use client";
 
 import { useState, useEffect, useRef } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
-// إعداد Supabase (يفضل نقلها إلى ملف env واستدعائها بـ process.env)
+// إعداد Supabase
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL, 
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
@@ -71,7 +71,7 @@ export default function DevSeedChatBot() {
   return (
     <div className="fixed bottom-6 right-6 z-50 font-sans">
       
-      {/* نافذة الدردشة (Chat Window) */}
+      {/* نافذة الدردجة (Chat Window) */}
       <div 
         className={`absolute bottom-20 right-0 w-[360px] h-[500px] bg-white rounded-2xl shadow-2xl border border-gray-100 flex flex-col overflow-hidden transition-all duration-300 origin-bottom-right ${
           isOpen ? 'scale-100 opacity-100 pointer-events-auto' : 'scale-0 opacity-0 pointer-events-none'
@@ -154,12 +154,12 @@ export default function DevSeedChatBot() {
         }`}
       >
         {isOpen ? (
-          <!-- أيقونة الإغلاق -->
+          // أيقونة الإغلاق (X)
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-7 h-7">
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
         ) : (
-          <!-- أيقونة الدردشة -->
+          // أيقونة الدردشة (Chat)
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
             <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.036 8-9 8a9.333 9.333 0 01-5.08-1.56L3 21l1.56-4.92A9.333 9.333 0 013 12c0-4.556 4.036-8 9-8s9 3.444 9 8z" />
           </svg>
