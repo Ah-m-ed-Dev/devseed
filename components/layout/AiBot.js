@@ -1,7 +1,78 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Send, X, Bot, Loader2 } from 'lucide-react';
+
+// ===== أيقونات SVG مخصصة بدلاً من lucide-react =====
+const SendIcon = ({ size = 20, className = '' }) => (
+  <svg 
+    width={size} 
+    height={size} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    className={className}
+  >
+    <path d="M22 2L11 13" />
+    <path d="M22 2l-7 20-4-9-9-4 20-7z" />
+  </svg>
+);
+
+const XIcon = ({ size = 20, className = '' }) => (
+  <svg 
+    width={size} 
+    height={size} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    className={className}
+  >
+    <line x1="18" y1="6" x2="6" y2="18" />
+    <line x1="6" y1="6" x2="18" y2="18" />
+  </svg>
+);
+
+const BotIcon = ({ size = 20, className = '' }) => (
+  <svg 
+    width={size} 
+    height={size} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    className={className}
+  >
+    <path d="M12 8V4H8" />
+    <rect x="4" y="8" width="16" height="12" rx="2" />
+    <path d="M2 14h2" />
+    <path d="M20 14h2" />
+    <path d="M15 13v2" />
+    <path d="M9 13v2" />
+  </svg>
+);
+
+const LoaderIcon = ({ size = 20, className = '' }) => (
+  <svg 
+    width={size} 
+    height={size} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    className={className}
+  >
+    <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+  </svg>
+);
 
 export default function AiBot({ position = 'bottom-right' }) {
   // ===== حالة البوت =====
@@ -101,7 +172,7 @@ export default function AiBot({ position = 'bottom-right' }) {
           ${isOpen ? 'rotate-45' : ''}
         `}
       >
-        <Bot size={28} />
+        <BotIcon size={28} />
       </button>
 
       {/* نافذة البوت */}
@@ -125,7 +196,7 @@ export default function AiBot({ position = 'bottom-right' }) {
               onClick={() => setIsOpen(false)}
               className="text-[#FDF8F0] hover:bg-[#2A5C6E] p-1 rounded transition"
             >
-              <X size={20} />
+              <XIcon size={20} />
             </button>
           </div>
 
@@ -152,7 +223,7 @@ export default function AiBot({ position = 'bottom-right' }) {
             {isLoading && (
               <div className="flex justify-start">
                 <div className="bg-white p-3 rounded-2xl rounded-bl-none border border-[#1A3C4A]/10">
-                  <Loader2 className="w-5 h-5 text-[#1A3C4A] animate-spin" />
+                  <LoaderIcon className="w-5 h-5 text-[#1A3C4A] animate-spin" />
                 </div>
               </div>
             )}
@@ -176,7 +247,7 @@ export default function AiBot({ position = 'bottom-right' }) {
                 disabled={isLoading || !input.trim()}
                 className="bg-[#1A3C4A] text-[#FDF8F0] p-2 rounded-full hover:bg-[#2A5C6E] transition disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <Send size={20} />
+                <SendIcon size={20} />
               </button>
             </div>
           </div>
