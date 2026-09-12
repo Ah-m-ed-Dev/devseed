@@ -3,6 +3,8 @@ import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
 import { Cairo } from "next/font/google";
 import AiBot from "@/components/layout/AiBot";
+import SmoothScroll from "@/components/providers/smooth-scroll";
+import { Toaster } from "sonner";
 
 const cairo = Cairo({
   subsets: ["arabic"],
@@ -13,18 +15,18 @@ const cairo = Cairo({
 
 export const metadata = {
   title: {
-    default: "DevSeed | نزرع حلولاً رقمية",
+    default: "DevSeed | Ù†Ø²Ø±Ø¹ Ø­Ù„ÙˆÙ„Ø§Ù‹ Ø±Ù‚Ù…ÙŠØ©",
     template: "%s | DevSeed",
   },
   description:
-    "شركة DevSeed لتطوير البرمجيات - نبني مواقع وتطبيقات حديثة، سريعة، وقابلة للتوسع. متخصصون في Next.js، React، وتطبيقات الويب.",
+    "Ø´Ø±ÙƒØ© DevSeed Ù„ØªØ·ÙˆÙŠØ± Ø§Ù„Ø¨Ø±Ù…Ø¬ÙŠØ§Øª - Ù†Ø¨Ù†ÙŠ Ù…ÙˆØ§Ù‚Ø¹ ÙˆØªØ·Ø¨ÙŠÙ‚Ø§Øª Ø­Ø¯ÙŠØ«Ø©ØŒ Ø³Ø±ÙŠØ¹Ø©ØŒ ÙˆÙ‚Ø§Ø¨Ù„Ø© Ù„Ù„ØªÙˆØ³Ø¹. Ù…ØªØ®ØµØµÙˆÙ† ÙÙŠ Next.jsØŒ ReactØŒ ÙˆØªØ·Ø¨ÙŠÙ‚Ø§Øª Ø§Ù„ÙˆÙŠØ¨.",
   keywords: [
-    "تطوير برمجيات",
+    "ØªØ·ÙˆÙŠØ± Ø¨Ø±Ù…Ø¬ÙŠØ§Øª",
     "Next.js",
     "React",
-    "تطبيقات ويب",
-    "تصميم واجهات",
-    "حلول سحابية",
+    "ØªØ·Ø¨ÙŠÙ‚Ø§Øª ÙˆÙŠØ¨",
+    "ØªØµÙ…ÙŠÙ… ÙˆØ§Ø¬Ù‡Ø§Øª",
+    "Ø­Ù„ÙˆÙ„ Ø³Ø­Ø§Ø¨ÙŠØ©",
     "DevSeed",
   ],
   authors: [{ name: "DevSeed" }],
@@ -38,15 +40,13 @@ export const metadata = {
     type: "website",
     locale: "ar_SA",
     siteName: "DevSeed",
-    title: "DevSeed | نزرع حلولاً رقمية",
-    description:
-      "شركة DevSeed لتطوير البرمجيات - نبني منتجات رقمية قابلة للتوسع والنمو",
+    title: "DevSeed | Ù†Ø²Ø±Ø¹ Ø­Ù„ÙˆÙ„Ø§Ù‹ Ø±Ù‚Ù…ÙŠØ©",
+    description: "Ø´Ø±ÙƒØ© DevSeed Ù„ØªØ·ÙˆÙŠØ± Ø§Ù„Ø¨Ø±Ù…Ø¬ÙŠØ§Øª - Ù†Ø¨Ù†ÙŠ Ù…Ù†ØªØ¬Ø§Øª Ø±Ù‚Ù…ÙŠØ© Ù‚Ø§Ø¨Ù„Ø© Ù„Ù„ØªÙˆØ³Ø¹ ÙˆØ§Ù„Ù†Ù…Ùˆ",
   },
   twitter: {
     card: "summary_large_image",
-    title: "DevSeed | نزرع حلولاً رقمية",
-    description:
-      "شركة DevSeed لتطوير البرمجيات - نبني منتجات رقمية قابلة للتوسع والنمو",
+    title: "DevSeed | Ù†Ø²Ø±Ø¹ Ø­Ù„ÙˆÙ„Ø§Ù‹ Ø±Ù‚Ù…ÙŠØ©",
+    description: "Ø´Ø±ÙƒØ© DevSeed Ù„ØªØ·ÙˆÙŠØ± Ø§Ù„Ø¨Ø±Ù…Ø¬ÙŠØ§Øª - Ù†Ø¨Ù†ÙŠ Ù…Ù†ØªØ¬Ø§Øª Ø±Ù‚Ù…ÙŠØ© Ù‚Ø§Ø¨Ù„Ø© Ù„Ù„ØªÙˆØ³Ø¹ ÙˆØ§Ù„Ù†Ù…Ùˆ",
   },
   robots: {
     index: true,
@@ -60,13 +60,16 @@ export const metadata = {
     },
   },
   icons: {
-    icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a0a0f'/><text x='50' y='68' font-size='46' font-family='monospace' font-weight='bold' fill='%2314b8a6' text-anchor='middle'>&lt;/&gt;</text></svg>",
+    icon: "/devlogo2.jpg",
+    shortcut: "/devlogo2.jpg",
+    apple: "/devlogo2.jpg",
   },
 };
 
 export const viewport = {
   width: "device-width",
   initialScale: 1.0,
+  maximumScale: 5,
 };
 
 export default function RootLayout({ children }) {
@@ -85,12 +88,14 @@ export default function RootLayout({ children }) {
           }}
         />
       </head>
-      <body className="antialiased">
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
-        <AiBot />
-        
+      <body className={`${cairo.className} antialiased`}>
+        <SmoothScroll>
+          <Navbar />
+          <main>{children}</main>
+          <Footer />
+          <AiBot />
+        </SmoothScroll>
+        <Toaster theme="dark" position="bottom-center" />
       </body>
     </html>
   );

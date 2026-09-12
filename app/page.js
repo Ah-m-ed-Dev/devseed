@@ -1,31 +1,20 @@
+import StickySection from "@/components/ui/sticky-section";
 import Hero from "@/sections/hero";
+import Problem from "@/sections/problem";
+import Growth from "@/sections/growth";
 import Services from "@/sections/services";
-import Projects from "@/sections/projects";
-import About from "@/sections/about";
-import Contact from "@/sections/contact";
-import WakeUpButton from "@/components/layout/WakeUpButton";
-
-export const metadata = {
-  title: "DevSeed | نزرع حلولاً رقمية",
-  description:
-    "حوّل فكرتك إلى منتج رقمي قابل للتوسع. DevSeed تبني مواقع وتطبيقات حديثة باستخدام أحدث التقنيات.",
-  alternates: {
-    canonical: "/",
-  },
-};
+import Process from "@/sections/process";
+import CTA from "@/sections/cta";
 
 export default function Home() {
   return (
-    <>
-      <main className="overflow-hidden">
-        <Hero />
-        <Services />
-        <Projects />
-        <About />
-        <Contact />
-      </main>
-
-      <WakeUpButton />
-    </>
+    <main className="relative">
+      <Hero />
+      <Problem />
+      <Growth />        
+      <Services />
+      <Process />       
+      <CTA />
+    </main>
   );
 }
