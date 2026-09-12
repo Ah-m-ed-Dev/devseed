@@ -1,219 +1,169 @@
 "use client";
-import React, { useRef, useState } from "react";
-import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
+import { motion } from "framer-motion";
 import { Sprout, Leaf, TreePine, GitBranch, TreeDeciduous } from "lucide-react";
+import SectionHeader from "@/components/ui/section-header";
 
 const stages = [
-  { title: "??????", desc: "???? ????? ?? ????? ?????? ???? ???? ???", num: "01", icon: Sprout },
-  { title: "??????", desc: "??? ???? MVP ????? ????? ????? ??????", num: "02", icon: Leaf },
-  { title: "?????", desc: "???? ????? ???? ???????? ?????", num: "03", icon: TreePine },
-  { title: "??????", desc: "?????? ?????? ????? ?? ??? ????", num: "04", icon: GitBranch },
-  { title: "??????", desc: "???? ????... ???? ???? ??????", num: "05", icon: TreeDeciduous },
+  {
+    title: "البذرة",
+    desc: "فكرة صغيرة في دماغك، بتحتاج مكان تنمو فيه",
+    num: "01",
+    icon: Sprout,
+  },
+  {
+    title: "البرعم",
+    desc: "أول نسخة MVP بتطلع للنور وتثبت الفكرة",
+    num: "02",
+    icon: Leaf,
+  },
+  {
+    title: "الجذع",
+    desc: "بنية تحتية قوية ومعمارية نظيفة",
+    num: "03",
+    icon: TreePine,
+  },
+  {
+    title: "الفروع",
+    desc: "مميزات بتتوسع بذكاء مع نمو عملك",
+    num: "04",
+    icon: GitBranch,
+  },
+  {
+    title: "الشجرة",
+    desc: "منتج كامل... يكبر معاك ويتكيّف",
+    num: "05",
+    icon: TreeDeciduous,
+  },
 ];
 
-// ???????????????????????????????????????????
-// Stage ? Simple card layout
-// ???????????????????????????????????????????
-function Stage({ stage, index, total, scrollYProgress, isMobile = false }) {
-  const segment = 1 / total;
-  const start = index * segment;
-  const end = start + segment;
-
-  // ??? ???? ? ???? ??? 0 ? 1
-  const r1 = start;
-  const r2 = start + segment * 0.3;
-  const r3 = end - segment * 0.3;
-  const r4 = end;
-
-  const opacity = useTransform(scrollYProgress, [r1, r2, r3, r4], [0, 1, 1, 0]);
-  const y = useTransform(
-    scrollYProgress,
-    [r1, r2, r3, r4],
-    isMobile ? [30, 0, 0, -30] : [50, 0, 0, -50]
-  );
-  const scale = useTransform(scrollYProgress, [r1, r2, r3, r4], [0.9, 1, 1, 0.9]);
-
+// ═══════════════════════════════════════════
+// Desktop Stage Card
+// ═══════════════════════════════════════════
+function DesktopStage({ stage, index }) {
   const Icon = stage.icon;
 
   return (
     <motion.div
-      style={{ opacity, y, scale }}
-      className="w-full max-w-2xl mx-auto flex flex-col items-center text-center"
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
+      className="relative flex-1 flex flex-col items-center text-center group"
     >
-      {/* Icon Box */}
-      <div className="relative mb-6 sm:mb-8">
-        <div
-          className={`rounded-2xl sm:rounded-3xl bg-brand-dark border-2 border-brand-accent/40 flex items-center justify-center shadow-2xl shadow-brand-accent/30 ${
-            isMobile ? "w-20 h-20" : "w-24 h-24 sm:w-28 sm:h-28"
-          }`}
-        >
-          <Icon
-            className={`text-brand-accent ${
-              isMobile ? "w-10 h-10" : "w-12 h-12 sm:w-14 sm:h-14"
-            }`}
-          />
+      {/* Icon box */}
+      <motion.div
+        whileHover={{ scale: 1.08, rotate: 3 }}
+        transition={{ type: "spring", stiffness: 300 }}
+        className="relative z-10 mb-6"
+      >
+        <div className="w-20 h-20 lg:w-24 lg:h-24 rounded-2xl lg:rounded-3xl bg-brand-dark border-2 border-brand-accent/40 flex items-center justify-center shadow-xl shadow-brand-accent/20 group-hover:shadow-brand-accent/40 group-hover:border-brand-accent/70 transition-all duration-300">
+          <Icon className="w-9 h-9 lg:w-11 lg:h-11 text-brand-accent" />
         </div>
 
-        {/* Number Badge */}
-        <div
-          className={`absolute -top-2 -right-2 rounded-full bg-brand-accent text-brand-dark font-bold flex items-center justify-center ring-4 ring-brand-dark ${
-            isMobile ? "w-8 h-8 text-xs" : "w-10 h-10 text-sm"
-          }`}
-        >
+        {/* Number badge */}
+        <div className="absolute -top-2 -right-2 w-8 h-8 lg:w-9 lg:h-9 rounded-full bg-brand-accent text-brand-dark text-xs lg:text-sm font-bold flex items-center justify-center ring-4 ring-brand-dark">
           {stage.num}
         </div>
 
         {/* Glow */}
-        <div className="absolute inset-0 rounded-2xl bg-brand-accent/30 blur-2xl -z-10" />
-      </div>
+        <div className="absolute inset-0 rounded-2xl bg-brand-accent/20 blur-xl -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      </motion.div>
 
       {/* Title */}
-      <h3
-        className={`font-bold text-white mb-4 ${
-          isMobile ? "text-2xl" : "text-3xl sm:text-4xl lg:text-5xl"
-        }`}
-      >
+      <h3 className="text-lg lg:text-xl font-bold text-white mb-2">
         {stage.title}
       </h3>
 
       {/* Description */}
-      <p
-        className={`text-brand-light/80 leading-relaxed max-w-xl px-4 ${
-          isMobile ? "text-base" : "text-lg sm:text-xl"
-        }`}
-      >
+      <p className="text-sm text-brand-light/70 leading-relaxed max-w-[220px]">
         {stage.desc}
       </p>
     </motion.div>
   );
 }
 
-// ???????????????????????????????????????????
-// ProgressDots ? Simple, no useTransform
-// ???????????????????????????????????????????
-function ProgressDots({ total, currentIndex }) {
+// ═══════════════════════════════════════════
+// Mobile Stage
+// ═══════════════════════════════════════════
+function MobileStage({ stage, index }) {
+  const Icon = stage.icon;
+
   return (
-    <div className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 flex flex-col gap-2.5 sm:gap-3 z-20">
-      {Array.from({ length: total }).map((_, i) => (
-        <div
-          key={i}
-          className={`w-2 h-2 rounded-full transition-all duration-300 ${
-            i === currentIndex
-              ? "bg-brand-accent scale-[1.6]"
-              : i < currentIndex
-              ? "bg-brand-accent/60"
-              : "bg-brand-light/20"
-          }`}
-        />
-      ))}
-    </div>
+    <motion.div
+      initial={{ opacity: 0, x: 40 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.5, delay: index * 0.08 }}
+      className="relative flex gap-4 items-start"
+    >
+      {/* Icon */}
+      <div className="relative z-10 flex-shrink-0">
+        <div className="w-14 h-14 rounded-xl bg-brand-dark border-2 border-brand-accent/40 flex items-center justify-center shadow-lg shadow-brand-accent/20">
+          <Icon className="w-6 h-6 text-brand-accent" />
+        </div>
+        <div className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-brand-accent text-brand-dark text-[10px] font-bold flex items-center justify-center ring-2 ring-brand-dark">
+          {stage.num}
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 pt-1">
+        <h3 className="text-lg font-bold text-white mb-1">{stage.title}</h3>
+        <p className="text-sm text-brand-light/70 leading-relaxed">
+          {stage.desc}
+        </p>
+      </div>
+    </motion.div>
   );
 }
 
-// ???????????????????????????????????????????
+// ═══════════════════════════════════════════
 // Main
-// ???????????????????????????????????????????
+// ═══════════════════════════════════════════
 export default function Growth() {
-  const ref = useRef(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end end"],
-  });
-
-  useMotionValueEvent(scrollYProgress, "change", (v) => {
-    const idx = Math.min(Math.floor(v * stages.length), stages.length - 1);
-    setCurrentIndex(Math.max(0, idx));
-  });
-
-  const progressHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
-
   return (
     <section
-      ref={ref}
       id="growth"
-      className="relative"
-      style={{ height: "500vh" }}
+      className="relative py-16 sm:py-20 md:py-24 lg:py-32 px-4 sm:px-6 lg:px-8 overflow-hidden"
     >
-      {/* Sticky viewport */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden">
-        {/* Background */}
-        <div className="absolute inset-0 bg-brand-dark" />
-        <div className="absolute inset-0 bg-gradient-to-b from-brand-dark via-[#0a1a3a] to-brand-dark" />
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="w-[600px] sm:w-[800px] h-[300px] sm:h-[400px] bg-brand-accent/10 rounded-full blur-[100px] sm:blur-[120px]" />
-        </div>
+      {/* Background glow */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <div className="w-[600px] sm:w-[800px] h-[300px] sm:h-[400px] bg-brand-accent/[0.08] rounded-full blur-[100px] sm:blur-[120px]" />
+      </div>
 
-        {/* Progress bar (right) */}
-        <div className="absolute right-3 sm:right-6 top-1/4 bottom-1/4 w-1 bg-brand-light/10 rounded-full overflow-hidden">
-          <motion.div
-            style={{ height: progressHeight }}
-            className="w-full bg-gradient-to-b from-brand-accent via-brand to-brand-accent rounded-full"
-          />
-        </div>
+      <div className="relative max-w-7xl mx-auto">
+        <SectionHeader
+          badge="🌱 رحلة النمو"
+          title="من فكرة"
+          titleAccent="لشجرة كاملة"
+          description="كل مشروع بيبدأ صغير، وبينمو مع الوقت — إحنا بنساعدك في كل مرحلة."
+        />
 
-        {/* Dots (left) */}
-        <ProgressDots total={stages.length} currentIndex={currentIndex} />
+        {/* ═══════ Desktop: Horizontal Timeline ═══════ */}
+        <div className="hidden md:block relative">
+          {/* Connecting Line */}
+          <div className="absolute top-10 lg:top-12 left-0 right-0 h-px">
+            <div className="h-full bg-gradient-to-l from-transparent via-brand-accent/40 to-transparent" />
+          </div>
 
-        {/* Header */}
-        <div className="absolute top-0 left-0 right-0 z-10 pt-20 sm:pt-24 px-6 text-center">
-          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-brand-accent/30 bg-brand-accent/10 text-brand-accent text-xs sm:text-sm font-medium backdrop-blur-sm">
-            ?? ???? ?????
-          </span>
-        </div>
-
-        {/* Stage ? centered vertically */}
-        <div className="relative w-full h-full flex items-center justify-center pt-24 pb-20">
-          <div className="w-full px-4 sm:px-8">
-            {/* Desktop version ? show current only */}
-            <div className="hidden md:block">
-              {stages.map((s, i) => (
-                <div
-                  key={i}
-                  className="absolute inset-x-0 top-1/2 -translate-y-1/2 px-4 sm:px-8 flex justify-center pointer-events-none"
-                  style={{ opacity: i === currentIndex ? 1 : 0, transition: "opacity 0.3s" }}
-                >
-                  <Stage
-                    stage={s}
-                    index={i}
-                    total={stages.length}
-                    scrollYProgress={scrollYProgress}
-                    isMobile={false}
-                  />
-                </div>
-              ))}
-            </div>
-
-            {/* Mobile version */}
-            <div className="md:hidden">
-              {stages.map((s, i) => (
-                <div
-                  key={i}
-                  className="absolute inset-x-0 top-1/2 -translate-y-1/2 px-4 flex justify-center pointer-events-none"
-                  style={{ opacity: i === currentIndex ? 1 : 0, transition: "opacity 0.3s" }}
-                >
-                  <Stage
-                    stage={s}
-                    index={i}
-                    total={stages.length}
-                    scrollYProgress={scrollYProgress}
-                    isMobile={true}
-                  />
-                </div>
-              ))}
-            </div>
+          {/* Stages Row */}
+          <div className="relative flex items-start justify-between gap-4">
+            {stages.map((s, i) => (
+              <DesktopStage key={i} stage={s} index={i} />
+            ))}
           </div>
         </div>
 
-        {/* Counter */}
-        <div className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 z-20">
-          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-brand-dark/60 backdrop-blur-md border border-brand-light/10">
-            <span className="text-brand-accent font-bold text-sm">
-              {currentIndex + 1}
-            </span>
-            <span className="text-brand-light/40 text-xs">/</span>
-            <span className="text-brand-light/60 text-sm">{stages.length}</span>
+        {/* ═══════ Mobile: Vertical Timeline ═══════ */}
+        <div className="md:hidden relative">
+          {/* Vertical Line */}
+          <div className="absolute right-7 top-2 bottom-2 w-0.5 bg-gradient-to-b from-brand-accent/40 via-brand-accent/30 to-transparent" />
+
+          {/* Stages */}
+          <div className="space-y-8">
+            {stages.map((s, i) => (
+              <MobileStage key={i} stage={s} index={i} />
+            ))}
           </div>
         </div>
       </div>

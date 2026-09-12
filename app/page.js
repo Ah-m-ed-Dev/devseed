@@ -1,4 +1,3 @@
-import StickySection from "@/components/ui/sticky-section";
 import Hero from "@/sections/hero";
 import Problem from "@/sections/problem";
 import Growth from "@/sections/growth";

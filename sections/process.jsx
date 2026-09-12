@@ -1,203 +1,171 @@
 "use client";
-import React, { useRef, useState } from "react";
-import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
-import { Search, Compass, PenTool, Code2, Rocket } from "lucide-react";
+import { motion } from "framer-motion";
+import {
+  Search,
+  Compass,
+  PenTool,
+  Code2,
+  Rocket,
+} from "lucide-react";
+import SectionHeader from "@/components/ui/section-header";
 
 const steps = [
-  { n: "01", t: "??????", d: "????? ????? ????? ??????? ????", icon: Search },
-  { n: "02", t: "??????????", d: "????? ????? ?????? ???? roadmap", icon: Compass },
-  { n: "03", t: "?????", d: "????????? ?????? ??? ?? ??? ???", icon: PenTool },
-  { n: "04", t: "?????", d: "??? ???? + ???????? + ???????", icon: Code2 },
-  { n: "05", t: "?????", d: "Deploy + monitoring + ??? ?????", icon: Rocket },
+  {
+    n: "01",
+    t: "اكتشاف",
+    d: "بنفهم فكرتك وعملك وأهدافك بعمق",
+    icon: Search,
+  },
+  {
+    n: "02",
+    t: "استراتيجية",
+    d: "بنرسم خريطة المنتج والـ roadmap",
+    icon: Compass,
+  },
+  {
+    n: "03",
+    t: "تصميم",
+    d: "بروتوتايب تفاعلي قبل أي سطر كود",
+    icon: PenTool,
+  },
+  {
+    n: "04",
+    t: "تطوير",
+    d: "كود نظيف + اختبارات + مراجعات",
+    icon: Code2,
+  },
+  {
+    n: "05",
+    t: "إطلاق",
+    d: "Deploy + monitoring + دعم مستمر",
+    icon: Rocket,
+  },
 ];
 
-function Step({ step, index, total, scrollYProgress, isMobile = false }) {
-  const segment = 1 / total;
-  const start = index * segment;
-  const end = start + segment;
-
-  const r1 = start;
-  const r2 = start + segment * 0.3;
-  const r3 = end - segment * 0.3;
-  const r4 = end;
-
-  const opacity = useTransform(scrollYProgress, [r1, r2, r3, r4], [0, 1, 1, 0]);
-  const x = useTransform(
-    scrollYProgress,
-    [r1, r2, r3, r4],
-    isMobile ? [30, 0, 0, -30] : [50, 0, 0, -50]
-  );
-  const scale = useTransform(scrollYProgress, [r1, r2, r3, r4], [0.9, 1, 1, 0.9]);
-
+// ═══════════════════════════════════════════
+// Desktop Step
+// ═══════════════════════════════════════════
+function DesktopStep({ step, index }) {
   const Icon = step.icon;
 
   return (
     <motion.div
-      style={{ opacity, x, scale }}
-      className="w-full max-w-2xl mx-auto flex flex-col items-center text-center"
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
+      className="relative flex-1 flex flex-col items-center text-center group"
     >
-      <div className="relative mb-6 sm:mb-8">
-        <div
-          className={`rounded-2xl sm:rounded-3xl bg-brand-dark border-2 border-brand-accent/40 flex items-center justify-center shadow-2xl shadow-brand-accent/30 ${
-            isMobile ? "w-20 h-20" : "w-24 h-24 sm:w-28 sm:h-28"
-          }`}
-        >
-          <Icon
-            className={`text-brand-accent ${
-              isMobile ? "w-10 h-10" : "w-12 h-12 sm:w-14 sm:h-14"
-            }`}
-          />
-        </div>
-
-        <div
-          className={`absolute -top-2 -right-2 rounded-full bg-brand-accent text-brand-dark font-bold flex items-center justify-center ring-4 ring-brand-dark ${
-            isMobile ? "w-8 h-8 text-xs" : "w-10 h-10 text-sm"
-          }`}
-        >
-          {step.n}
-        </div>
-
-        <div className="absolute inset-0 rounded-2xl bg-brand-accent/30 blur-2xl -z-10" />
-      </div>
-
-      <h3
-        className={`font-bold text-white mb-4 ${
-          isMobile ? "text-2xl" : "text-3xl sm:text-4xl lg:text-5xl"
-        }`}
+      {/* Icon box */}
+      <motion.div
+        whileHover={{ scale: 1.08 }}
+        transition={{ type: "spring", stiffness: 300 }}
+        className="relative z-10 mb-6"
       >
+        <div className="w-20 h-20 lg:w-24 lg:h-24 rounded-2xl lg:rounded-3xl bg-gradient-to-br from-brand-dark to-brand/30 border-2 border-brand-accent/40 flex flex-col items-center justify-center shadow-xl shadow-brand-accent/20 group-hover:shadow-brand-accent/40 group-hover:border-brand-accent/70 transition-all duration-300">
+          <Icon className="w-8 h-8 lg:w-10 lg:h-10 text-brand-accent mb-0.5" />
+          <span className="text-[10px] lg:text-xs font-mono text-brand-light/50">
+            {step.n}
+          </span>
+        </div>
+
+        {/* Glow */}
+        <div className="absolute inset-0 rounded-2xl bg-brand-accent/20 blur-xl -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      </motion.div>
+
+      {/* Title */}
+      <h3 className="text-lg lg:text-xl font-bold text-white mb-2">
         {step.t}
       </h3>
 
-      <p
-        className={`text-brand-light/80 leading-relaxed max-w-xl px-4 ${
-          isMobile ? "text-base" : "text-lg sm:text-xl"
-        }`}
-      >
+      {/* Description */}
+      <p className="text-sm text-brand-light/70 leading-relaxed max-w-[220px]">
         {step.d}
       </p>
     </motion.div>
   );
 }
 
-function ProgressDots({ total, currentIndex }) {
+// ═══════════════════════════════════════════
+// Mobile Step
+// ═══════════════════════════════════════════
+function MobileStep({ step, index }) {
+  const Icon = step.icon;
+
   return (
-    <div className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 flex flex-col gap-2.5 sm:gap-3 z-20">
-      {Array.from({ length: total }).map((_, i) => (
-        <div
-          key={i}
-          className={`w-2 h-2 rounded-full transition-all duration-300 ${
-            i === currentIndex
-              ? "bg-brand-accent scale-[1.6]"
-              : i < currentIndex
-              ? "bg-brand-accent/60"
-              : "bg-brand-light/20"
-          }`}
-        />
-      ))}
-    </div>
+    <motion.div
+      initial={{ opacity: 0, x: 40 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.5, delay: index * 0.08 }}
+      className="relative flex gap-4 items-start"
+    >
+      {/* Icon */}
+      <div className="relative z-10 flex-shrink-0">
+        <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-brand-dark to-brand/30 border-2 border-brand-accent/40 flex items-center justify-center shadow-lg shadow-brand-accent/20">
+          <Icon className="w-6 h-6 text-brand-accent" />
+        </div>
+        <div className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-brand-accent text-brand-dark text-[10px] font-bold flex items-center justify-center ring-2 ring-brand-dark">
+          {step.n}
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 pt-1">
+        <h3 className="text-lg font-bold text-white mb-1">{step.t}</h3>
+        <p className="text-sm text-brand-light/70 leading-relaxed">
+          {step.d}
+        </p>
+      </div>
+    </motion.div>
   );
 }
 
+// ═══════════════════════════════════════════
+// Main
+// ═══════════════════════════════════════════
 export default function Process() {
-  const ref = useRef(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end end"],
-  });
-
-  useMotionValueEvent(scrollYProgress, "change", (v) => {
-    const idx = Math.min(Math.floor(v * steps.length), steps.length - 1);
-    setCurrentIndex(Math.max(0, idx));
-  });
-
-  const progressHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
-
   return (
     <section
-      ref={ref}
       id="process"
-      className="relative"
-      style={{ height: "500vh" }}
+      className="relative py-16 sm:py-20 md:py-24 lg:py-32 px-4 sm:px-6 lg:px-8 overflow-hidden"
     >
-      <div className="sticky top-0 h-screen w-full overflow-hidden">
-        {/* Background */}
-        <div className="absolute inset-0 bg-brand-dark" />
-        <div className="absolute inset-0 bg-gradient-to-b from-brand-dark via-[#0a1a3a] to-brand-dark" />
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="w-[600px] sm:w-[800px] h-[300px] sm:h-[400px] bg-brand-accent/10 rounded-full blur-[100px] sm:blur-[120px]" />
-        </div>
+      {/* Background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-brand-dark/30 to-transparent pointer-events-none" />
 
-        {/* Progress bar */}
-        <div className="absolute right-3 sm:right-6 top-1/4 bottom-1/4 w-1 bg-brand-light/10 rounded-full overflow-hidden">
-          <motion.div
-            style={{ height: progressHeight }}
-            className="w-full bg-gradient-to-b from-brand-accent via-brand to-brand-accent rounded-full"
-          />
-        </div>
+      <div className="relative max-w-7xl mx-auto">
+        <SectionHeader
+          badge="🚀 المنهجية"
+          title="مراحل"
+          titleAccent="النمو"
+          description="منهجية واضحة من أول يوم لحد الإطلاق وما بعده — كل خطوة مدروسة."
+        />
 
-        {/* Dots */}
-        <ProgressDots total={steps.length} currentIndex={currentIndex} />
+        {/* ═══════ Desktop: Horizontal Stepper ═══════ */}
+        <div className="hidden md:block relative">
+          {/* Connecting Line */}
+          <div className="absolute top-10 lg:top-12 left-0 right-0 h-px">
+            <div className="h-full bg-gradient-to-l from-transparent via-brand-accent/40 to-transparent" />
+          </div>
 
-        {/* Header */}
-        <div className="absolute top-0 left-0 right-0 z-10 pt-20 sm:pt-24 px-6 text-center">
-          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-brand-accent/30 bg-brand-accent/10 text-brand-accent text-xs sm:text-sm font-medium backdrop-blur-sm">
-            ?? ????????
-          </span>
-        </div>
-
-        {/* Step ? centered */}
-        <div className="relative w-full h-full flex items-center justify-center pt-24 pb-20">
-          <div className="w-full px-4 sm:px-8">
-            {/* Desktop */}
-            <div className="hidden md:block">
-              {steps.map((s, i) => (
-                <div
-                  key={i}
-                  className="absolute inset-x-0 top-1/2 -translate-y-1/2 px-4 sm:px-8 flex justify-center pointer-events-none"
-                  style={{ opacity: i === currentIndex ? 1 : 0, transition: "opacity 0.3s" }}
-                >
-                  <Step
-                    step={s}
-                    index={i}
-                    total={steps.length}
-                    scrollYProgress={scrollYProgress}
-                    isMobile={false}
-                  />
-                </div>
-              ))}
-            </div>
-
-            {/* Mobile */}
-            <div className="md:hidden">
-              {steps.map((s, i) => (
-                <div
-                  key={i}
-                  className="absolute inset-x-0 top-1/2 -translate-y-1/2 px-4 flex justify-center pointer-events-none"
-                  style={{ opacity: i === currentIndex ? 1 : 0, transition: "opacity 0.3s" }}
-                >
-                  <Step
-                    step={s}
-                    index={i}
-                    total={steps.length}
-                    scrollYProgress={scrollYProgress}
-                    isMobile={true}
-                  />
-                </div>
-              ))}
-            </div>
+          {/* Steps Row */}
+          <div className="relative flex items-start justify-between gap-4">
+            {steps.map((s, i) => (
+              <DesktopStep key={i} step={s} index={i} />
+            ))}
           </div>
         </div>
 
-        {/* Counter */}
-        <div className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 z-20">
-          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-brand-dark/60 backdrop-blur-md border border-brand-light/10">
-            <span className="text-brand-accent font-bold text-sm">
-              {currentIndex + 1}
-            </span>
-            <span className="text-brand-light/40 text-xs">/</span>
-            <span className="text-brand-light/60 text-sm">{steps.length}</span>
+        {/* ═══════ Mobile: Vertical Timeline ═══════ */}
+        <div className="md:hidden relative">
+          {/* Vertical Line */}
+          <div className="absolute right-7 top-2 bottom-2 w-0.5 bg-gradient-to-b from-brand-accent/40 via-brand-accent/30 to-transparent" />
+
+          {/* Steps */}
+          <div className="space-y-8">
+            {steps.map((s, i) => (
+              <MobileStep key={i} step={s} index={i} />
+            ))}
           </div>
         </div>
       </div>
