@@ -13,7 +13,7 @@ export default function Home() {
       <Growth />        
       <Services />
       <Process />       
-      <CTA />
+      <Contact />
     </main>
   );
 }
