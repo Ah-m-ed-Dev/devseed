@@ -3,7 +3,7 @@ import Problem from "@/sections/problem";
 import Growth from "@/sections/growth";
 import Services from "@/sections/services";
 import Process from "@/sections/process";
-import CTA from "@/sections/cta";
+import Contact from "@/sections/contact";
 
 export default function Home() {
   return (
