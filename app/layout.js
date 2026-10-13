@@ -36,6 +36,14 @@ export const metadata = {
     process.env.NEXT_PUBLIC_SITE_URL ||
       `https://${process.env.NEXT_PUBLIC_VERCEL_URL || "devseed.vercel.app"}`
   ),
+
+  // ═══════════════════════════════════════════
+  // Google Search Console Verification
+  // ═══════════════════════════════════════════
+  verification: {
+    google: "ml9KpzfRvArRN_5CZhL8irn31uTSSogIrofYl3NFKRA",
+  },
+
   openGraph: {
     type: "website",
     locale: "ar_SA",
